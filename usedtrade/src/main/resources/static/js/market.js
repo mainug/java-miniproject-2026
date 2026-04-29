@@ -23,48 +23,48 @@ const sortFilter = document.querySelector("#sortFilter");
 const productImagesInput = document.querySelector("#productImages");
 const imagePreviewList = document.querySelector("#imagePreviewList");
 
-// const products = [
-//   {
-//     id: 1,
-//     title: "중고 키보드 팝니다",
-//     content: "상태 좋습니다. 직거래 가능합니다.",
-//     price: 30000,
-//     category: "DIGITAL",
-//     location: "부산 남구",
-//     status: "판매중",
-//     createdAt: "2026-04-28T10:30:00",
-//   },
-//   {
-//     id: 2,
-//     title: "모니터 판매합니다",
-//     content: "27인치 FHD 모니터입니다.",
-//     price: 80000,
-//     category: "DIGITAL",
-//     location: "서울 강남구",
-//     status: "예약중",
-//     createdAt: "2026-04-29T09:10:00",
-//   },
-//   {
-//     id: 3,
-//     title: "책상 정리합니다",
-//     content: "사용감 조금 있습니다.",
-//     price: 20000,
-//     category: "FURNITURE",
-//     location: "대구 수성구",
-//     status: "판매완료",
-//     createdAt: "2026-04-27T15:20:00",
-//   },
-//   {
-//     id: 4,
-//     title: "자바 책 판매",
-//     content: "정보처리기사 공부하면서 같이 봤던 책입니다.",
-//     price: 15000,
-//     category: "BOOK",
-//     location: "부산 수영구",
-//     status: "판매중",
-//     createdAt: "2026-04-26T12:00:00",
-//   },
-// ];
+const products = [
+  {
+    id: 1,
+    title: "중고 키보드 팝니다",
+    content: "상태 좋습니다. 직거래 가능합니다.",
+    price: 30000,
+    category: "DIGITAL",
+    location: "부산 남구",
+    status: "판매중",
+    createdAt: "2026-04-28T10:30:00",
+  },
+  {
+    id: 2,
+    title: "모니터 판매합니다",
+    content: "27인치 FHD 모니터입니다.",
+    price: 80000,
+    category: "DIGITAL",
+    location: "서울 강남구",
+    status: "예약중",
+    createdAt: "2026-04-29T09:10:00",
+  },
+  {
+    id: 3,
+    title: "책상 정리합니다",
+    content: "사용감 조금 있습니다.",
+    price: 20000,
+    category: "FURNITURE",
+    location: "대구 수성구",
+    status: "판매완료",
+    createdAt: "2026-04-27T15:20:00",
+  },
+  {
+    id: 4,
+    title: "자바 책 판매",
+    content: "정보처리기사 공부하면서 같이 봤던 책입니다.",
+    price: 15000,
+    category: "BOOK",
+    location: "부산 수영구",
+    status: "판매중",
+    createdAt: "2026-04-26T12:00:00",
+  },
+];
 
 function setTestLogin() {
   if (!localStorage.getItem("token")) {
@@ -307,7 +307,7 @@ productImagesInput.addEventListener("change", renderImagePreview);
 
 productWriteForm.addEventListener("submit", handleProductSubmit);
 
-// setTestLogin();
+setTestLogin();
 updateLoginArea();
 applySearchParams();
 renderProducts();
