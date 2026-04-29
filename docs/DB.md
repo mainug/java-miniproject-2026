@@ -95,3 +95,4 @@ CREATE TABLE comments (
         REFERENCES posts(post_id)
         ON DELETE CASCADE
 );
+```
