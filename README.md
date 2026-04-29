@@ -15,6 +15,20 @@ Java 웹개발자 2026 미니프로젝트1
   - ~~액션~~ - 프로젝트 소스 자동 배포 등
   - `프로젝트` - 보통 칸반을 사용, 이슈 탭에 작성한 이슈들이 바로 디스플레이
 
+- Github 저장소 종류
+  - main : 배포용 완성된 리포지토리
+  - branch : 개발용(팀의 경우 각자 개발하는 리포지토리)
+
+- Branch 생성 작업 후 합치는 방법
+  1. main ▼ 클릭 > View all branches 선택
+  2. New branch 클릭 이름 적고 생성
+  3. 각자 작업(같은 소스를 건드리는 작업 피할 것)
+  4. Pull requests > New Pull request
+  5. 충돌발생 시 직접 소스해결 Resolve
+  6. Create Pull request 진행
+  7. Branch 작업 완료 후 branch 삭제버튼 생성 > 클릭하면 branch 리포지토리 삭제됨
+  8. View all branches에서 수동 삭제 가능
+
 ## 요구사항 정의
 
 [링크](./docs/PRD.md)
@@ -27,7 +41,7 @@ Java 웹개발자 2026 미니프로젝트1
 
 [링크](./docs/Design.md)
 
-## (임시) 미니 프로젝트 주제
+### (임시) 미니 프로젝트 주제
 
  중고거래 플랫폼
   - 게시판을 변형, 이미지가 리스트에 나오도록
