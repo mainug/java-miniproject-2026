@@ -1,90 +1,94 @@
-const productWriteModal = document.querySelector('#productWriteModal');
-const openProductWriteButton = document.querySelector('#openProductWriteButton');
-const closeProductWriteButton = document.querySelector('#closeProductWriteButton');
-const productWriteForm = document.querySelector('#productWriteForm');
+const productWriteModal = document.querySelector("#productWriteModal");
+const openProductWriteButton = document.querySelector(
+  "#openProductWriteButton",
+);
+const closeProductWriteButton = document.querySelector(
+  "#closeProductWriteButton",
+);
+const productWriteForm = document.querySelector("#productWriteForm");
 
-const loginUsername = document.querySelector('#loginUsername');
-const loginLink = document.querySelector('#loginLink');
-const logoutButton = document.querySelector('#logoutButton');
+const loginUsername = document.querySelector("#loginUsername");
+const loginLink = document.querySelector("#loginLink");
+const logoutButton = document.querySelector("#logoutButton");
 
-const marketStatus = document.querySelector('#marketStatus');
-const productCount = document.querySelector('#productCount');
-const productList = document.querySelector('#productList');
+const marketStatus = document.querySelector("#marketStatus");
+const productCount = document.querySelector("#productCount");
+const productList = document.querySelector("#productList");
 
-const searchForm = document.querySelector('#searchForm');
-const keywordSearch = document.querySelector('#keywordSearch');
-const categoryFilter = document.querySelector('#categoryFilter');
-const sortFilter = document.querySelector('#sortFilter');
+const searchForm = document.querySelector("#searchForm");
+const keywordSearch = document.querySelector("#keywordSearch");
+const categoryFilter = document.querySelector("#categoryFilter");
+const sortFilter = document.querySelector("#sortFilter");
 
-const productImagesInput = document.querySelector('#productImages');
-const imagePreviewList = document.querySelector('#imagePreviewList');
+const productImagesInput = document.querySelector("#productImages");
+const imagePreviewList = document.querySelector("#imagePreviewList");
 
-const products = [
-  {
-    id: 1,
-    title: '중고 키보드 팝니다',
-    content: '상태 좋습니다. 직거래 가능합니다.',
-    price: 30000,
-    category: 'DIGITAL',
-    location: '부산 남구',
-    status: '판매중',
-    createdAt: '2026-04-28T10:30:00'
-  },
-  {
-    id: 2,
-    title: '모니터 판매합니다',
-    content: '27인치 FHD 모니터입니다.',
-    price: 80000,
-    category: 'DIGITAL',
-    location: '서울 강남구',
-    status: '예약중',
-    createdAt: '2026-04-29T09:10:00'
-  },
-  {
-    id: 3,
-    title: '책상 정리합니다',
-    content: '사용감 조금 있습니다.',
-    price: 20000,
-    category: 'FURNITURE',
-    location: '대구 수성구',
-    status: '판매완료',
-    createdAt: '2026-04-27T15:20:00'
-  },
-  {
-    id: 4,
-    title: '자바 책 판매',
-    content: '정보처리기사 공부하면서 같이 봤던 책입니다.',
-    price: 15000,
-    category: 'BOOK',
-    location: '부산 수영구',
-    status: '판매중',
-    createdAt: '2026-04-26T12:00:00'
-  }
-];
+// const products = [
+//   {
+//     id: 1,
+//     title: "중고 키보드 팝니다",
+//     content: "상태 좋습니다. 직거래 가능합니다.",
+//     price: 30000,
+//     category: "DIGITAL",
+//     location: "부산 남구",
+//     status: "판매중",
+//     createdAt: "2026-04-28T10:30:00",
+//   },
+//   {
+//     id: 2,
+//     title: "모니터 판매합니다",
+//     content: "27인치 FHD 모니터입니다.",
+//     price: 80000,
+//     category: "DIGITAL",
+//     location: "서울 강남구",
+//     status: "예약중",
+//     createdAt: "2026-04-29T09:10:00",
+//   },
+//   {
+//     id: 3,
+//     title: "책상 정리합니다",
+//     content: "사용감 조금 있습니다.",
+//     price: 20000,
+//     category: "FURNITURE",
+//     location: "대구 수성구",
+//     status: "판매완료",
+//     createdAt: "2026-04-27T15:20:00",
+//   },
+//   {
+//     id: 4,
+//     title: "자바 책 판매",
+//     content: "정보처리기사 공부하면서 같이 봤던 책입니다.",
+//     price: 15000,
+//     category: "BOOK",
+//     location: "부산 수영구",
+//     status: "판매중",
+//     createdAt: "2026-04-26T12:00:00",
+//   },
+// ];
 
 function setTestLogin() {
-  if (!localStorage.getItem('token')) {
-    localStorage.setItem('token', 'test-token');
-    localStorage.setItem('username', 'testUser');
+  if (!localStorage.getItem("token")) {
+    localStorage.setItem("token", "test-token");
+    localStorage.setItem("username", "testUser");
   }
 }
 
 function getUsername() {
-  return localStorage.getItem('username');
+  return localStorage.getItem("username");
 }
 
 function showStatus(message) {
   if (!marketStatus) return;
 
   marketStatus.textContent = message;
-  marketStatus.classList.remove('hidden');
+  marketStatus.classList.remove("hidden");
 }
 
 function hideStatus() {
   if (!marketStatus) return;
 
-  marketStatus.textContent = '';
-  marketStatus.classList.add('hidden');
+  marketStatus.textContent = "";
+  marketStatus.classList.add("hidden");
 }
 
 function updateLoginArea() {
@@ -92,21 +96,21 @@ function updateLoginArea() {
 
   if (username) {
     loginUsername.textContent = username;
-    loginLink.classList.add('hidden');
-    logoutButton.classList.remove('hidden');
+    loginLink.classList.add("hidden");
+    logoutButton.classList.remove("hidden");
   } else {
-    loginUsername.textContent = '비회원';
-    loginLink.classList.remove('hidden');
-    logoutButton.classList.add('hidden');
+    loginUsername.textContent = "비회원";
+    loginLink.classList.remove("hidden");
+    logoutButton.classList.add("hidden");
   }
 }
 
 function applySearchParams() {
   const params = new URLSearchParams(window.location.search);
 
-  const keyword = params.get('keyword') || '';
-  const category = params.get('category') || 'ALL';
-  const sort = params.get('sort') || 'LATEST';
+  const keyword = params.get("keyword") || "";
+  const category = params.get("category") || "ALL";
+  const sort = params.get("sort") || "LATEST";
 
   keywordSearch.value = keyword;
   categoryFilter.value = category;
@@ -114,7 +118,7 @@ function applySearchParams() {
 }
 
 function formatPrice(price) {
-  return Number(price).toLocaleString() + '원';
+  return Number(price).toLocaleString() + "원";
 }
 
 function renderProducts() {
@@ -138,23 +142,23 @@ function renderProducts() {
     });
   }
 
-  if (selectedCategory !== 'ALL') {
+  if (selectedCategory !== "ALL") {
     filteredProducts = filteredProducts.filter(
-      (product) => product.category === selectedCategory
+      (product) => product.category === selectedCategory,
     );
   }
 
-  if (selectedSort === 'LATEST') {
+  if (selectedSort === "LATEST") {
     filteredProducts.sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
     );
   }
 
-  if (selectedSort === 'PRICE_ASC') {
+  if (selectedSort === "PRICE_ASC") {
     filteredProducts.sort((a, b) => a.price - b.price);
   }
 
-  if (selectedSort === 'PRICE_DESC') {
+  if (selectedSort === "PRICE_DESC") {
     filteredProducts.sort((a, b) => b.price - a.price);
   }
 
@@ -191,9 +195,9 @@ function renderProducts() {
           </small>
         </div>
       </article>
-    `
+    `,
     )
-    .join('');
+    .join("");
 }
 
 function renderImagePreview() {
@@ -216,7 +220,7 @@ function renderImagePreview() {
         </div>
       `;
     })
-    .join('');
+    .join("");
 }
 
 function resetImagePreview() {
@@ -225,11 +229,11 @@ function resetImagePreview() {
 }
 
 function openProductWriteModal() {
-  productWriteModal.classList.remove('hidden');
+  productWriteModal.classList.remove("hidden");
 }
 
 function closeProductWriteModal() {
-  productWriteModal.classList.add('hidden');
+  productWriteModal.classList.add("hidden");
 
   if (productWriteForm) {
     productWriteForm.reset();
@@ -241,14 +245,14 @@ function closeProductWriteModal() {
 function handleProductSubmit(event) {
   event.preventDefault();
 
-  const title = document.querySelector('#productTitle').value.trim();
-  const price = document.querySelector('#productPrice').value.trim();
-  const category = document.querySelector('#productCategory').value;
-  const location = document.querySelector('#tradeLocation').value.trim();
-  const content = document.querySelector('#productContent').value.trim();
+  const title = document.querySelector("#productTitle").value.trim();
+  const price = document.querySelector("#productPrice").value.trim();
+  const category = document.querySelector("#productCategory").value;
+  const location = document.querySelector("#tradeLocation").value.trim();
+  const content = document.querySelector("#productContent").value.trim();
 
   if (!title || !price || !content) {
-    showStatus('상품명, 가격, 상품 설명을 입력하세요.');
+    showStatus("상품명, 가격, 상품 설명을 입력하세요.");
     return;
   }
 
@@ -259,8 +263,8 @@ function handleProductSubmit(event) {
     price: Number(price),
     category,
     location,
-    status: '판매중',
-    createdAt: new Date().toISOString()
+    status: "판매중",
+    createdAt: new Date().toISOString(),
   });
 
   hideStatus();
@@ -268,17 +272,17 @@ function handleProductSubmit(event) {
   renderProducts();
 }
 
-openProductWriteButton.addEventListener('click', openProductWriteModal);
+openProductWriteButton.addEventListener("click", openProductWriteModal);
 
-closeProductWriteButton.addEventListener('click', closeProductWriteModal);
+closeProductWriteButton.addEventListener("click", closeProductWriteModal);
 
-logoutButton.addEventListener('click', () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('username');
+logoutButton.addEventListener("click", () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("username");
   updateLoginArea();
 });
 
-searchForm.addEventListener('submit', function (event) {
+searchForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
   const keyword = keywordSearch.value.trim();
@@ -288,22 +292,22 @@ searchForm.addEventListener('submit', function (event) {
   const params = new URLSearchParams();
 
   if (keyword) {
-    params.set('keyword', keyword);
+    params.set("keyword", keyword);
   }
 
-  params.set('category', category);
-  params.set('sort', sort);
+  params.set("category", category);
+  params.set("sort", sort);
 
   location.href = `/index.html?${params.toString()}`;
 });
 
-categoryFilter.addEventListener('change', renderProducts);
-sortFilter.addEventListener('change', renderProducts);
-productImagesInput.addEventListener('change', renderImagePreview);
+categoryFilter.addEventListener("change", renderProducts);
+sortFilter.addEventListener("change", renderProducts);
+productImagesInput.addEventListener("change", renderImagePreview);
 
-productWriteForm.addEventListener('submit', handleProductSubmit);
+productWriteForm.addEventListener("submit", handleProductSubmit);
 
-setTestLogin();
+// setTestLogin();
 updateLoginArea();
 applySearchParams();
 renderProducts();
