@@ -172,7 +172,9 @@ textarea {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 16px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .product-card:hover {
@@ -349,7 +351,7 @@ textarea {
   resize: vertical;
 }
 
-.product-form button[type='submit'] {
+.product-form button[type="submit"] {
   padding: 12px;
   border: none;
   border-radius: 8px;
@@ -359,7 +361,7 @@ textarea {
   cursor: pointer;
 }
 
-.product-form button[type='submit']:hover {
+.product-form button[type="submit"]:hover {
   background: #1d4ed8;
 }
 
@@ -372,7 +374,7 @@ textarea {
   background: #fff;
 }
 
-.image-upload-box input[type='file'] {
+.image-upload-box input[type="file"] {
   width: 100%;
   margin-bottom: 12px;
 }
@@ -416,6 +418,27 @@ textarea {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* 회원가입/로그인 전용 스타일 보완 */
+.auth-box {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 32px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.auth-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.auth-header h2 {
+  font-size: 24px;
+  margin: 0;
 }
 
 /* 반응형 */
