@@ -1,5 +1,6 @@
 package com.pknu26.usedtrade.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.pknu26.usedtrade.dto.UserForm;
 import com.pknu26.usedtrade.service.UserService;
+import com.pknu26.usedtrade.validation.UserLoginForm;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/join")
     public String joinForm(Model model) {
@@ -42,6 +45,15 @@ public class UserController {
             return "/user/join";
         }
 
-        return "redirect:/login";
+        // 회원가입 후 로그인 페이지로 이동 (redirect)
+        return "redirect:/users/login";
     }
+
+    // 로그인 화면
+    @GetMapping("/login")
+    public String loginForm(Model model) {
+        model.addAttribute("userLoginForm", new UserLoginForm());
+        return "/users/login";
+    }
+
 }

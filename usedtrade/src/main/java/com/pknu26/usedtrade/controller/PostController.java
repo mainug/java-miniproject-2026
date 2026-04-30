@@ -1,33 +1,53 @@
 package com.pknu26.usedtrade.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.pknu26.usedtrade.dto.PostDTO;
+import com.pknu26.usedtrade.service.FileService;
 import com.pknu26.usedtrade.service.PostService;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 
-@Controller 
-@RequestMapping("/products")
+@RestController
+@RequestMapping("/api/posts")
 public class PostController {
 
-    @Autowired
-    private PostService postService;
+    private final PostService postService;
+    private final FileService fileService;
 
-    @PostMapping("/add")
-    public String createProduct(PostDTO postDTO) {
-        
-        // 임시 데이터 세팅
+    public PostController(PostService postService, FileService fileService) {
+        this.postService = postService;
+        this.fileService = fileService;
+    }
+
+    @GetMapping
+    public List<PostDTO> findAllPosts() {
+        return postService.findAllPosts();
+    }
+
+    @PostMapping
+    public String registerPost(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("price") Long price,
+            @RequestParam("category") String category,
+            @RequestParam("location") String location,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images) {
+        PostDTO postDTO = new PostDTO();
+
         postDTO.setUserId(1L);
         postDTO.setBoardId(1L);
+        postDTO.setTitle(title);
+        postDTO.setContent(content);
+        postDTO.setPrice(price);
+        postDTO.setCategory(category);
+        postDTO.setLocation(location);
+        postDTO.setStatus("SELLING");
 
-        // DB 저장
-        postService.registerPost(postDTO);
+        Long postId = postService.registerPost(postDTO);
 
-        // 등록 후 메인 페이지로 이동 (redirect)
-        return "redirect:/"; 
+        fileService.savePostImages(postId, images);
+
+        return "게시글 등록 성공";
     }
-    
 }

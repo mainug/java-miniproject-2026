@@ -3,12 +3,12 @@ package com.pknu26.usedtrade.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.pknu26.usedtrade.dto.User;
+import com.pknu26.usedtrade.dto.UserDTO;
 
 @Mapper
 public interface UserMapper {
 
-    void insertUser(User user);
+    void insertUser(UserDTO user);
 
     User findByLoginId(@Param("loginId") String loginId);
 }

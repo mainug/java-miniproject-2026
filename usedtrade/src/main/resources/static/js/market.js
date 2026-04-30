@@ -1,10 +1,6 @@
 const productWriteModal = document.querySelector("#productWriteModal");
-const openProductWriteButton = document.querySelector(
-  "#openProductWriteButton",
-);
-const closeProductWriteButton = document.querySelector(
-  "#closeProductWriteButton",
-);
+const openProductWriteButton = document.querySelector("#openProductWriteButton");
+const closeProductWriteButton = document.querySelector("#closeProductWriteButton");
 const productWriteForm = document.querySelector("#productWriteForm");
 
 const loginUsername = document.querySelector("#loginUsername");
@@ -23,55 +19,7 @@ const sortFilter = document.querySelector("#sortFilter");
 const productImagesInput = document.querySelector("#productImages");
 const imagePreviewList = document.querySelector("#imagePreviewList");
 
-const products = [
-  {
-    id: 1,
-    title: "중고 키보드 팝니다",
-    content: "상태 좋습니다. 직거래 가능합니다.",
-    price: 30000,
-    category: "DIGITAL",
-    location: "부산 남구",
-    status: "판매중",
-    createdAt: "2026-04-28T10:30:00",
-  },
-  {
-    id: 2,
-    title: "모니터 판매합니다",
-    content: "27인치 FHD 모니터입니다.",
-    price: 80000,
-    category: "DIGITAL",
-    location: "서울 강남구",
-    status: "예약중",
-    createdAt: "2026-04-29T09:10:00",
-  },
-  {
-    id: 3,
-    title: "책상 정리합니다",
-    content: "사용감 조금 있습니다.",
-    price: 20000,
-    category: "FURNITURE",
-    location: "대구 수성구",
-    status: "판매완료",
-    createdAt: "2026-04-27T15:20:00",
-  },
-  {
-    id: 4,
-    title: "자바 책 판매",
-    content: "정보처리기사 공부하면서 같이 봤던 책입니다.",
-    price: 15000,
-    category: "BOOK",
-    location: "부산 수영구",
-    status: "판매중",
-    createdAt: "2026-04-26T12:00:00",
-  },
-];
-
-function setTestLogin() {
-  if (!localStorage.getItem("token")) {
-    localStorage.setItem("token", "test-token");
-    localStorage.setItem("username", "testUser");
-  }
-}
+let products = [];
 
 function getUsername() {
   return localStorage.getItem("username");
@@ -121,6 +69,32 @@ function formatPrice(price) {
   return Number(price).toLocaleString() + "원";
 }
 
+function convertStatus(status) {
+  if (status === "SELLING") return "판매중";
+  if (status === "RESERVED") return "예약중";
+  if (status === "SOLD") return "판매완료";
+  return status || "판매중";
+}
+
+async function loadProducts() {
+  try {
+    const response = await fetch("/api/posts");
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(errorText);
+      showStatus("상품 목록을 불러오지 못했습니다.");
+      return;
+    }
+
+    products = await response.json();
+    renderProducts();
+  } catch (error) {
+    console.error(error);
+    showStatus("서버 연결에 실패했습니다.");
+  }
+}
+
 function renderProducts() {
   const keyword = keywordSearch.value.trim().toLowerCase();
   const selectedCategory = categoryFilter.value;
@@ -130,9 +104,9 @@ function renderProducts() {
 
   if (keyword) {
     filteredProducts = filteredProducts.filter((product) => {
-      const title = product.title.toLowerCase();
-      const content = product.content.toLowerCase();
-      const location = product.location.toLowerCase();
+      const title = (product.title || "").toLowerCase();
+      const content = (product.content || "").toLowerCase();
+      const location = (product.location || "").toLowerCase();
 
       return (
         title.includes(keyword) ||
@@ -144,22 +118,24 @@ function renderProducts() {
 
   if (selectedCategory !== "ALL") {
     filteredProducts = filteredProducts.filter(
-      (product) => product.category === selectedCategory,
+      (product) => product.category === selectedCategory
     );
   }
 
   if (selectedSort === "LATEST") {
     filteredProducts.sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      (a, b) =>
+        new Date(b.createdAtPosts || b.createdAt) -
+        new Date(a.createdAtPosts || a.createdAt)
     );
   }
 
   if (selectedSort === "PRICE_ASC") {
-    filteredProducts.sort((a, b) => a.price - b.price);
+    filteredProducts.sort((a, b) => Number(a.price) - Number(b.price));
   }
 
   if (selectedSort === "PRICE_DESC") {
-    filteredProducts.sort((a, b) => b.price - a.price);
+    filteredProducts.sort((a, b) => Number(b.price) - Number(a.price));
   }
 
   productCount.textContent = filteredProducts.length;
@@ -170,33 +146,40 @@ function renderProducts() {
   }
 
   productList.innerHTML = filteredProducts
-    .map(
-      (product) => `
-      <article class="product-card">
-        <div class="product-image">
-          <span>이미지 없음</span>
-        </div>
+    .map((product) => {
+      const createdAt = product.createdAtPosts || product.createdAt || "";
+      const imageUrl = product.mainImageUrl;
 
-        <div class="product-body">
-          <h3>${product.title}</h3>
-          <p>${product.content}</p>
-
-          <div class="product-meta">
-            <strong>${formatPrice(product.price)}</strong>
-            <span>${product.location}</span>
+      return `
+        <article class="product-card">
+          <div class="product-image">
+            ${
+              imageUrl
+                ? `<img src="${imageUrl}" alt="${product.title}" />`
+                : `<span>이미지 없음</span>`
+            }
           </div>
 
-          <div class="product-status">
-            ${product.status}
-          </div>
+          <div class="product-body">
+            <h3>${product.title}</h3>
+            <p>${product.content || ""}</p>
 
-          <small class="created-at">
-            등록일: ${product.createdAt.slice(0, 10)}
-          </small>
-        </div>
-      </article>
-    `,
-    )
+            <div class="product-meta">
+              <strong>${formatPrice(product.price)}</strong>
+              <span>${product.location || ""}</span>
+            </div>
+
+            <div class="product-status">
+              ${convertStatus(product.status)}
+            </div>
+
+            <small class="created-at">
+              등록일: ${createdAt ? createdAt.slice(0, 10) : ""}
+            </small>
+          </div>
+        </article>
+      `;
+    })
     .join("");
 }
 
@@ -242,7 +225,7 @@ function closeProductWriteModal() {
   resetImagePreview();
 }
 
-function handleProductSubmit(event) {
+async function handleProductSubmit(event) {
   event.preventDefault();
 
   const title = document.querySelector("#productTitle").value.trim();
@@ -256,24 +239,42 @@ function handleProductSubmit(event) {
     return;
   }
 
-  products.unshift({
-    id: products.length + 1,
-    title,
-    content,
-    price: Number(price),
-    category,
-    location,
-    status: "판매중",
-    createdAt: new Date().toISOString(),
-  });
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("price", price);
+  formData.append("category", category);
+  formData.append("location", location);
+  formData.append("content", content);
 
-  hideStatus();
-  closeProductWriteModal();
-  renderProducts();
+  const files = productImagesInput.files;
+
+  for (const file of files) {
+    formData.append("images", file);
+  }
+
+  try {
+    const response = await fetch("/api/posts", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(errorText);
+      showStatus("상품 등록에 실패했습니다.");
+      return;
+    }
+
+    hideStatus();
+    closeProductWriteModal();
+    await loadProducts();
+  } catch (error) {
+    console.error(error);
+    showStatus("서버 연결에 실패했습니다.");
+  }
 }
 
 openProductWriteButton.addEventListener("click", openProductWriteModal);
-
 closeProductWriteButton.addEventListener("click", closeProductWriteModal);
 
 logoutButton.addEventListener("click", () => {
@@ -298,16 +299,14 @@ searchForm.addEventListener("submit", function (event) {
   params.set("category", category);
   params.set("sort", sort);
 
-  location.href = `/index.html?${params.toString()}`;
+  location.href = `/products?${params.toString()}`;
 });
 
 categoryFilter.addEventListener("change", renderProducts);
 sortFilter.addEventListener("change", renderProducts);
 productImagesInput.addEventListener("change", renderImagePreview);
-
 productWriteForm.addEventListener("submit", handleProductSubmit);
 
-setTestLogin();
 updateLoginArea();
 applySearchParams();
-renderProducts();
+loadProducts();
