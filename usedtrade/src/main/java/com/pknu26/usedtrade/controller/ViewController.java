@@ -15,13 +15,14 @@ public class ViewController {
         return "index"; 
     }
 
+    // UserController 기능 충돌로 인해 주석 처리
     /**
      * 2. 로그인 화면 (login.html) 리턴
      */
-    @GetMapping("/login")
-    public String showLoginPage() {
-        return "login";
-    }
+    // @GetMapping("/login")
+    // public String showLoginPage() {
+    //     return "login";
+    // }
 
     // UserController 기능 충돌로 인해 주석 처리
     /**

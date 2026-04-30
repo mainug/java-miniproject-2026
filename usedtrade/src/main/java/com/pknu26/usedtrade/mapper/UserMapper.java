@@ -2,12 +2,12 @@ package com.pknu26.usedtrade.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.pknu26.usedtrade.dto.User;
+import com.pknu26.usedtrade.dto.UserDTO;
 
 @Mapper
 public interface UserMapper {
 
-    void insertUser(User user);
+    void insertUser(UserDTO user);
 
-    User findByLoginId(String loginId); // 중복 체크용
+    UserDTO findByLoginId(String loginId); // 중복 체크용
 }
