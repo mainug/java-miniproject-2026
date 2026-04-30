@@ -16,7 +16,8 @@
             <p class="subtitle">새로운 가족이 되어주세요!</p>
           </div>
           <div class="user-box">
-            <a href="/index.html" class="small-button">홈으로</a>
+            <!-- 260430 수정 : "/index.html" -> "/"  -->
+            <a th:href="@{/}" class="small-button">홈으로</a>
           </div>
         </header>
 
@@ -28,24 +29,28 @@
           <form
             id="joinForm"
             th:action="@{/users/join}"
-            method="post"
-            th:object="${userForm}"
+            th:object="${userJoinForm}"
+            method="POST"
             class="product-form"
           >
-            <!-- 아이디 -->
+            <!-- 전체 에러 메시지 -->
+            <div th:if="${#fields.hasGlobalErrors()}" class="error-box">
+              <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+            </div>
+
             <label class="row">
               <span>아이디</span>
               <input
                 type="text"
+                name="loginId"
                 th:field="*{loginId}"
-                placeholder="아이디 입력"
+                placeholder="사용할 아이디를 입력하세요"
               />
-
-              <div
+              <p
+                class="field-error"
                 th:if="${#fields.hasErrors('loginId')}"
                 th:errors="*{loginId}"
-                style="color: red"
-              ></div>
+              ></p>
             </label>
 
             <!-- 비밀번호 -->
@@ -53,16 +58,16 @@
               <span>비밀번호</span>
               <input
                 type="password"
-                id="userPassword"
                 th:field="*{password}"
-                placeholder="비밀번호 입력"
+                id="userPassword"
+                name="password"
+                placeholder="비밀번호를 입력하세요"
               />
-
-              <div
+              <p
+                class="field-error"
                 th:if="${#fields.hasErrors('password')}"
                 th:errors="*{password}"
-                style="color: red"
-              ></div>
+              ></p>
             </label>
 
             <!-- 비밀번호 확인 -->
@@ -70,10 +75,15 @@
               <span>비밀번호 확인</span>
               <input
                 type="password"
+                th:field="*{passwordConfirm}"
                 id="passwordConfirm"
-                name="passwordConfirm"
-                placeholder="비밀번호 확인"
+                placeholder="비밀번호를 한 번 더 입력하세요"
               />
+              <p
+                class="field-error"
+                th:if="${#fields.hasErrors('passwordConfirm')}"
+                th:errors="*{passwordConfirm}"
+              ></p>
             </label>
 
             <!-- 이름 -->
@@ -82,14 +92,14 @@
               <input
                 type="text"
                 th:field="*{userName}"
-                placeholder="이름 입력"
+                name="userName"
+                placeholder="성함을 입력하세요"
               />
-
-              <div
+              <p
+                class="field-error"
                 th:if="${#fields.hasErrors('userName')}"
                 th:errors="*{userName}"
-                style="color: red"
-              ></div>
+              ></p>
             </label>
 
             <!-- 닉네임 -->
@@ -98,30 +108,30 @@
               <input
                 type="text"
                 th:field="*{nickname}"
-                placeholder="닉네임 입력"
+                name="nickname"
+                placeholder="활동할 별명을 입력하세요"
               />
-
-              <div
+              <p
+                class="field-error"
                 th:if="${#fields.hasErrors('nickname')}"
                 th:errors="*{nickname}"
-                style="color: red"
-              ></div>
+              ></p>
             </label>
 
             <!-- 전화번호 -->
             <label class="row">
               <span>전화번호</span>
               <input
-                type="text"
+                type="tel"
                 th:field="*{phone}"
-                placeholder="010-1234-5678"
+                name="phone"
+                placeholder="예: 010-1234-5678"
               />
-
-              <div
+              <p
+                class="field-error"
                 th:if="${#fields.hasErrors('phone')}"
                 th:errors="*{phone}"
-                style="color: red"
-              ></div>
+              ></p>
             </label>
 
             <div class="button-group" style="margin-top: 20px">
@@ -133,7 +143,6 @@
                 가입 완료
               </button>
             </div>
-            [2026-04-30 오후 3:45] 김 나현:
             <p
               style="
                 text-align: center;
