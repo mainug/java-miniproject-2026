@@ -441,6 +441,7 @@ textarea {
   margin: 0;
 }
 
+/* 회원가입/로그인 에러메시지 스타일 */
 .error-box {
   margin: 12px 0 18px;
   padding: 12px 14px;
