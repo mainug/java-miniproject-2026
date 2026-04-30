@@ -99,6 +99,7 @@
         </section>
 
         <button
+          th:if="${session.loginUser != null}"
           type="button"
           id="openProductWriteButton"
           class="upload-fab floating"
@@ -110,7 +111,11 @@
       </div>
     </div>
 
-    <div id="productWriteModal" class="modal hidden">
+    <div
+      th:if="${session.loginUser != null}"
+      id="productWriteModal"
+      class="modal hidden"
+    >
       <div class="modal-card">
         <div class="modal-header">
           <h2>상품 등록</h2>
