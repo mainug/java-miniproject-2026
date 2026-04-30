@@ -1,5 +1,6 @@
 package com.pknu26.usedtrade.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.pknu26.usedtrade.dto.UserDTO;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public void join(UserJoinForm form) {
 
@@ -38,6 +40,8 @@ public class UserService {
 
         // 기본 권한 설정
         user.setRole("USER");
+
+        user.setPassword(passwordEncoder.encode(form.getPassword()));
 
         userMapper.insertUser(user);
     }

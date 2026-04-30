@@ -28,7 +28,7 @@ dependencies {
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 	annotationProcessor 'org.projectlombok:lombok'
 	// 스프링부트 시큐리티 의존성
-	// implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	// Spring Security Thymeleaf 연동 라이브러리
 	// implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
