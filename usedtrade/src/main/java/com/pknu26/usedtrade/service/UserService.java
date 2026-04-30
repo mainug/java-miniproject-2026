@@ -3,6 +3,7 @@ package com.pknu26.usedtrade.service;
 import org.springframework.stereotype.Service;
 
 import com.pknu26.usedtrade.dto.UserDTO;
+import com.pknu26.usedtrade.dto.UserForm;
 import com.pknu26.usedtrade.mapper.UserMapper;
 import com.pknu26.usedtrade.validation.UserJoinForm;
 

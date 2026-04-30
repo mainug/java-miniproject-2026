@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.pknu26.usedtrade.dto.UserDTO;
+import com.pknu26.usedtrade.dto.UserForm;
 import com.pknu26.usedtrade.service.UserService;
 import com.pknu26.usedtrade.validation.UserJoinForm;
 import com.pknu26.usedtrade.validation.UserLoginForm;
@@ -15,20 +16,18 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping("/users")
 @RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
 
-    // 회원가입 페이지
     @GetMapping("/join")
     public String joinForm(Model model) {
         model.addAttribute("userJoinForm", new UserJoinForm());
         return "/users/join";
     }
 
-    // 회원가입 처리
     @PostMapping("/join")
     public String join(@Valid @ModelAttribute("userJoinForm") UserJoinForm form,
                         BindingResult bindingResult) {

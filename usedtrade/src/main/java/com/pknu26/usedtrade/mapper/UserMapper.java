@@ -1,6 +1,7 @@
 package com.pknu26.usedtrade.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.pknu26.usedtrade.dto.UserDTO;
 
@@ -9,5 +10,5 @@ public interface UserMapper {
 
     void insertUser(UserDTO user);
 
-    UserDTO findByLoginId(String loginId); // 중복 체크용
+    UserDTO findByLoginId(@Param("loginId") String loginId);
 }
