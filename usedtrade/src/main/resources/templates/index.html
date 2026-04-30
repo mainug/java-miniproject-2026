@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>중고마켓</title>
     <link rel="stylesheet" href="/css/style.css" />
   </head>
+
   <body>
     <div class="app">
       <div class="wrap">
@@ -16,7 +17,16 @@
           </div>
 
           <div class="user-box">
-            <a href="/login.html" id="loginLink" class="small-button">로그인</a>
+            <a
+              th:href="@{/join}"
+              id="joinLink"
+              class="small-button"
+              style="background: #2563eb"
+              >회원가입</a
+            >
+            <a th:href="@{/login}" id="loginLink" class="small-button"
+              >로그인</a
+            >
             <button type="button" id="logoutButton" class="small-button hidden">
               로그아웃
             </button>
@@ -31,8 +41,16 @@
             <p class="summary">총 <span id="productCount">0</span>개</p>
           </div>
 
-          <div class="filter-box">
-            <select id="categoryFilter">
+          <form id="searchForm" class="filter-box">
+            <input
+              type="text"
+              id="keywordSearch"
+              name="keyword"
+              class="search-input"
+              placeholder="상품명, 설명, 지역 검색"
+            />
+
+            <select id="categoryFilter" name="category">
               <option value="ALL">전체</option>
               <option value="DIGITAL">디지털기기</option>
               <option value="FURNITURE">가구</option>
@@ -40,7 +58,15 @@
               <option value="BOOK">도서</option>
               <option value="ETC">기타</option>
             </select>
-          </div>
+
+            <select id="sortFilter" name="sort">
+              <option value="LATEST">최신순</option>
+              <option value="PRICE_ASC">가격 낮은순</option>
+              <option value="PRICE_DESC">가격 높은순</option>
+            </select>
+
+            <button type="submit" class="search-button">검색</button>
+          </form>
         </section>
 
         <section id="productList" class="product-list">
@@ -111,7 +137,14 @@
 
           <label class="row">
             <span>상품 이미지</span>
-            <input type="file" id="productImages" accept="image/*" multiple />
+
+            <div class="image-upload-box">
+              <input type="file" id="productImages" accept="image/*" multiple />
+
+              <div id="imagePreviewList" class="image-preview-list">
+                <p class="image-preview-empty">선택된 이미지가 없습니다.</p>
+              </div>
+            </div>
           </label>
 
           <button type="submit">등록하기</button>

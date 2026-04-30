@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입 - 중고마켓</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="wrap">
+        <header class="top-bar">
+          <div>
+            <h1>중고마켓</h1>
+            <p class="subtitle">새로운 가족이 되어주세요!</p>
+          </div>
+          <div class="user-box">
+            <!-- 260430 수정 : "/index.html" -> "/"  -->
+            <a href="/" class="small-button">홈으로</a>
+          </div>
+        </header>
+
+        <section class="auth-box">
+          <div class="auth-header">
+            <h2>회원가입</h2>
+          </div>
+
+          <form
+            id="joinForm"
+            action="/users/join"
+            method="POST"
+            class="product-form"
+          >
+            <label class="row">
+              <span>아이디</span>
+              <input
+                type="text"
+                name="loginId"
+                placeholder="사용할 아이디를 입력하세요"
+                required
+              />
+            </label>
+
+            <label class="row">
+              <span>비밀번호</span>
+              <input
+                type="password"
+                id="userPassword"
+                name="password"
+                placeholder="비밀번호를 입력하세요"
+                required
+              />
+            </label>
+
+            <label class="row">
+              <span>비밀번호 확인</span>
+              <input
+                type="password"
+                id="passwordConfirm"
+                placeholder="비밀번호를 한 번 더 입력하세요"
+                required
+              />
+            </label>
+
+            <label class="row">
+              <span>이름 (실명)</span>
+              <input
+                type="text"
+                name="userName"
+                placeholder="성함을 입력하세요"
+                required
+              />
+            </label>
+
+            <label class="row">
+              <span>닉네임</span>
+              <input
+                type="text"
+                name="nickname"
+                placeholder="활동할 별명을 입력하세요"
+                required
+              />
+            </label>
+
+            <label class="row">
+              <span>전화번호</span>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="예: 010-1234-5678"
+                required
+              />
+            </label>
+
+            <div class="button-group" style="margin-top: 20px">
+              <button
+                type="submit"
+                class="search-button"
+                style="width: 100%; height: 50px; font-size: 16px"
+              >
+                가입 완료
+              </button>
+            </div>
+
+            <p
+              style="
+                text-align: center;
+                margin-top: 20px;
+                color: #666;
+                font-size: 14px;
+              "
+            >
+              이미 계정이 있으신가요?
+              <a href="/login.html" style="color: #2563eb; font-weight: 700"
+                >로그인하기</a
+              >
+            </p>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      // 간단한 비밀번호 일치 확인 스크립트
+      document
+        .getElementById("joinForm")
+        .addEventListener("submit", function (e) {
+          const password = document.getElementById("userPassword").value;
+          const confirm = document.getElementById("passwordConfirm").value;
+
+          if (password !== confirm) {
+            e.preventDefault();
+            alert("비밀번호가 서로 일치하지 않습니다. 다시 확인해주세요.");
+          }
+        });
+    </script>
+  </body>
+</html>
