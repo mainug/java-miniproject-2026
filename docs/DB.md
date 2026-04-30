@@ -79,4 +79,35 @@ CREATE TABLE comments (
     CONSTRAINT fk_comments_users FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     CONSTRAINT fk_comments_posts FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE
 );
+
+
+-- 임시 유저
+INSERT INTO users (
+    user_id,
+    login_id,
+    user_name,
+    password,
+    nickname,
+    role,
+    phone
+) VALUES (
+    1,
+    'test',
+    '테스트유저',
+    '1234',
+    '테스터',
+    'USER',
+    '010-0000-0000'
+);
+
+--임시 게시판
+INSERT INTO boards (
+    board_id,
+    manager_id
+) VALUES (
+    1,
+    1
+);
+
+COMMIT;
 ```
