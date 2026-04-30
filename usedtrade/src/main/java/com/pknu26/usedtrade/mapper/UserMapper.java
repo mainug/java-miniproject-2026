@@ -10,5 +10,5 @@ public interface UserMapper {
 
     void insertUser(UserDTO user);
 
-    User findByLoginId(@Param("loginId") String loginId);
+    UserDTO findByLoginId(@Param("loginId") String loginId);
 }
