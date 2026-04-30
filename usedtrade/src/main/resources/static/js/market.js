@@ -1,11 +1,16 @@
 const productWriteModal = document.querySelector("#productWriteModal");
-const openProductWriteButton = document.querySelector("#openProductWriteButton");
-const closeProductWriteButton = document.querySelector("#closeProductWriteButton");
+const openProductWriteButton = document.querySelector(
+  "#openProductWriteButton",
+);
+const closeProductWriteButton = document.querySelector(
+  "#closeProductWriteButton",
+);
 const productWriteForm = document.querySelector("#productWriteForm");
 
-const loginUsername = document.querySelector("#loginUsername");
-const loginLink = document.querySelector("#loginLink");
-const logoutButton = document.querySelector("#logoutButton");
+// 세션으로 로그인해서 로그인 관련 localStorage 코드 제거_SY
+// const loginUsername = document.querySelector("#loginUsername");
+// const loginLink = document.querySelector("#loginLink");
+// const logoutButton = document.querySelector("#logoutButton");
 
 const marketStatus = document.querySelector("#marketStatus");
 const productCount = document.querySelector("#productCount");
@@ -21,9 +26,9 @@ const imagePreviewList = document.querySelector("#imagePreviewList");
 
 let products = [];
 
-function getUsername() {
-  return localStorage.getItem("username");
-}
+// function getUsername() {
+//   return localStorage.getItem("username");
+// }
 
 function showStatus(message) {
   if (!marketStatus) return;
@@ -38,20 +43,20 @@ function hideStatus() {
   marketStatus.textContent = "";
   marketStatus.classList.add("hidden");
 }
+//  세션으로 userName 가져와서 주석처리_SY
+// function updateLoginArea() {
+//   const username = getUsername();
 
-function updateLoginArea() {
-  const username = getUsername();
-
-  if (username) {
-    loginUsername.textContent = username;
-    loginLink.classList.add("hidden");
-    logoutButton.classList.remove("hidden");
-  } else {
-    loginUsername.textContent = "비회원";
-    loginLink.classList.remove("hidden");
-    logoutButton.classList.add("hidden");
-  }
-}
+//   if (username) {
+//     loginUsername.textContent = username;
+//     loginLink.classList.add("hidden");
+//     logoutButton.classList.remove("hidden");
+//   } else {
+//     loginUsername.textContent = "비회원";
+//     loginLink.classList.remove("hidden");
+//     logoutButton.classList.add("hidden");
+//   }
+// }
 
 function applySearchParams() {
   const params = new URLSearchParams(window.location.search);
@@ -118,7 +123,7 @@ function renderProducts() {
 
   if (selectedCategory !== "ALL") {
     filteredProducts = filteredProducts.filter(
-      (product) => product.category === selectedCategory
+      (product) => product.category === selectedCategory,
     );
   }
 
@@ -126,7 +131,7 @@ function renderProducts() {
     filteredProducts.sort(
       (a, b) =>
         new Date(b.createdAtPosts || b.createdAt) -
-        new Date(a.createdAtPosts || a.createdAt)
+        new Date(a.createdAtPosts || a.createdAt),
     );
   }
 
@@ -277,11 +282,12 @@ async function handleProductSubmit(event) {
 openProductWriteButton.addEventListener("click", openProductWriteModal);
 closeProductWriteButton.addEventListener("click", closeProductWriteModal);
 
-logoutButton.addEventListener("click", () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("username");
-  updateLoginArea();
-});
+// 주석처리_SY
+// logoutButton.addEventListener("click", () => {
+//   localStorage.removeItem("token");
+//   localStorage.removeItem("username");
+//   updateLoginArea();
+// });
 
 searchForm.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -307,6 +313,6 @@ sortFilter.addEventListener("change", renderProducts);
 productImagesInput.addEventListener("change", renderImagePreview);
 productWriteForm.addEventListener("submit", handleProductSubmit);
 
-updateLoginArea();
+// updateLoginArea();
 applySearchParams();
 loadProducts();

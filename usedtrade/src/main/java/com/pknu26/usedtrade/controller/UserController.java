@@ -6,7 +6,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.pknu26.usedtrade.dto.UserDTO;
-import com.pknu26.usedtrade.dto.UserForm;
 import com.pknu26.usedtrade.service.UserService;
 import com.pknu26.usedtrade.validation.UserJoinForm;
 import com.pknu26.usedtrade.validation.UserLoginForm;

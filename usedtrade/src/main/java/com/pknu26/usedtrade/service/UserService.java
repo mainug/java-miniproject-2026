@@ -3,9 +3,9 @@ package com.pknu26.usedtrade.service;
 import org.springframework.stereotype.Service;
 
 import com.pknu26.usedtrade.dto.UserDTO;
-import com.pknu26.usedtrade.dto.UserForm;
 import com.pknu26.usedtrade.mapper.UserMapper;
 import com.pknu26.usedtrade.validation.UserJoinForm;
+import com.pknu26.usedtrade.validation.UserLoginForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +41,25 @@ public class UserService {
 
         userMapper.insertUser(user);
     }
+
+    public UserDTO login(UserLoginForm form) {
+
+    // 사용자가 입력한 아이디(loginId)로 DB에서 회원 정보를 조회
+    UserDTO user = userMapper.findByLoginId(form.getLoginId());
+
+    // 해당 아이디를 가진 회원이 없으면 로그인 실패
+    if (user == null) {
+        return null;
+    }
+
+    // DB에 저장된 비밀번호와 사용자가 입력한 비밀번호를 비교해서 일치하지 않으면 로그인 실패
+    if (!user.getPassword().equals(form.getPassword())) {
+        return null;
+    }
+
+    // 아이디와 비밀번호가 모두 일치하면 조회된 회원 정보를 반환
+    return user;
+}
 
     
 

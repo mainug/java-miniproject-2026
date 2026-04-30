@@ -17,7 +17,7 @@
             <p class="subtitle">로그인 후 다양한 중고 물품을 확인하세요!</p>
           </div>
           <div class="user-box">
-            <a href="/" class="small-button">홈으로</a>
+            <a th:href="@{/}" class="small-button">홈으로</a>
           </div>
         </header>
 
@@ -33,15 +33,27 @@
             method="post"
             class="product-form"
           >
+            <!-- 로그인 실패 같은 전체 에러 메시지 -->
+            <div th:if="${#fields.hasGlobalErrors()}" class="error-box">
+              <p
+                th:each="err : ${#fields.globalErrors()}"
+                th:text="${err}"
+              ></p>
+            </div>
+
             <label class="row">
               <span>아이디</span>
               <input
                 type="text"
                 th:field="*{loginId}"
                 placeholder="아이디를 입력하세요"
-                required
                 autocomplete="username"
               />
+              <p
+              class="field-error"
+              th:if="${#fields.hasErrors('loginId')}"
+              th:errors="*{loginId}"
+            ></p>
             </label>
 
             <label class="row">
@@ -50,9 +62,13 @@
                 type="password"
                 th:field="*{password}"
                 placeholder="비밀번호를 입력하세요"
-                required
                 autocomplete="current-password"
               />
+              <p
+              class="field-error"
+              th:if="${#fields.hasErrors('password')}"
+              th:errors="*{password}"
+            ></p>
             </label>
 
             <!-- 상태 메시지 (로그인 실패 시 등) -->
