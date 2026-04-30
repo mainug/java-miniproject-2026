@@ -27,7 +27,7 @@
     </insert>
 
     <!-- 아이디 중복 체크 -->
-    <select id="findByLoginId" resultType="com.pknu26.usedtrade.dto.User">
+    <select id="findByLoginId" resultType="UserDTO">
         SELECT *
         FROM users
         WHERE login_id = #{loginId}
