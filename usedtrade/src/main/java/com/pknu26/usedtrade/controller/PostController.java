@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.pknu26.usedtrade.dto.PostDTO;
 import com.pknu26.usedtrade.service.PostService;
 
+
 @Controller 
 @RequestMapping("/products")
 public class PostController {

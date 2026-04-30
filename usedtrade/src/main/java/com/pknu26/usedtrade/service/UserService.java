@@ -3,6 +3,7 @@ package com.pknu26.usedtrade.service;
 import org.springframework.stereotype.Service;
 
 import com.pknu26.usedtrade.dto.User;
+import com.pknu26.usedtrade.dto.UserForm;
 import com.pknu26.usedtrade.mapper.UserMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -13,15 +14,22 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    public void join(User user) {
+    public void join(UserForm form) {
 
-        // 아이디 중복 체크
-        User exist = userMapper.findByLoginId(user.getLoginId());
+        // 중복 체크
+        User exist = userMapper.findByLoginId(form.getLoginId());
         if (exist != null) {
             throw new RuntimeException("이미 존재하는 아이디입니다.");
         }
 
-        // 기본값 설정
+        // DTO → Entity 변환
+        User user = new User();
+        user.setLoginId(form.getLoginId());
+        user.setUserName(form.getUserName());
+        user.setPassword(form.getPassword());
+        user.setNickname(form.getNickname());
+        user.setPhone(form.getPhone());
+
         user.setRole("USER");
 
         userMapper.insertUser(user);
