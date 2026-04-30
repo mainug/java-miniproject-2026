@@ -17,7 +17,7 @@
           </div>
           <div class="user-box">
             <!-- 260430 수정 : "/index.html" -> "/"  -->
-            <a href="/" class="small-button">홈으로</a>
+            <a th:href="@{/}" class="small-button">홈으로</a>
           </div>
         </header>
 
@@ -29,68 +29,104 @@
           <form
             id="joinForm"
             th:action="@{/users/join}"
+            th:object="${userJoinForm}"
             method="POST"
             class="product-form"
           >
+            <!-- 전체 에러 메시지 -->
+            <div th:if="${#fields.hasGlobalErrors()}" class="error-box">
+              <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+            </div>
+
             <label class="row">
               <span>아이디</span>
               <input
                 type="text"
                 name="loginId"
+                th:field="*{loginId}"
                 placeholder="사용할 아이디를 입력하세요"
-                required
               />
+              <p
+                class="field-error"
+                th:if="${#fields.hasErrors('loginId')}"
+                th:errors="*{loginId}"
+              ></p>
             </label>
 
             <label class="row">
               <span>비밀번호</span>
               <input
                 type="password"
+                th:field="*{password}"
                 id="userPassword"
                 name="password"
                 placeholder="비밀번호를 입력하세요"
-                required
               />
+              <p
+                class="field-error"
+                th:if="${#fields.hasErrors('password')}"
+                th:errors="*{password}"
+              ></p>
             </label>
 
             <label class="row">
               <span>비밀번호 확인</span>
               <input
                 type="password"
+                th:field="*{passwordConfirm}"
                 id="passwordConfirm"
                 placeholder="비밀번호를 한 번 더 입력하세요"
-                required
               />
+              <p
+                class="field-error"
+                th:if="${#fields.hasErrors('passwordConfirm')}"
+                th:errors="*{passwordConfirm}"
+              ></p>
             </label>
 
             <label class="row">
               <span>이름 (실명)</span>
               <input
                 type="text"
+                th:field="*{userName}"
                 name="userName"
                 placeholder="성함을 입력하세요"
-                required
               />
+              <p
+                class="field-error"
+                th:if="${#fields.hasErrors('userName')}"
+                th:errors="*{userName}"
+              ></p>
             </label>
 
             <label class="row">
               <span>닉네임</span>
               <input
                 type="text"
+                th:field="*{nickname}"
                 name="nickname"
                 placeholder="활동할 별명을 입력하세요"
-                required
               />
+              <p
+                class="field-error"
+                th:if="${#fields.hasErrors('nickname')}"
+                th:errors="*{nickname}"
+              ></p>
             </label>
 
             <label class="row">
               <span>전화번호</span>
               <input
                 type="tel"
+                th:field="*{phone}"
                 name="phone"
                 placeholder="예: 010-1234-5678"
-                required
               />
+              <p
+                class="field-error"
+                th:if="${#fields.hasErrors('phone')}"
+                th:errors="*{phone}"
+              ></p>
             </label>
 
             <div class="button-group" style="margin-top: 20px">
