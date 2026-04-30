@@ -24,7 +24,7 @@ public class UserController {
     @GetMapping("/join")
     public String joinForm(Model model) {
         model.addAttribute("userForm", new UserForm());
-        return "/user/join";
+        return "/users/join";
     }
 
     @PostMapping("/join")
@@ -35,14 +35,14 @@ public class UserController {
 
         // 1. Validation 실패 시
         if (bindingResult.hasErrors()) {
-            return "/user/join";
+            return "/users/join";
         }
 
         try {
             userService.join(userForm);
         } catch (RuntimeException e) {
             bindingResult.reject("joinFail", e.getMessage());
-            return "/user/join";
+            return "/users/join";
         }
 
         // 회원가입 후 로그인 페이지로 이동 (redirect)
