@@ -23,11 +23,13 @@ public class ViewController {
         return "login";
     }
 
+    // UserController 기능 충돌로 인해 주석 처리
     /**
      * 3. 회원가입 화면 (join.html) 리턴
      */
-    @GetMapping("/join")
-    public String showJoinPage() {
-        return "join";
-    }
+    // @GetMapping("/join")
+    // public String showJoinPage() {
+    //     return "join";
+    // }
+
 }
