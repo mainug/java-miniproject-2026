@@ -27,19 +27,16 @@ public class PostController {
 
     @PostMapping
     public String registerPost(
-            @RequestParam String title,
-            @RequestParam String content,
-            @RequestParam Long price,
-            @RequestParam String category,
-            @RequestParam String location,
-            @RequestParam(required = false) List<MultipartFile> images
-    ) {
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("price") Long price,
+            @RequestParam("category") String category,
+            @RequestParam("location") String location,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images) {
         PostDTO postDTO = new PostDTO();
 
-        // 로그인 구현 전 임시값
         postDTO.setUserId(1L);
         postDTO.setBoardId(1L);
-
         postDTO.setTitle(title);
         postDTO.setContent(content);
         postDTO.setPrice(price);
