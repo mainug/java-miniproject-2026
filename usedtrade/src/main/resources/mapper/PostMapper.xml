@@ -10,6 +10,9 @@
             SELECT seq_post_id.NEXTVAL FROM dual
         </selectKey>
 
+<mapper namespace="com.pknu26.usedtrade.mapper.PostMapper">
+    
+    <insert id="insertPost" parameterType="PostDTO" useGeneratedKeys="true" keyProperty="postId" keyColumn="post_id">
         INSERT INTO posts (
             post_id,
             user_id,

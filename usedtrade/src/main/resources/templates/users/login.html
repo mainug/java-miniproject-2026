@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인 - 중고마켓</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="wrap">
+        <!-- 상단 바: join.html과 동일한 구조 -->
+        <header class="top-bar">
+          <div>
+            <h1>중고마켓</h1>
+            <p class="subtitle">로그인 후 다양한 중고 물품을 확인하세요!</p>
+          </div>
+          <div class="user-box">
+            <a href="/" class="small-button">홈으로</a>
+          </div>
+        </header>
+
+        <!-- 로그인 박스 -->
+        <section class="auth-box">
+          <div class="auth-header">
+            <h2>로그인</h2>
+          </div>
+
+          <form
+            th:action="@{/users/login}"
+            th:object="${userLoginForm}"
+            method="post"
+            class="product-form"
+          >
+            <label class="row">
+              <span>아이디</span>
+              <input
+                type="text"
+                th:field="*{loginId}"
+                placeholder="아이디를 입력하세요"
+                required
+                autocomplete="username"
+              />
+            </label>
+
+            <label class="row">
+              <span>비밀번호</span>
+              <input
+                type="password"
+                th:field="*{password}"
+                placeholder="비밀번호를 입력하세요"
+                required
+                autocomplete="current-password"
+              />
+            </label>
+
+            <!-- 상태 메시지 (로그인 실패 시 등) -->
+            <div
+              id="authMessage"
+              class="status-box hidden"
+              style="margin-top: 10px"
+            ></div>
+
+            <div class="button-group" style="margin-top: 20px">
+              <button
+                type="submit"
+                class="search-button"
+                style="width: 100%; height: 50px; font-size: 16px"
+              >
+                로그인
+              </button>
+            </div>
+
+            <p
+              style="
+                text-align: center;
+                margin-top: 20px;
+                color: #666;
+                font-size: 14px;
+              "
+            >
+              아직 회원이 아니신가요?
+              <a href="/join.html" style="color: #2563eb; font-weight: 700"
+                >회원가입하기</a
+              >
+            </p>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <script src="/js/login.js"></script>
+  </body>
+</html>
