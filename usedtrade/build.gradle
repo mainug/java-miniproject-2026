@@ -30,7 +30,7 @@ dependencies {
 	// 스프링부트 시큐리티 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	// Spring Security Thymeleaf 연동 라이브러리
-	// implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
 	// JWT 의존성
 	// implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
