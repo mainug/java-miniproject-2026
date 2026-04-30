@@ -441,6 +441,30 @@ textarea {
   margin: 0;
 }
 
+.error-box {
+  margin: 12px 0 18px;
+  padding: 12px 14px;
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  background-color: #fef2f2;
+}
+
+.error-box p {
+  margin: 0;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.field-error {
+  display: block;
+  width: 100%;
+  margin: 6px 0 0;
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 /* 반응형 */
 
 @media (max-width: 900px) {
