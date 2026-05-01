@@ -9,9 +9,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.pknu26.usedtrade.dto.UserDTO;
 
-
-
-
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {

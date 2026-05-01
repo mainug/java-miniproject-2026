@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -44,11 +45,6 @@ public class UserController {
 
         // 회원가입 후 로그인 페이지로 이동 (redirect)
         return "redirect:/login";
-    }
-
-    @GetMapping("/login")
-    public String loginForm() {
-        return "/users/login";
     }
 
 }
