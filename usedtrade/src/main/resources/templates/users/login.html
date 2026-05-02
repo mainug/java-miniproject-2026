@@ -31,14 +31,10 @@
             th:action="@{/users/login}"
             th:object="${userLoginForm}"
             method="post"
-            class="product-form"
-          >
+            class="product-form">
             <!-- 로그인 실패 같은 전체 에러 메시지 -->
             <div th:if="${#fields.hasGlobalErrors()}" class="error-box">
-              <p
-                th:each="err : ${#fields.globalErrors()}"
-                th:text="${err}"
-              ></p>
+              <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
             </div>
 
             <label class="row">
@@ -47,13 +43,11 @@
                 type="text"
                 th:field="*{loginId}"
                 placeholder="아이디를 입력하세요"
-                autocomplete="username"
-              />
+                autocomplete="username" />
               <p
-              class="field-error"
-              th:if="${#fields.hasErrors('loginId')}"
-              th:errors="*{loginId}"
-            ></p>
+                class="field-error"
+                th:if="${#fields.hasErrors('loginId')}"
+                th:errors="*{loginId}"></p>
             </label>
 
             <label class="row">
@@ -62,28 +56,24 @@
                 type="password"
                 th:field="*{password}"
                 placeholder="비밀번호를 입력하세요"
-                autocomplete="current-password"
-              />
+                autocomplete="current-password" />
               <p
-              class="field-error"
-              th:if="${#fields.hasErrors('password')}"
-              th:errors="*{password}"
-            ></p>
+                class="field-error"
+                th:if="${#fields.hasErrors('password')}"
+                th:errors="*{password}"></p>
             </label>
 
             <!-- 상태 메시지 (로그인 실패 시 등) -->
             <div
               id="authMessage"
               class="status-box hidden"
-              style="margin-top: 10px"
-            ></div>
+              style="margin-top: 10px"></div>
 
             <div class="button-group" style="margin-top: 20px">
               <button
                 type="submit"
                 class="search-button"
-                style="width: 100%; height: 50px; font-size: 16px"
-              >
+                style="width: 100%; height: 50px; font-size: 16px">
                 로그인
               </button>
             </div>
@@ -94,10 +84,11 @@
                 margin-top: 20px;
                 color: #666;
                 font-size: 14px;
-              "
-            >
+              ">
               아직 회원이 아니신가요?
-              <a href="/join.html" style="color: #2563eb; font-weight: 700"
+              <a
+                th:href="@{/users/join}"
+                style="color: #2563eb; font-weight: 700"
                 >회원가입하기</a
               >
             </p>

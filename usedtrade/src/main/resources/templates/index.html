@@ -1,62 +1,52 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>중고마켓</title>
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-
-  <body>
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{layout :: layout(~{::content}, ~{::pageScripts})}">
+  <th:block th:fragment="content">
     <div class="app">
       <div class="wrap">
-        <header class="top-bar">
-          <div>
-            <h1>중고마켓</h1>
-            <p class="subtitle">
-              계정:
-              <span
-                id="loginUsername"
-                th:text="${session.loginUser != null ? session.loginUser.userName : '비회원'}"
-              >
-                비회원
-              </span>
-            </p>
-          </div>
+        <!-- <section class="page-title-box">
+          <h1>중고마켓</h1>
+          <p class="subtitle">
+            계정:
+            <span
+              id="loginUsername"
+              th:text="${session.loginUser != null ? session.loginUser.userName : '비회원'}">
+              비회원
+            </span>
+          </p>
+        </section> -->
 
-          <div class="user-box">
-            <!-- 로그인 안했을 때만 보임 -->
-            <a
-              th:if="${session.loginUser == null}"
-              th:href="@{/users/join}"
-              id="joinLink"
-              class="small-button"
-              style="background: #2563eb"
-            >
-              회원가입
-            </a>
+        <!-- <div class="user-box"> -->
+        <!-- 로그인 안했을 때만 보임 -->
+        <!-- <a
+            th:if="${session.loginUser == null}"
+            th:href="@{/users/join}"
+            id="joinLink"
+            class="small-button"
+            style="background: #2563eb">
+            회원가입
+          </a> -->
 
-            <a
-              th:if="${session.loginUser == null}"
-              th:href="@{/users/login}"
-              id="loginLink"
-              class="small-button"
-            >
-              로그인
-            </a>
+        <!-- <a
+            th:if="${session.loginUser == null}"
+            th:href="@{/users/login}"
+            id="loginLink"
+            class="small-button">
+            로그인
+          </a> -->
 
-            <!-- 로그인 했을 때만 보임 -->
-            <form
-              th:if="${session.loginUser != null}"
-              th:action="@{/users/logout}"
-              method="post"
-            >
-              <button type="submit" id="logoutButton" class="small-button">
-                로그아웃
-              </button>
-            </form>
-          </div>
-        </header>
+        <!-- 로그인 했을 때만 보임 -->
+        <!-- <form
+            th:if="${session.loginUser != null}"
+            th:action="@{/users/logout}"
+            method="post">
+            <button type="submit" id="logoutButton" class="small-button">
+              로그아웃
+            </button>
+          </form>
+        </div> -->
 
         <div id="marketStatus" class="status-box hidden"></div>
 
@@ -72,8 +62,7 @@
               id="keywordSearch"
               name="keyword"
               class="search-input"
-              placeholder="상품명, 설명, 지역 검색"
-            />
+              placeholder="상품명, 설명, 지역 검색" />
 
             <select id="categoryFilter" name="category">
               <option value="ALL">전체</option>
@@ -104,8 +93,7 @@
           id="openProductWriteButton"
           class="upload-fab floating"
           aria-label="상품 등록"
-          title="상품 등록"
-        >
+          title="상품 등록">
           +
         </button>
       </div>
@@ -114,8 +102,7 @@
     <div
       th:if="${session.loginUser != null}"
       id="productWriteModal"
-      class="modal hidden"
-    >
+      class="modal hidden">
       <div class="modal-card">
         <div class="modal-header">
           <h2>상품 등록</h2>
@@ -128,8 +115,7 @@
             <input
               type="text"
               id="productTitle"
-              placeholder="상품명을 입력하세요"
-            />
+              placeholder="상품명을 입력하세요" />
           </label>
 
           <label class="row">
@@ -137,8 +123,7 @@
             <input
               type="number"
               id="productPrice"
-              placeholder="가격을 입력하세요"
-            />
+              placeholder="가격을 입력하세요" />
           </label>
 
           <label class="row">
@@ -161,8 +146,7 @@
             <span>상품 설명</span>
             <textarea
               id="productContent"
-              placeholder="상품 설명을 입력하세요"
-            ></textarea>
+              placeholder="상품 설명을 입력하세요"></textarea>
           </label>
 
           <label class="row">
@@ -181,7 +165,9 @@
         </form>
       </div>
     </div>
+  </th:block>
 
+  <th:block th:fragment="pageScripts">
     <script src="/js/market.js"></script>
-  </body>
+  </th:block>
 </html>
