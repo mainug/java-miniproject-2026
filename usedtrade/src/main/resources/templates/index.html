@@ -2,51 +2,52 @@
 <html
   lang="ko"
   xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
   th:replace="~{layout :: layout(~{::content}, ~{::pageScripts})}">
   <th:block th:fragment="content">
     <div class="app">
       <div class="wrap">
-        <!-- <section class="page-title-box">
-          <h1>중고마켓</h1>
-          <p class="subtitle">
-            계정:
-            <span
-              id="loginUsername"
-              th:text="${session.loginUser != null ? session.loginUser.userName : '비회원'}">
-              비회원
-            </span>
-          </p>
-        </section> -->
+        <!-- 로그인 성공 메시지 -->
+        <div
+          id="toastMsg"
+          th:if="${param.login}"
+          style="
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #2563eb;
+            padding: 16px 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            font-weight: 600;
+            font-size: 15px;
+            z-index: 9999;
+          ">
+          로그인 되었습니다.
+        </div>
 
-        <!-- <div class="user-box"> -->
-        <!-- 로그인 안했을 때만 보임 -->
-        <!-- <a
-            th:if="${session.loginUser == null}"
-            th:href="@{/users/join}"
-            id="joinLink"
-            class="small-button"
-            style="background: #2563eb">
-            회원가입
-          </a> -->
-
-        <!-- <a
-            th:if="${session.loginUser == null}"
-            th:href="@{/users/login}"
-            id="loginLink"
-            class="small-button">
-            로그인
-          </a> -->
-
-        <!-- 로그인 했을 때만 보임 -->
-        <!-- <form
-            th:if="${session.loginUser != null}"
-            th:action="@{/users/logout}"
-            method="post">
-            <button type="submit" id="logoutButton" class="small-button">
-              로그아웃
-            </button>
-          </form>
-        </div> -->
+        <!-- 로그아웃 성공 메시지 -->
+        <div
+          id="toastMsg"
+          th:if="${param.logout}"
+          style="
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: red;
+            padding: 16px 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            font-weight: 600;
+            font-size: 15px;
+            z-index: 9999;
+          ">
+          로그아웃 되었습니다.
+        </div>
 
         <div id="marketStatus" class="status-box hidden"></div>
 
@@ -87,8 +88,9 @@
           <p class="empty">상품을 불러오는 중...</p>
         </section>
 
+        <!-- 로그인한 사용자만 상품 등록 버튼 표시 -->
         <button
-          th:if="${session.loginUser != null}"
+          sec:authorize="isAuthenticated()"
           type="button"
           id="openProductWriteButton"
           class="upload-fab floating"
@@ -99,8 +101,9 @@
       </div>
     </div>
 
+    <!-- 로그인한 사용자만 상품 등록 모달 표시 -->
     <div
-      th:if="${session.loginUser != null}"
+      sec:authorize="isAuthenticated()"
       id="productWriteModal"
       class="modal hidden">
       <div class="modal-card">
@@ -168,6 +171,17 @@
   </th:block>
 
   <th:block th:fragment="pageScripts">
+    <script>
+      const toastMsg = document.getElementById("toastMsg");
+      if (toastMsg) {
+        history.replaceState(null, "", "/");
+        setTimeout(() => {
+          toastMsg.style.transition = "opacity 1s";
+          toastMsg.style.opacity = "0";
+          setTimeout(() => toastMsg.remove(), 1000);
+        }, 1500);
+      }
+    </script>
     <script src="/js/market.js"></script>
   </th:block>
 </html>

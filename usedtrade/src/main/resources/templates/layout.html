@@ -2,6 +2,7 @@
 <html
   lang="ko"
   xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
   th:fragment="layout(content, pageScripts)">
   <head>
     <meta charset="UTF-8" />
@@ -13,6 +14,7 @@
   </head>
 
   <body>
+    <!-- 공통 헤더 -->
     <header class="site-header">
       <div class="site-header-inner">
         <div class="site-header-left">
@@ -40,26 +42,26 @@
         </div>
 
         <div class="site-header-right">
-          <!-- 로그인 여부와 관계없이 항상 표시 -->
+          <!-- 로그인 상태 표시 -->
           <span class="header-username">
             <span
-              th:text="${session.loginUser != null ? session.loginUser.userName : '비회원'}">
-              비회원 </span
-            >님
+              sec:authorize="isAuthenticated()"
+              sec:authentication="principal.nickname"
+              >닉네임</span
+            >
+            <span sec:authorize="isAnonymous()">비회원</span>
+            님
           </span>
 
           <!-- 비회원일 때 -->
-          <th:block th:if="${session.loginUser == null}">
+          <th:block sec:authorize="isAnonymous()">
             <a th:href="@{/users/join}" class="header-button join">회원가입</a>
             <a th:href="@{/users/login}" class="header-button login">로그인</a>
           </th:block>
 
           <!-- 로그인했을 때 -->
-          <th:block th:if="${session.loginUser != null}">
-            <form
-              th:action="@{/users/logout}"
-              method="post"
-              class="logout-form">
+          <th:block sec:authorize="isAuthenticated()">
+            <form th:action="@{/logout}" method="post" class="logout-form">
               <button type="submit" class="header-button outline">
                 로그아웃
               </button>

@@ -50,6 +50,7 @@
                 th:errors="*{loginId}"></p>
             </label>
 
+            <!-- 비밀번호 -->
             <label class="row">
               <span>비밀번호</span>
               <input
@@ -64,6 +65,7 @@
                 th:errors="*{password}"></p>
             </label>
 
+            <!-- 비밀번호 확인 -->
             <label class="row">
               <span>비밀번호 확인</span>
               <input
@@ -77,8 +79,9 @@
                 th:errors="*{passwordConfirm}"></p>
             </label>
 
+            <!-- 이름 -->
             <label class="row">
-              <span>이름 (실명)</span>
+              <span>이름</span>
               <input
                 type="text"
                 th:field="*{userName}"
@@ -90,6 +93,7 @@
                 th:errors="*{userName}"></p>
             </label>
 
+            <!-- 닉네임 -->
             <label class="row">
               <span>닉네임</span>
               <input
@@ -103,6 +107,7 @@
                 th:errors="*{nickname}"></p>
             </label>
 
+            <!-- 전화번호 -->
             <label class="row">
               <span>전화번호</span>
               <input
@@ -124,7 +129,6 @@
                 가입 완료
               </button>
             </div>
-
             <p
               style="
                 text-align: center;
