@@ -420,7 +420,7 @@ textarea {
   text-overflow: ellipsis;
 }
 
-/* 회원가입/로그인 전용 스타일 보완 */
+/* 회원가입/로그인 전용 스타일 보완_SY */
 .auth-box {
   max-width: 480px;
   margin: 0 auto;
@@ -441,7 +441,7 @@ textarea {
   margin: 0;
 }
 
-/* 회원가입/로그인 에러메시지 스타일 */
+/* 회원가입/로그인 에러메시지 스타일_SY */
 .error-box {
   margin: 12px 0 18px;
   padding: 12px 14px;
@@ -464,6 +464,215 @@ textarea {
   color: #dc2626;
   font-size: 13px;
   font-weight: 600;
+}
+
+/* 헤더 스타일_SY */
+.site-header {
+  width: 100%;
+  height: 72px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.site-header-inner {
+  max-width: 1180px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.site-logo {
+  font-size: 26px;
+  font-weight: 900;
+  color: #111827;
+  text-decoration: none;
+  letter-spacing: -1px;
+}
+
+.site-logo:hover {
+  color: #585e6b;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.site-nav a,
+.dropdown-button {
+  border: 0;
+  background: transparent;
+  color: #111827;
+  font-size: 18px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.site-nav a:hover,
+.dropdown-button:hover {
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dropdown-button::after {
+  content: "";
+  display: inline-block;
+  margin-left: 6px;
+  vertical-align: 3px;
+  border-top: 7px solid #111827;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+}
+
+.dropdown-button:hover::after {
+  border-top-color: #2563eb;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 38px;
+  left: 0;
+  min-width: 150px;
+  padding: 8px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+  z-index: 20;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 10px 12px;
+  white-space: nowrap;
+}
+
+.site-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-button {
+  min-width: 78px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.header-button.join {
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.header-button.join:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.header-button.login {
+  border: 1px solid #111827;
+  background: #111827;
+  color: #ffffff;
+}
+
+.header-button.login:hover {
+  background: #020617;
+  border-color: #020617;
+}
+
+.header-button.outline {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #111827;
+}
+
+.header-button.outline:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.header-username {
+  color: #4b5563;
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.logout-form {
+  margin: 0;
+}
+
+.logout-form button {
+  font-family: inherit;
+}
+
+@media (max-width: 768px) {
+  .site-header {
+    height: auto;
+  }
+
+  .site-header-inner {
+    padding: 14px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .site-header-left {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .site-nav {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .site-header-right {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
 }
 
 /* 반응형 */

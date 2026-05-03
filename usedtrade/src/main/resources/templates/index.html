@@ -3,90 +3,49 @@
   lang="ko"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>중고마켓</title>
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-
-  <body>
+  th:replace="~{layout :: layout(~{::content}, ~{::pageScripts})}">
+  <th:block th:fragment="content">
     <div class="app">
       <div class="wrap">
-        <header class="top-bar">
-          <div>
-            <h1>중고마켓</h1>
-            <p class="subtitle">
-              계정:
-              <span
-                sec:authorize="isAuthenticated()"
-                sec:authentication="name"
-              ></span>
-              <span sec:authorize="isAnonymous()">비회원</span>
-            </p>
-          </div>
-
-          <div class="user-box">
-            <a
-              sec:authorize="isAnonymous()"
-              th:href="@{/users/join}"
-              class="small-button"
-            >
-              회원가입
-            </a>
-
-            <a
-              sec:authorize="isAnonymous()"
-              th:href="@{/login}"
-              class="small-button"
-            >
-              로그인
-            </a>
-
-            <form
-              sec:authorize="isAuthenticated()"
-              th:action="@{/logout}"
-              method="post"
-            >
-              <button type="submit" class="small-button">로그아웃</button>
-            </form>
-          </div>
-        </header>
-
         <!-- 로그인 성공 메시지 -->
-        <div id="toastMsg" th:if="${param.login}" style="
-          position: fixed;
-          top: 30px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: white;
-          color: #2563eb;
-          padding: 16px 32px;
-          border-radius: 8px;
-          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-          font-weight: 600;
-          font-size: 15px;
-          z-index: 9999;
-        ">
+        <div
+          id="toastMsg"
+          th:if="${param.login}"
+          style="
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #2563eb;
+            padding: 16px 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            font-weight: 600;
+            font-size: 15px;
+            z-index: 9999;
+          ">
           로그인 되었습니다.
         </div>
 
         <!-- 로그아웃 성공 메시지 -->
-        <div id="toastMsg" th:if="${param.logout}" style="
-          position: fixed;
-          top: 30px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: white;
-          color: red;
-          padding: 16px 32px;
-          border-radius: 8px;
-          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-          font-weight: 600;
-          font-size: 15px;
-          z-index: 9999;
-        ">
+        <div
+          id="toastMsg"
+          th:if="${param.logout}"
+          style="
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: red;
+            padding: 16px 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            font-weight: 600;
+            font-size: 15px;
+            z-index: 9999;
+          ">
           로그아웃 되었습니다.
         </div>
 
@@ -104,8 +63,7 @@
               id="keywordSearch"
               name="keyword"
               class="search-input"
-              placeholder="상품명, 설명, 지역 검색"
-            />
+              placeholder="상품명, 설명, 지역 검색" />
 
             <select id="categoryFilter" name="category">
               <option value="ALL">전체</option>
@@ -130,24 +88,24 @@
           <p class="empty">상품을 불러오는 중...</p>
         </section>
 
+        <!-- 로그인한 사용자만 상품 등록 버튼 표시 -->
         <button
-          th:if="${session.loginUser != null}"
+          sec:authorize="isAuthenticated()"
           type="button"
           id="openProductWriteButton"
           class="upload-fab floating"
           aria-label="상품 등록"
-          title="상품 등록"
-        >
+          title="상품 등록">
           +
         </button>
       </div>
     </div>
 
+    <!-- 로그인한 사용자만 상품 등록 모달 표시 -->
     <div
-      th:if="${session.loginUser != null}"
+      sec:authorize="isAuthenticated()"
       id="productWriteModal"
-      class="modal hidden"
-    >
+      class="modal hidden">
       <div class="modal-card">
         <div class="modal-header">
           <h2>상품 등록</h2>
@@ -160,8 +118,7 @@
             <input
               type="text"
               id="productTitle"
-              placeholder="상품명을 입력하세요"
-            />
+              placeholder="상품명을 입력하세요" />
           </label>
 
           <label class="row">
@@ -169,8 +126,7 @@
             <input
               type="number"
               id="productPrice"
-              placeholder="가격을 입력하세요"
-            />
+              placeholder="가격을 입력하세요" />
           </label>
 
           <label class="row">
@@ -193,8 +149,7 @@
             <span>상품 설명</span>
             <textarea
               id="productContent"
-              placeholder="상품 설명을 입력하세요"
-            ></textarea>
+              placeholder="상품 설명을 입력하세요"></textarea>
           </label>
 
           <label class="row">
@@ -213,18 +168,20 @@
         </form>
       </div>
     </div>
+  </th:block>
 
+  <th:block th:fragment="pageScripts">
     <script>
-      const toastMsg = document.getElementById('toastMsg');
+      const toastMsg = document.getElementById("toastMsg");
       if (toastMsg) {
-        history.replaceState(null, '', '/');
+        history.replaceState(null, "", "/");
         setTimeout(() => {
-          toastMsg.style.transition = 'opacity 1s';
-          toastMsg.style.opacity = '0';
+          toastMsg.style.transition = "opacity 1s";
+          toastMsg.style.opacity = "0";
           setTimeout(() => toastMsg.remove(), 1000);
         }, 1500);
       }
     </script>
     <script src="/js/market.js"></script>
-  </body>
+  </th:block>
 </html>

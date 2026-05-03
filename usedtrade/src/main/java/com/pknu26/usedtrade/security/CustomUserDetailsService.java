@@ -1,4 +1,4 @@
-package com.pknu26.usedtrade.service;
+package com.pknu26.usedtrade.security;
 
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
@@ -25,11 +25,14 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("사용자 없음");
         }
 
-        return org.springframework.security.core.userdetails.User
-                .builder()
-                .username(user.getLoginId())
-                .password(user.getPassword()) // DB에 저장된 암호화 비밀번호
-                .roles(user.getRole())        // "USER"
-                .build();
+        // CustomUserDetails.java 생성으로 인한 주석처리
+        // return org.springframework.security.core.userdetails.User
+        //         .builder()
+        //         .username(user.getLoginId())
+        //         .password(user.getPassword()) // DB에 저장된 암호화 비밀번호
+        //         .roles(user.getRole())        // "USER"
+        //         .build();
+
+        return new CustomUserDetails(user);
     }
 }

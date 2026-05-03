@@ -31,8 +31,7 @@
             th:action="@{/users/join}"
             th:object="${userJoinForm}"
             method="POST"
-            class="product-form"
-          >
+            class="product-form">
             <!-- 전체 에러 메시지 -->
             <div th:if="${#fields.hasGlobalErrors()}" class="error-box">
               <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
@@ -44,13 +43,11 @@
                 type="text"
                 name="loginId"
                 th:field="*{loginId}"
-                placeholder="사용할 아이디를 입력하세요"
-              />
+                placeholder="사용할 아이디를 입력하세요" />
               <p
                 class="field-error"
                 th:if="${#fields.hasErrors('loginId')}"
-                th:errors="*{loginId}"
-              ></p>
+                th:errors="*{loginId}"></p>
             </label>
 
             <!-- 비밀번호 -->
@@ -61,13 +58,11 @@
                 th:field="*{password}"
                 id="userPassword"
                 name="password"
-                placeholder="비밀번호를 입력하세요"
-              />
+                placeholder="비밀번호를 입력하세요" />
               <p
                 class="field-error"
                 th:if="${#fields.hasErrors('password')}"
-                th:errors="*{password}"
-              ></p>
+                th:errors="*{password}"></p>
             </label>
 
             <!-- 비밀번호 확인 -->
@@ -77,13 +72,11 @@
                 type="password"
                 th:field="*{passwordConfirm}"
                 id="passwordConfirm"
-                placeholder="비밀번호를 한 번 더 입력하세요"
-              />
+                placeholder="비밀번호를 한 번 더 입력하세요" />
               <p
                 class="field-error"
                 th:if="${#fields.hasErrors('passwordConfirm')}"
-                th:errors="*{passwordConfirm}"
-              ></p>
+                th:errors="*{passwordConfirm}"></p>
             </label>
 
             <!-- 이름 -->
@@ -93,13 +86,11 @@
                 type="text"
                 th:field="*{userName}"
                 name="userName"
-                placeholder="성함을 입력하세요"
-              />
+                placeholder="성함을 입력하세요" />
               <p
                 class="field-error"
                 th:if="${#fields.hasErrors('userName')}"
-                th:errors="*{userName}"
-              ></p>
+                th:errors="*{userName}"></p>
             </label>
 
             <!-- 닉네임 -->
@@ -109,13 +100,11 @@
                 type="text"
                 th:field="*{nickname}"
                 name="nickname"
-                placeholder="활동할 별명을 입력하세요"
-              />
+                placeholder="활동할 별명을 입력하세요" />
               <p
                 class="field-error"
                 th:if="${#fields.hasErrors('nickname')}"
-                th:errors="*{nickname}"
-              ></p>
+                th:errors="*{nickname}"></p>
             </label>
 
             <!-- 전화번호 -->
@@ -125,21 +114,18 @@
                 type="tel"
                 th:field="*{phone}"
                 name="phone"
-                placeholder="예: 010-1234-5678"
-              />
+                placeholder="예: 010-1234-5678" />
               <p
                 class="field-error"
                 th:if="${#fields.hasErrors('phone')}"
-                th:errors="*{phone}"
-              ></p>
+                th:errors="*{phone}"></p>
             </label>
 
             <div class="button-group" style="margin-top: 20px">
               <button
                 type="submit"
                 class="search-button"
-                style="width: 100%; height: 50px; font-size: 16px"
-              >
+                style="width: 100%; height: 50px; font-size: 16px">
                 가입 완료
               </button>
             </div>
@@ -149,10 +135,11 @@
                 margin-top: 20px;
                 color: #666;
                 font-size: 14px;
-              "
-            >
+              ">
               이미 계정이 있으신가요?
-              <a th:href="@{/login}" style="color: #2563eb; font-weight: 700"
+              <a
+                th:href="@{/users/login}"
+                style="color: #2563eb; font-weight: 700"
                 >로그인하기</a
               >
             </p>
