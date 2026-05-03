@@ -1,5 +1,9 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,47 +20,75 @@
             <p class="subtitle">
               계정:
               <span
-                id="loginUsername"
-                th:text="${session.loginUser != null ? session.loginUser.userName : '비회원'}"
-              >
-                비회원
-              </span>
+                sec:authorize="isAuthenticated()"
+                sec:authentication="name"
+              ></span>
+              <span sec:authorize="isAnonymous()">비회원</span>
             </p>
           </div>
 
           <div class="user-box">
-            <!-- 로그인 안했을 때만 보임 -->
             <a
-              th:if="${session.loginUser == null}"
+              sec:authorize="isAnonymous()"
               th:href="@{/users/join}"
-              id="joinLink"
               class="small-button"
-              style="background: #2563eb"
             >
               회원가입
             </a>
 
             <a
-              th:if="${session.loginUser == null}"
-              th:href="@{/users/login}"
-              id="loginLink"
+              sec:authorize="isAnonymous()"
+              th:href="@{/login}"
               class="small-button"
             >
               로그인
             </a>
 
-            <!-- 로그인 했을 때만 보임 -->
             <form
-              th:if="${session.loginUser != null}"
-              th:action="@{/users/logout}"
+              sec:authorize="isAuthenticated()"
+              th:action="@{/logout}"
               method="post"
             >
-              <button type="submit" id="logoutButton" class="small-button">
-                로그아웃
-              </button>
+              <button type="submit" class="small-button">로그아웃</button>
             </form>
           </div>
         </header>
+
+        <!-- 로그인 성공 메시지 -->
+        <div id="toastMsg" th:if="${param.login}" style="
+          position: fixed;
+          top: 30px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: white;
+          color: #2563eb;
+          padding: 16px 32px;
+          border-radius: 8px;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+          font-weight: 600;
+          font-size: 15px;
+          z-index: 9999;
+        ">
+          로그인 되었습니다.
+        </div>
+
+        <!-- 로그아웃 성공 메시지 -->
+        <div id="toastMsg" th:if="${param.logout}" style="
+          position: fixed;
+          top: 30px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: white;
+          color: red;
+          padding: 16px 32px;
+          border-radius: 8px;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+          font-weight: 600;
+          font-size: 15px;
+          z-index: 9999;
+        ">
+          로그아웃 되었습니다.
+        </div>
 
         <div id="marketStatus" class="status-box hidden"></div>
 
@@ -182,6 +214,17 @@
       </div>
     </div>
 
+    <script>
+      const toastMsg = document.getElementById('toastMsg');
+      if (toastMsg) {
+        history.replaceState(null, '', '/');
+        setTimeout(() => {
+          toastMsg.style.transition = 'opacity 1s';
+          toastMsg.style.opacity = '0';
+          setTimeout(() => toastMsg.remove(), 1000);
+        }, 1500);
+      }
+    </script>
     <script src="/js/market.js"></script>
   </body>
 </html>

@@ -27,8 +27,8 @@ const imagePreviewList = document.querySelector("#imagePreviewList");
 let products = [];
 
 // function getUsername() {
-//   return localStorage.getItem("username");
-// }
+  //   return localStorage.getItem("username");
+  // }
 
 function showStatus(message) {
   if (!marketStatus) return;
