@@ -54,6 +54,42 @@
           </div>
         </header>
 
+        <!-- 로그인 성공 메시지 -->
+        <div id="toastMsg" th:if="${param.login}" style="
+          position: fixed;
+          top: 30px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: white;
+          color: #2563eb;
+          padding: 16px 32px;
+          border-radius: 8px;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+          font-weight: 600;
+          font-size: 15px;
+          z-index: 9999;
+        ">
+          로그인 되었습니다.
+        </div>
+
+        <!-- 로그아웃 성공 메시지 -->
+        <div id="toastMsg" th:if="${param.logout}" style="
+          position: fixed;
+          top: 30px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: white;
+          color: red;
+          padding: 16px 32px;
+          border-radius: 8px;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+          font-weight: 600;
+          font-size: 15px;
+          z-index: 9999;
+        ">
+          로그아웃 되었습니다.
+        </div>
+
         <div id="marketStatus" class="status-box hidden"></div>
 
         <section class="section-header">
@@ -173,6 +209,17 @@
       </div>
     </div>
 
+    <script>
+      const toastMsg = document.getElementById('toastMsg');
+      if (toastMsg) {
+        history.replaceState(null, '', '/');
+        setTimeout(() => {
+          toastMsg.style.transition = 'opacity 1s';
+          toastMsg.style.opacity = '0';
+          setTimeout(() => toastMsg.remove(), 1000);
+        }, 1500);
+      }
+    </script>
     <script src="/js/market.js"></script>
   </body>
 </html>
