@@ -25,6 +25,7 @@ public class SecurityConfig {
                     "/users/join",
                     "/login",
                     "/api/posts",
+                    "/uploads/**",
                     "/css/**",
                     "/js/**"
                 ).permitAll()   // 위 페이지들은 인증 없이 접근 허용
@@ -39,6 +40,12 @@ public class SecurityConfig {
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
+
+            .sessionManagement(session -> session
+            .maximumSessions(1)          // 중복 로그인 방지
+            .expiredUrl("/login")        // 세션 만료 시 이동 페이지
+        )
+
 
             .logout(logout -> logout
                 .logoutUrl("/logout")
