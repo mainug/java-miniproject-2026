@@ -26,9 +26,9 @@ public class SecurityConfig {
                                 "/users/join",
                                 "/users/login",
                                 "/api/posts/**",
+                                "/community/**",
+                                "/api/community/posts",
                                 "/uploads/**",
-                                "/board",
-                                "/board/**",
                                 "/css/**",
                                 "/js/**",
                                 "/error"

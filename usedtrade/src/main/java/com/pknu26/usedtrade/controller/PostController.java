@@ -1,8 +1,10 @@
 package com.pknu26.usedtrade.controller;
 
 import com.pknu26.usedtrade.dto.PostDTO;
+import com.pknu26.usedtrade.security.CustomUserDetails;
 import com.pknu26.usedtrade.service.FileService;
 import com.pknu26.usedtrade.service.PostService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +40,7 @@ public class PostController {
 
     @PostMapping
     public String registerPost(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam("title") String title,
             @RequestParam("content") String content,
             @RequestParam("price") Long price,
@@ -46,7 +49,7 @@ public class PostController {
             @RequestParam(value = "images", required = false) List<MultipartFile> images) {
         PostDTO postDTO = new PostDTO();
 
-        postDTO.setUserId(1L);
+        postDTO.setUserId(userDetails.getUser().getUserId());
         postDTO.setBoardId(1L);
         postDTO.setTitle(title);
         postDTO.setContent(content);
