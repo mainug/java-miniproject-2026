@@ -26,7 +26,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public PostDTO findPostDetail(@PathVariable Long postId) {
+    public PostDTO findPostDetail(@PathVariable("postId") Long postId) {
         PostDTO post = postService.findPostDetail(postId);
 
         if (post == null) {
