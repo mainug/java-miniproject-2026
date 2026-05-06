@@ -1,27 +1,53 @@
 <!doctype html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>중고마켓</title>
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  th:replace="~{layout :: layout(~{::content}, ~{::pageScripts})}">
+  <th:block th:fragment="content">
     <div class="app">
       <div class="wrap">
-        <header class="top-bar">
-          <div>
-            <h1>중고마켓</h1>
-            <p class="subtitle">계정: <span id="loginUsername">비회원</span></p>
-          </div>
+        <!-- 로그인 성공 메시지 -->
+        <div
+          id="toastMsg"
+          th:if="${param.login}"
+          style="
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #2563eb;
+            padding: 16px 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            font-weight: 600;
+            font-size: 15px;
+            z-index: 9999;
+          ">
+          로그인 되었습니다.
+        </div>
 
-          <div class="user-box">
-            <a href="/login.html" id="loginLink" class="small-button">로그인</a>
-            <button type="button" id="logoutButton" class="small-button hidden">
-              로그아웃
-            </button>
-          </div>
-        </header>
+        <!-- 로그아웃 성공 메시지 -->
+        <div
+          id="toastMsg"
+          th:if="${param.logout}"
+          style="
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: red;
+            padding: 16px 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            font-weight: 600;
+            font-size: 15px;
+            z-index: 9999;
+          ">
+          로그아웃 되었습니다.
+        </div>
 
         <div id="marketStatus" class="status-box hidden"></div>
 
@@ -31,8 +57,15 @@
             <p class="summary">총 <span id="productCount">0</span>개</p>
           </div>
 
-          <div class="filter-box">
-            <select id="categoryFilter">
+          <form id="searchForm" class="filter-box">
+            <input
+              type="text"
+              id="keywordSearch"
+              name="keyword"
+              class="search-input"
+              placeholder="상품명, 설명, 지역 검색" />
+
+            <select id="categoryFilter" name="category">
               <option value="ALL">전체</option>
               <option value="DIGITAL">디지털기기</option>
               <option value="FURNITURE">가구</option>
@@ -40,26 +73,39 @@
               <option value="BOOK">도서</option>
               <option value="ETC">기타</option>
             </select>
-          </div>
+
+            <select id="sortFilter" name="sort">
+              <option value="LATEST">최신순</option>
+              <option value="PRICE_ASC">가격 낮은순</option>
+              <option value="PRICE_DESC">가격 높은순</option>
+            </select>
+
+            <button type="submit" class="search-button">검색</button>
+          </form>
         </section>
 
         <section id="productList" class="product-list">
           <p class="empty">상품을 불러오는 중...</p>
         </section>
 
+        <!-- 로그인한 사용자만 상품 등록 버튼 표시 -->
         <button
+          sec:authorize="isAuthenticated()"
           type="button"
           id="openProductWriteButton"
           class="upload-fab floating"
           aria-label="상품 등록"
-          title="상품 등록"
-        >
+          title="상품 등록">
           +
         </button>
       </div>
     </div>
 
-    <div id="productWriteModal" class="modal hidden">
+    <!-- 로그인한 사용자만 상품 등록 모달 표시 -->
+    <div
+      sec:authorize="isAuthenticated()"
+      id="productWriteModal"
+      class="modal hidden">
       <div class="modal-card">
         <div class="modal-header">
           <h2>상품 등록</h2>
@@ -72,8 +118,7 @@
             <input
               type="text"
               id="productTitle"
-              placeholder="상품명을 입력하세요"
-            />
+              placeholder="상품명을 입력하세요" />
           </label>
 
           <label class="row">
@@ -81,8 +126,7 @@
             <input
               type="number"
               id="productPrice"
-              placeholder="가격을 입력하세요"
-            />
+              placeholder="가격을 입력하세요" />
           </label>
 
           <label class="row">
@@ -105,20 +149,39 @@
             <span>상품 설명</span>
             <textarea
               id="productContent"
-              placeholder="상품 설명을 입력하세요"
-            ></textarea>
+              placeholder="상품 설명을 입력하세요"></textarea>
           </label>
 
           <label class="row">
             <span>상품 이미지</span>
-            <input type="file" id="productImages" accept="image/*" multiple />
+
+            <div class="image-upload-box">
+              <input type="file" id="productImages" accept="image/*" multiple />
+
+              <div id="imagePreviewList" class="image-preview-list">
+                <p class="image-preview-empty">선택된 이미지가 없습니다.</p>
+              </div>
+            </div>
           </label>
 
           <button type="submit">등록하기</button>
         </form>
       </div>
     </div>
+  </th:block>
 
+  <th:block th:fragment="pageScripts">
+    <script>
+      const toastMsg = document.getElementById("toastMsg");
+      if (toastMsg) {
+        history.replaceState(null, "", "/");
+        setTimeout(() => {
+          toastMsg.style.transition = "opacity 1s";
+          toastMsg.style.opacity = "0";
+          setTimeout(() => toastMsg.remove(), 1000);
+        }, 1500);
+      }
+    </script>
     <script src="/js/market.js"></script>
-  </body>
+  </th:block>
 </html>

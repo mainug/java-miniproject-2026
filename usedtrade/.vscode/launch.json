@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-UsedtradeApplication<usedtrade>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.pknu26.usedtrade.UsedtradeApplication",
+      "projectName": "usedtrade",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
