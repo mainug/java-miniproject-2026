@@ -59,6 +59,9 @@ function hideStatus() {
 // ==============================
 // URL 쿼리스트링 값을 검색 필터에 반영하는 함수
 // 예: /products?category=DIGITAL&sort=LATEST
+//
+// 현재는 검색 버튼을 눌러도 URL 이동을 하지 않지만,
+// 나중에 URL 검색 조건을 다시 쓸 수 있으므로 유지함.
 // ==============================
 function applySearchParams() {
   if (!keywordSearch || !categoryFilter || !sortFilter) return;
@@ -74,8 +77,10 @@ function applySearchParams() {
   sortFilter.value = sort;
 }
 
+// 가격 표시 형식 변환
+// 예: 10000 -> 10,000원
 function formatPrice(price) {
-  return Number(price).toLocaleString() + "원";
+  return Number(price || 0).toLocaleString() + "원";
 }
 
 // 서버에서 받은 상품 상태값을 화면에 표시할 한글로 변환
@@ -105,7 +110,8 @@ async function loadProducts() {
 
     // 서버에서 받은 상품 목록을 전역 배열에 저장
     products = await response.json();
-    // 화면에 상품 목록 출력
+
+    // 처음 페이지에 들어왔을 때 전체 상품 목록 출력
     renderProducts();
   } catch (error) {
     console.error(error);
@@ -115,14 +121,17 @@ async function loadProducts() {
 
 // ==============================
 // 상품 목록을 화면에 렌더링하는 함수
-// 검색어, 카테고리, 정렬 조건을 반영해서 보여줌
+//
+// 이 함수가 실행되는 시점에 현재 입력/선택된 값을 읽음.
+// 따라서 카테고리나 정렬 select에 별도 change 이벤트를 걸지 않아도,
+// 검색 버튼을 누르는 순간 현재 값이 한 번에 적용됨.
 // ==============================
 function renderProducts() {
   if (!productList || !productCount) return;
 
-  const keyword = keywordSearch.value.trim().toLowerCase();
-  const selectedCategory = categoryFilter.value;
-  const selectedSort = sortFilter.value;
+  const keyword = keywordSearch ? keywordSearch.value.trim().toLowerCase() : "";
+  const selectedCategory = categoryFilter ? categoryFilter.value : "ALL";
+  const selectedSort = sortFilter ? sortFilter.value : "LATEST";
 
   // 원본 상품 배열을 직접 수정하지 않기 위해 복사본 생성
   let filteredProducts = [...products];
@@ -153,19 +162,23 @@ function renderProducts() {
   if (selectedSort === "LATEST") {
     filteredProducts.sort(
       (a, b) =>
-        new Date(b.createdAtPosts || b.createdAt) -
-        new Date(a.createdAtPosts || a.createdAt),
+        new Date(b.createdAtPosts || b.createdAt || 0) -
+        new Date(a.createdAtPosts || a.createdAt || 0),
     );
   }
 
   // 가격 낮은순 정렬
   if (selectedSort === "PRICE_ASC") {
-    filteredProducts.sort((a, b) => Number(a.price) - Number(b.price));
+    filteredProducts.sort(
+      (a, b) => Number(a.price || 0) - Number(b.price || 0),
+    );
   }
 
   // 가격 높은순 정렬
   if (selectedSort === "PRICE_DESC") {
-    filteredProducts.sort((a, b) => Number(b.price) - Number(a.price));
+    filteredProducts.sort(
+      (a, b) => Number(b.price || 0) - Number(a.price || 0),
+    );
   }
 
   // 상품 개수 표시
@@ -184,7 +197,7 @@ function renderProducts() {
       const imageUrl = product.mainImageUrl;
 
       return `
-        <article class="product-card">
+        <article class="product-card" onclick="location.href='/posts/${product.postId}'">
           <div class="product-image">
             ${
               imageUrl
@@ -271,6 +284,7 @@ function closeProductWriteModal() {
   if (productWriteForm) {
     productWriteForm.reset();
   }
+
   // 이미지 미리보기 초기화
   resetImagePreview();
 }
@@ -308,8 +322,8 @@ async function handleProductSubmit(event) {
   const content = productContentInput.value.trim();
 
   // 필수 입력값 검증
-  if (!title || !price || !content) {
-    showStatus("상품명, 가격, 상품 설명을 입력하세요.");
+  if (!title || !price || !content || !category) {
+    showStatus("상품명, 가격, 상품 설명, 카테고리를 입력하세요.");
     return;
   }
 
@@ -371,37 +385,23 @@ if (closeProductWriteButton) {
   closeProductWriteButton.addEventListener("click", closeProductWriteModal);
 }
 
-// 검색 폼 제출 시 URL 쿼리스트링을 만들어 이동
+// 검색 버튼 클릭 또는 검색창에서 Enter 입력 시 목록 다시 렌더링
+//
+// 여기서 renderProducts()가 실행되면서 현재 검색어, 카테고리, 정렬 값을 모두 읽음.
+// 즉 카테고리/정렬 변경 자체는 아무 동작 안 하고,
+// 검색 버튼을 눌렀을 때 한 번에 반영됨.
 if (searchForm) {
   searchForm.addEventListener("submit", function (event) {
     event.preventDefault();
-
-    const keyword = keywordSearch ? keywordSearch.value.trim() : "";
-    const category = categoryFilter ? categoryFilter.value : "ALL";
-    const sort = sortFilter ? sortFilter.value : "LATEST";
-
-    const params = new URLSearchParams();
-
-    if (keyword) {
-      params.set("keyword", keyword);
-    }
-
-    params.set("category", category);
-    params.set("sort", sort);
-
-    location.href = `/products?${params.toString()}`;
+    renderProducts();
   });
 }
 
-// 카테고리 선택 변경 시 즉시 상품 목록 다시 렌더링
-if (categoryFilter) {
-  categoryFilter.addEventListener("change", renderProducts);
-}
+// 카테고리 변경 이벤트는 일부러 등록하지 않음
+// categoryFilter.addEventListener("change", renderProducts); 사용 안 함
 
-// 정렬 방식 변경 시 즉시 상품 목록 다시 렌더링
-if (sortFilter) {
-  sortFilter.addEventListener("change", renderProducts);
-}
+// 정렬 변경 이벤트도 일부러 등록하지 않음
+// sortFilter.addEventListener("change", renderProducts); 사용 안 함
 
 // 이미지 선택 시 미리보기 렌더링
 if (productImagesInput) {

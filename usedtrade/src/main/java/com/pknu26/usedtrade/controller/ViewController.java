@@ -12,7 +12,7 @@ public class ViewController {
     @GetMapping("/")
     public String showIndexPage() {
         // "index"라고 리턴하면, 스프링이 templates 폴더에서 "index.html"을 찾아 화면에 띄워줌.
-        return "index"; 
+        return "index";
     }
 
     /**
@@ -29,7 +29,13 @@ public class ViewController {
      */
     // @GetMapping("/join")
     // public String showJoinPage() {
-    //     return "join";
+    // return "join";
     // }
 
+
+    //게시글 상세화면
+    @GetMapping("/posts/{postId}")
+    public String showPostDetailPage() {
+        return "post/detail";
+    }
 }
