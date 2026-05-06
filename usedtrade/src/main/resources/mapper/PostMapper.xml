@@ -54,7 +54,6 @@
             p.view_count,
             p.created_at_posts,
             img.image_url AS main_image_url,
-
             u.nickname AS nickname
 
         FROM posts p
