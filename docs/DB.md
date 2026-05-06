@@ -2,7 +2,8 @@
 
 ## ERD
 
-<img width="908" height="666" alt="image" src="https://github.com/user-attachments/assets/8f376634-1589-45f9-b124-9b0ce68a5a87" />
+<img width="826" height="460" alt="image" src="https://github.com/user-attachments/assets/dc809bf2-c659-481a-8515-605f9bd1643b" />
+
 
 ## 테이블 생성 쿼리
 
@@ -108,6 +109,39 @@ INSERT INTO boards (
     1,
     1
 );
+
+COMMIT;
+
+-- 260506 기존 테이블에서 커뮤니티 게시판을 위한 스키마 수정
+-- 시퀀스
+CREATE SEQUENCE seq_community_post_id START WITH 1 INCREMENT BY 1 NOCACHE;
+
+-- 커뮤니티 게시글 테이블
+CREATE TABLE community_posts (
+    community_post_id NUMBER DEFAULT seq_community_post_id.NEXTVAL PRIMARY KEY,
+    user_id           NUMBER NOT NULL,
+    title             VARCHAR2(200) NOT NULL,
+    content           CLOB NOT NULL,
+    category          VARCHAR2(20) NOT NULL
+                          CHECK (category IN ('FREE', 'LOCAL', 'REVIEW', 'QNA')),
+    view_count        NUMBER DEFAULT 0 NOT NULL,
+    created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at        TIMESTAMP,
+
+    CONSTRAINT fk_community_posts_users
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+-- 기존 테이블 수정 (post_id NULL 허용 + community_post_id 추가)
+ALTER TABLE post_img MODIFY post_id NUMBER NULL;
+ALTER TABLE post_img ADD community_post_id NUMBER;
+ALTER TABLE post_img ADD CONSTRAINT fk_post_img_community
+    FOREIGN KEY (community_post_id) REFERENCES community_posts(community_post_id) ON DELETE CASCADE;
+
+ALTER TABLE comments MODIFY post_id NUMBER NULL;
+ALTER TABLE comments ADD community_post_id NUMBER;
+ALTER TABLE comments ADD CONSTRAINT fk_comments_community
+    FOREIGN KEY (community_post_id) REFERENCES community_posts(community_post_id) ON DELETE CASCADE;
 
 COMMIT;
 ```
