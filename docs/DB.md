@@ -142,6 +142,4 @@ ALTER TABLE comments MODIFY post_id NUMBER NULL;
 ALTER TABLE comments ADD community_post_id NUMBER;
 ALTER TABLE comments ADD CONSTRAINT fk_comments_community
     FOREIGN KEY (community_post_id) REFERENCES community_posts(community_post_id) ON DELETE CASCADE;
-
-COMMIT;
 ```
