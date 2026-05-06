@@ -1,12 +1,11 @@
 // ==============================
 // 상품 등록 모달 관련 요소
-// 로그인하지 않은 비회원 상태에서는 이 요소들이 HTML에 없을 수 있음
-// 그래서 아래 이벤트 등록 시 반드시 null 체크가 필요함
 // ==============================
-const productWriteModal = document.querySelector("#productWriteModal");
-const openProductWriteButton = document.querySelector(
-  "#openProductWriteButton",
-);
+const openProductWriteButton = document.getElementById(
+  "openProductWriteButton",
+); // 상품 등록 버튼
+const productWriteModal = document.getElementById("productWriteModal"); // 상품 등록 모달
+
 const closeProductWriteButton = document.querySelector(
   "#closeProductWriteButton",
 );
@@ -207,7 +206,11 @@ function renderProducts() {
           </div>
 
           <div class="product-body">
-            <h3>${product.title}</h3>
+            <div class="product-title-row">
+              <h3 class="product-title">${product.title}</h3>
+              <span class="seller-nickname">${product.nickname || "알 수 없음"}</span>
+            </div>
+
             <p>${product.content || ""}</p>
 
             <div class="product-meta">
@@ -375,9 +378,25 @@ async function handleProductSubmit(event) {
 // addEventListener 전에 반드시 요소 존재 여부를 확인함
 // ==============================
 
-// 상품 등록 버튼 클릭 시 모달 열기
+// 상품 등록 버튼 클릭 이벤트_SY
 if (openProductWriteButton) {
-  openProductWriteButton.addEventListener("click", openProductWriteModal);
+  openProductWriteButton.addEventListener("click", () => {
+    // HTML 버튼에 저장해둔 로그인 여부 가져오기
+    const isAuthenticated =
+      openProductWriteButton.dataset.authenticated === "true";
+
+    // HTML 버튼에 저장해둔 로그인 페이지 주소 가져오기
+    const loginUrl = openProductWriteButton.dataset.loginUrl;
+
+    // 비회원이면 로그인 페이지로 이동
+    if (!isAuthenticated) {
+      location.href = loginUrl;
+      return;
+    }
+
+    // 로그인한 사용자면 상품 등록 모달 열기
+    productWriteModal.classList.remove("hidden");
+  });
 }
 
 // 모달 닫기 버튼 클릭 시 모달 닫기

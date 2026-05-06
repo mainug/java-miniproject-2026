@@ -23,6 +23,9 @@ public class PostDTO {
     private LocalDateTime createdAtPosts;
     private String mainImageUrl;
 
+    // 260506 상품 등록자 추가_SY
+    private String nickname;
+    
     //상세조회용 이미지 목록
     private List<PostImageDTO> images;
 }
