@@ -15,7 +15,6 @@ public class ViewController {
         return "index"; 
     }
 
-<<<<<<< HEAD
     /**
      * 2. 로그인 화면 (login.html) 리턴
      */
@@ -23,16 +22,6 @@ public class ViewController {
     public String showLoginPage() {
         return "users/login";
     }
-=======
-    // UserController 기능 충돌로 인해 주석 처리
-    /**
-     * 2. 로그인 화면 (login.html) 리턴
-     */
-    // @GetMapping("/login")
-    // public String showLoginPage() {
-    //     return "login";
-    // }
->>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
 
     // UserController 기능 충돌로 인해 주석 처리
     /**
