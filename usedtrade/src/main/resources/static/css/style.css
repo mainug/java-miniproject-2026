@@ -720,3 +720,101 @@ textarea {
     padding: 20px;
   }
 }
+
+/* 커뮤니티 상세 페이지 */
+
+.back-link {
+  color: #374151;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.back-link:hover {
+  color: #1d4ed8;
+}
+
+.post-detail {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 32px;
+  margin-top: 16px;
+}
+
+.post-detail-header {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+}
+
+.post-detail-header h2 {
+  margin: 12px 0 10px;
+  font-size: 22px;
+}
+
+.post-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: #777;
+  font-size: 14px;
+}
+
+.post-images {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.post-detail-image {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.post-content {
+  line-height: 1.8;
+  color: #374151;
+  white-space: pre-wrap;
+}
+
+.post-detail-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.post-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-secondary {
+  padding: 6px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #f3f4f6;
+}
+
+.btn-danger {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background: #fecaca;
+}

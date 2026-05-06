@@ -22,9 +22,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/",
+                    "/community/**",
                     "/users/join",
                     "/login",
                     "/api/posts",
+                    "/api/community/posts",
                     "/uploads/**",
                     "/css/**",
                     "/js/**"
