@@ -29,6 +29,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	// 스프링부트 시큐리티 의존성
 <<<<<<< HEAD
+<<<<<<< HEAD
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	// Spring Security Thymeleaf 연동 라이브러리
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
@@ -37,6 +38,11 @@ dependencies {
 	// Spring Security Thymeleaf 연동 라이브러리
 	// implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 >>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// Spring Security Thymeleaf 연동 라이브러리
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+>>>>>>> main
 
 	// JWT 의존성
 	// implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
