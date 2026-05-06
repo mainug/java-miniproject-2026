@@ -14,7 +14,7 @@
           </div>
         </section>
 
-        <article class="post-detail">
+        <article class="post-detail" th:attr="data-post-id=${post.communityPostId}">
           <header class="post-detail-header">
             <div class="post-detail-title-row">
               <span class="product-status" th:text="${post.category == 'FREE' ? '자유게시판' :
@@ -92,9 +92,6 @@
   </th:block>
 
   <th:block th:fragment="pageScripts">
-    <script th:inline="javascript">
-      const communityPostId = [[${post.communityPostId}]];
-    </script>
     <script src="/js/community-detail.js"></script>
   </th:block>
 </html>

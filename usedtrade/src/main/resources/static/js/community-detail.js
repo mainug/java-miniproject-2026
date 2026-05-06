@@ -1,3 +1,5 @@
+const communityPostId = document.querySelector(".post-detail")?.dataset.postId;
+
 const openEditButton = document.querySelector("#openEditButton");
 const closeEditButton = document.querySelector("#closeEditButton");
 const editModal = document.querySelector("#editModal");
