@@ -1,11 +1,17 @@
 package com.pknu26.usedtrade.service;
 
+<<<<<<< HEAD
 import org.springframework.security.crypto.password.PasswordEncoder;
+=======
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
 import org.springframework.stereotype.Service;
 
 import com.pknu26.usedtrade.dto.UserDTO;
 import com.pknu26.usedtrade.mapper.UserMapper;
+<<<<<<< HEAD
 import com.pknu26.usedtrade.validation.UserJoinForm;
+=======
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserMapper userMapper;
+<<<<<<< HEAD
     private final PasswordEncoder passwordEncoder;
 
     public void join(UserJoinForm form) {
@@ -45,4 +52,22 @@ public class UserService {
         userMapper.insertUser(user);
     }
 
+=======
+
+    public void join(UserDTO user) {
+
+        // 아이디 중복 체크
+        UserDTO exist = this.userMapper.findByLoginId(user.getLoginId());
+        if (exist != null) {
+            throw new RuntimeException("이미 존재하는 아이디입니다.");
+        }
+
+        // 기본값 설정
+        user.setRole("USER");
+
+        userMapper.insertUser(user);
+    }
+
+
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
 }

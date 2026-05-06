@@ -420,7 +420,11 @@ textarea {
   text-overflow: ellipsis;
 }
 
+<<<<<<< HEAD
 /* 회원가입/로그인 전용 스타일 보완_SY */
+=======
+/* 회원가입/로그인 전용 스타일 보완 */
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
 .auth-box {
   max-width: 480px;
   margin: 0 auto;
@@ -441,6 +445,7 @@ textarea {
   margin: 0;
 }
 
+<<<<<<< HEAD
 /* 회원가입/로그인 에러메시지 스타일_SY */
 .error-box {
   margin: 12px 0 18px;
@@ -692,6 +697,25 @@ textarea {
     min-width: 100%;
   }
 
+=======
+/* 반응형 */
+
+@media (max-width: 900px) {
+  .section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .filter-box {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    min-width: 100%;
+  }
+
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
   .product-list {
     grid-template-columns: repeat(2, 1fr);
   }

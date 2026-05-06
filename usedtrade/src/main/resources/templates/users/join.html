@@ -17,7 +17,11 @@
           </div>
           <div class="user-box">
             <!-- 260430 수정 : "/index.html" -> "/"  -->
+<<<<<<< HEAD
             <a th:href="@{/}" class="small-button">홈으로</a>
+=======
+            <a href="/" class="small-button">홈으로</a>
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
           </div>
         </header>
 
@@ -29,6 +33,7 @@
           <form
             id="joinForm"
             th:action="@{/users/join}"
+<<<<<<< HEAD
             th:object="${userJoinForm}"
             method="POST"
             class="product-form">
@@ -37,11 +42,17 @@
               <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
             </div>
 
+=======
+            method="POST"
+            class="product-form"
+          >
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
             <label class="row">
               <span>아이디</span>
               <input
                 type="text"
                 name="loginId"
+<<<<<<< HEAD
                 th:field="*{loginId}"
                 placeholder="사용할 아이디를 입력하세요" />
               <p
@@ -51,10 +62,18 @@
             </label>
 
             <!-- 비밀번호 -->
+=======
+                placeholder="사용할 아이디를 입력하세요"
+                required
+              />
+            </label>
+
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
             <label class="row">
               <span>비밀번호</span>
               <input
                 type="password"
+<<<<<<< HEAD
                 th:field="*{password}"
                 id="userPassword"
                 name="password"
@@ -66,10 +85,20 @@
             </label>
 
             <!-- 비밀번호 확인 -->
+=======
+                id="userPassword"
+                name="password"
+                placeholder="비밀번호를 입력하세요"
+                required
+              />
+            </label>
+
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
             <label class="row">
               <span>비밀번호 확인</span>
               <input
                 type="password"
+<<<<<<< HEAD
                 th:field="*{passwordConfirm}"
                 id="passwordConfirm"
                 placeholder="비밀번호를 한 번 더 입력하세요" />
@@ -94,10 +123,29 @@
             </label>
 
             <!-- 닉네임 -->
+=======
+                id="passwordConfirm"
+                placeholder="비밀번호를 한 번 더 입력하세요"
+                required
+              />
+            </label>
+
+            <label class="row">
+              <span>이름 (실명)</span>
+              <input
+                type="text"
+                name="userName"
+                placeholder="성함을 입력하세요"
+                required
+              />
+            </label>
+
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
             <label class="row">
               <span>닉네임</span>
               <input
                 type="text"
+<<<<<<< HEAD
                 th:field="*{nickname}"
                 name="nickname"
                 placeholder="활동할 별명을 입력하세요" />
@@ -108,10 +156,19 @@
             </label>
 
             <!-- 전화번호 -->
+=======
+                name="nickname"
+                placeholder="활동할 별명을 입력하세요"
+                required
+              />
+            </label>
+
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
             <label class="row">
               <span>전화번호</span>
               <input
                 type="tel"
+<<<<<<< HEAD
                 th:field="*{phone}"
                 name="phone"
                 placeholder="예: 010-1234-5678" />
@@ -119,27 +176,49 @@
                 class="field-error"
                 th:if="${#fields.hasErrors('phone')}"
                 th:errors="*{phone}"></p>
+=======
+                name="phone"
+                placeholder="예: 010-1234-5678"
+                required
+              />
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
             </label>
 
             <div class="button-group" style="margin-top: 20px">
               <button
                 type="submit"
                 class="search-button"
+<<<<<<< HEAD
                 style="width: 100%; height: 50px; font-size: 16px">
                 가입 완료
               </button>
             </div>
+=======
+                style="width: 100%; height: 50px; font-size: 16px"
+              >
+                가입 완료
+              </button>
+            </div>
+
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
             <p
               style="
                 text-align: center;
                 margin-top: 20px;
                 color: #666;
                 font-size: 14px;
+<<<<<<< HEAD
               ">
               이미 계정이 있으신가요?
               <a
                 th:href="@{/users/login}"
                 style="color: #2563eb; font-weight: 700"
+=======
+              "
+            >
+              이미 계정이 있으신가요?
+              <a href="/users/login" style="color: #2563eb; font-weight: 700"
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
                 >로그인하기</a
               >
             </p>
