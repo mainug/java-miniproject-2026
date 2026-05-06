@@ -193,7 +193,11 @@ function renderProducts() {
           </div>
 
           <div class="product-body">
-            <h3>${product.title}</h3>
+            <div class="product-title-row">
+              <h3 class="product-title">${product.title}</h3>
+              <span class="seller-nickname">${product.nickname || "알 수 없음"}</span>
+            </div>
+
             <p>${product.content || ""}</p>
 
             <div class="product-meta">

@@ -21,4 +21,7 @@ public class PostDTO {
     private Long viewCount;
     private LocalDateTime createdAtPosts;
     private String mainImageUrl;
+
+    // 260506 상품 등록자 추가_SY
+    private String nickname;
 }
