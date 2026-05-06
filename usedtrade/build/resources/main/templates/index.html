@@ -1,10 +1,28 @@
 <!doctype html>
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> main
 <html
   lang="ko"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
   th:replace="~{layout :: layout(~{::content}, ~{::pageScripts})}">
   <th:block th:fragment="content">
+<<<<<<< HEAD
+=======
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>중고마켓</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+
+  <body>
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+>>>>>>> main
     <div class="app">
       <div class="wrap">
         <!-- 로그인 성공 메시지 -->
@@ -28,6 +46,10 @@
           로그인 되었습니다.
         </div>
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> main
         <!-- 로그아웃 성공 메시지 -->
         <div
           id="toastMsg"
@@ -48,6 +70,27 @@
           ">
           로그아웃 되었습니다.
         </div>
+<<<<<<< HEAD
+=======
+          <div class="user-box">
+            <a
+              th:href="@{/users/join}"
+              id="joinLink"
+              class="small-button"
+              style="background: #2563eb"
+              >회원가입</a
+            >
+            <a th:href="@{/users/login}" id="loginLink" class="small-button"
+              >로그인</a
+            >
+            <button type="button" id="logoutButton" class="small-button hidden">
+              로그아웃
+            </button>
+          </div>
+        </header>
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+>>>>>>> main
 
         <div id="marketStatus" class="status-box hidden"></div>
 
@@ -63,7 +106,16 @@
               id="keywordSearch"
               name="keyword"
               class="search-input"
+<<<<<<< HEAD
+<<<<<<< HEAD
               placeholder="상품명, 설명, 지역 검색" />
+=======
+              placeholder="상품명, 설명, 지역 검색"
+            />
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+              placeholder="상품명, 설명, 지역 검색" />
+>>>>>>> main
 
             <select id="categoryFilter" name="category">
               <option value="ALL">전체</option>

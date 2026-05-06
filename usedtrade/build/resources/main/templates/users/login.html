@@ -4,20 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>로그인 - 중고마켓</title>
+<<<<<<< HEAD
+<<<<<<< HEAD
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+=======
+    <link rel="stylesheet" href="/css/style.css" />
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+>>>>>>> main
   </head>
 
   <body>
     <div class="app">
       <div class="wrap">
+<<<<<<< HEAD
+<<<<<<< HEAD
         <!-- 상단 바 -->
+=======
+        <!-- 상단 바: join.html과 동일한 구조 -->
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+        <!-- 상단 바 -->
+>>>>>>> main
         <header class="top-bar">
           <div>
             <h1>중고마켓</h1>
             <p class="subtitle">로그인 후 다양한 중고 물품을 확인하세요!</p>
           </div>
           <div class="user-box">
+<<<<<<< HEAD
+<<<<<<< HEAD
             <a th:href="@{/}" class="small-button">홈으로</a>
+=======
+            <a href="/" class="small-button">홈으로</a>
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+            <a th:href="@{/}" class="small-button">홈으로</a>
+>>>>>>> main
           </div>
         </header>
 
@@ -27,6 +51,10 @@
             <h2>로그인</h2>
           </div>
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> main
           <form th:action="@{/login}" method="post" class="product-form">
             <!--  로그인 실패 메시지 -->
             <div th:if="${param.error}" style="color: red; margin-bottom: 10px">
@@ -34,10 +62,23 @@
             </div>
 
             <!-- 아이디 -->
+<<<<<<< HEAD
+=======
+          <form
+            th:action="@{/users/login}"
+            th:object="${userLoginForm}"
+            method="post"
+            class="product-form"
+          >
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+>>>>>>> main
             <label class="row">
               <span>아이디</span>
               <input
                 type="text"
+<<<<<<< HEAD
+<<<<<<< HEAD
                 name="username"
                 placeholder="아이디를 입력하세요"
                 autocomplete="username"
@@ -45,10 +86,27 @@
             </label>
 
             <!-- 비밀번호 -->
+=======
+                th:field="*{loginId}"
+=======
+                name="username"
+>>>>>>> main
+                placeholder="아이디를 입력하세요"
+                autocomplete="username"
+                required />
+            </label>
+
+<<<<<<< HEAD
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+            <!-- 비밀번호 -->
+>>>>>>> main
             <label class="row">
               <span>비밀번호</span>
               <input
                 type="password"
+<<<<<<< HEAD
+<<<<<<< HEAD
                 name="password"
                 placeholder="비밀번호를 입력하세요"
                 autocomplete="current-password"
@@ -56,22 +114,62 @@
             </label>
 
             <!-- 로그인 버튼 -->
+=======
+                th:field="*{password}"
+=======
+                name="password"
+>>>>>>> main
+                placeholder="비밀번호를 입력하세요"
+                autocomplete="current-password"
+                required />
+            </label>
+
+<<<<<<< HEAD
+            <!-- 상태 메시지 (로그인 실패 시 등) -->
+            <div
+              id="authMessage"
+              class="status-box hidden"
+              style="margin-top: 10px"
+            ></div>
+
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+            <!-- 로그인 버튼 -->
+>>>>>>> main
             <div class="button-group" style="margin-top: 20px">
               <button
                 type="submit"
                 class="search-button"
+<<<<<<< HEAD
+<<<<<<< HEAD
                 style="width: 100%; height: 50px; font-size: 16px">
+=======
+                style="width: 100%; height: 50px; font-size: 16px"
+              >
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+                style="width: 100%; height: 50px; font-size: 16px">
+>>>>>>> main
                 로그인
               </button>
             </div>
 
+<<<<<<< HEAD
+<<<<<<< HEAD
             <!-- 회원가입 이동 -->
+=======
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+            <!-- 회원가입 이동 -->
+>>>>>>> main
             <p
               style="
                 text-align: center;
                 margin-top: 20px;
                 color: #666;
                 font-size: 14px;
+<<<<<<< HEAD
+<<<<<<< HEAD
               ">
               아직 회원이 아니신가요?
               <a
@@ -79,10 +177,35 @@
                 style="color: #2563eb; font-weight: 700">
                 회원가입하기
               </a>
+=======
+              "
+            >
+              아직 회원이 아니신가요?
+              <a href="/users/join" style="color: #2563eb; font-weight: 700"
+                >회원가입하기</a
+              >
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+              ">
+              아직 회원이 아니신가요?
+              <a
+                th:href="@{/users/join}"
+                style="color: #2563eb; font-weight: 700">
+                회원가입하기
+              </a>
+>>>>>>> main
             </p>
           </form>
         </section>
       </div>
     </div>
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+    <script src="/js/login.js"></script>
+>>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
+=======
+>>>>>>> main
   </body>
 </html>

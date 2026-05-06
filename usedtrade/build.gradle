@@ -20,35 +20,11 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	// MyBatis 버전 지정
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 	annotationProcessor 'org.projectlombok:lombok'
-	// 스프링부트 시큐리티 의존성
-<<<<<<< HEAD
-<<<<<<< HEAD
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	// Spring Security Thymeleaf 연동 라이브러리
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-=======
-	// implementation 'org.springframework.boot:spring-boot-starter-security'
-	// Spring Security Thymeleaf 연동 라이브러리
-	// implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
->>>>>>> 7379014e57389f8606c1cf4368c9fb73d3787796
-=======
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	// Spring Security Thymeleaf 연동 라이브러리
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
->>>>>>> main
-
-	// JWT 의존성
-	// implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
-	// runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.13.0'
-	// runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.13.0'
-
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.5'
 	testCompileOnly 'org.projectlombok:lombok'
@@ -58,8 +34,4 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs += ['-parameters']
 }
