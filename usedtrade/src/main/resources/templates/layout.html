@@ -1,0 +1,80 @@
+<!doctype html>
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  th:fragment="layout(content, pageScripts)">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>중고마켓</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  </head>
+
+  <body>
+    <!-- 공통 헤더 -->
+    <header class="site-header">
+      <div class="site-header-inner">
+        <div class="site-header-left">
+          <a th:href="@{/}" class="site-logo">중고마켓</a>
+
+          <nav class="site-nav">
+            <a th:href="@{/}">상품 목록</a>
+            <a th:href="@{/products?category=DIGITAL&sort=LATEST}"
+              >디지털기기</a
+            >
+            <a th:href="@{/products?category=FURNITURE&sort=LATEST}">가구</a>
+            <a th:href="@{/products?category=CLOTHES&sort=LATEST}">의류</a>
+
+            <div class="dropdown">
+              <button type="button" class="dropdown-button">더보기</button>
+
+              <div class="dropdown-menu">
+                <a th:href="@{/products?category=BOOK&sort=LATEST}">도서</a>
+                <a th:href="@{/products?category=ETC&sort=LATEST}">기타</a>
+                <a th:href="@{/privacy}">개인정보처리방침</a>
+                <a th:href="@{/terms}">이용약관</a>
+              </div>
+            </div>
+          </nav>
+        </div>
+
+        <div class="site-header-right">
+          <!-- 로그인 상태 표시 -->
+          <span class="header-username">
+            <span
+              sec:authorize="isAuthenticated()"
+              sec:authentication="principal.nickname"
+              >닉네임</span
+            >
+            <span sec:authorize="isAnonymous()">비회원</span>
+            님
+          </span>
+
+          <!-- 비회원일 때 -->
+          <th:block sec:authorize="isAnonymous()">
+            <a th:href="@{/users/join}" class="header-button join">회원가입</a>
+            <a th:href="@{/users/login}" class="header-button login">로그인</a>
+          </th:block>
+
+          <!-- 로그인했을 때 -->
+          <th:block sec:authorize="isAuthenticated()">
+            <form th:action="@{/logout}" method="post" class="logout-form">
+              <button type="submit" class="header-button outline">
+                로그아웃
+              </button>
+            </form>
+          </th:block>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <th:block th:replace="${content}"></th:block>
+    </main>
+
+    <th:block th:replace="${pageScripts}"></th:block>
+  </body>
+</html>
