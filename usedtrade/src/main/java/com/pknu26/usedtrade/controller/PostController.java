@@ -27,6 +27,17 @@ public class PostController {
         return postService.findAllPosts();
     }
 
+    @GetMapping("/{postId}")
+    public PostDTO findPostDetail(@PathVariable("postId") Long postId) {
+        PostDTO post = postService.findPostDetail(postId);
+
+        if (post == null) {
+            throw new IllegalArgumentException("존재하지 않는 게시글입니다.");
+        }
+
+        return post;
+    }
+
     @PostMapping
     public String registerPost(
             @AuthenticationPrincipal CustomUserDetails userDetails,
