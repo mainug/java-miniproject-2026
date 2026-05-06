@@ -595,24 +595,24 @@ textarea {
   cursor: pointer;
 }
 
-.header-button.join {
+.header-button.blue {
   border: 1px solid #2563eb;
   background: #2563eb;
   color: #ffffff;
 }
 
-.header-button.join:hover {
+.header-button.blue:hover {
   background: #1d4ed8;
   border-color: #1d4ed8;
 }
 
-.header-button.login {
+.header-button.black {
   border: 1px solid #111827;
   background: #111827;
   color: #ffffff;
 }
 
-.header-button.login:hover {
+.header-button.black:hover {
   background: #020617;
   border-color: #020617;
 }

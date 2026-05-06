@@ -3,7 +3,8 @@
   lang="ko"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-  th:replace="~{layout :: layout(~{::content}, ~{::pageScripts})}">
+  th:replace="~{layout :: layout(~{::content}, ~{::pageScripts})}"
+>
   <th:block th:fragment="content">
     <div class="app">
       <div class="wrap">
@@ -24,7 +25,8 @@
             font-weight: 600;
             font-size: 15px;
             z-index: 9999;
-          ">
+          "
+        >
           로그인 되었습니다.
         </div>
 
@@ -45,7 +47,8 @@
             font-weight: 600;
             font-size: 15px;
             z-index: 9999;
-          ">
+          "
+        >
           로그아웃 되었습니다.
         </div>
 
@@ -63,7 +66,8 @@
               id="keywordSearch"
               name="keyword"
               class="search-input"
-              placeholder="상품명, 설명, 지역 검색" />
+              placeholder="상품명, 설명, 지역 검색"
+            />
 
             <select id="categoryFilter" name="category">
               <option value="ALL">전체</option>
@@ -88,24 +92,22 @@
           <p class="empty">상품을 불러오는 중...</p>
         </section>
 
-        <!-- 로그인한 사용자만 상품 등록 버튼 표시 -->
+        <!-- 비회원이 상품 등록 버튼 클릭시 로그인페이지로 리다이렉트 -->
         <button
-          sec:authorize="isAuthenticated()"
           type="button"
           id="openProductWriteButton"
           class="upload-fab floating"
           aria-label="상품 등록"
-          title="상품 등록">
+          title="상품 등록"
+          th:data-authenticated="${#authorization.expression('isAuthenticated()')}"
+          th:data-login-url="@{/users/login}"
+        >
           +
         </button>
       </div>
     </div>
 
-    <!-- 로그인한 사용자만 상품 등록 모달 표시 -->
-    <div
-      sec:authorize="isAuthenticated()"
-      id="productWriteModal"
-      class="modal hidden">
+    <div id="productWriteModal" class="modal hidden">
       <div class="modal-card">
         <div class="modal-header">
           <h2>상품 등록</h2>
@@ -118,7 +120,8 @@
             <input
               type="text"
               id="productTitle"
-              placeholder="상품명을 입력하세요" />
+              placeholder="상품명을 입력하세요"
+            />
           </label>
 
           <label class="row">
@@ -126,7 +129,8 @@
             <input
               type="number"
               id="productPrice"
-              placeholder="가격을 입력하세요" />
+              placeholder="가격을 입력하세요"
+            />
           </label>
 
           <label class="row">
@@ -149,7 +153,8 @@
             <span>상품 설명</span>
             <textarea
               id="productContent"
-              placeholder="상품 설명을 입력하세요"></textarea>
+              placeholder="상품 설명을 입력하세요"
+            ></textarea>
           </label>
 
           <label class="row">

@@ -23,27 +23,30 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/",
                     "/users/join",
-                    "/login",
+                    "/users/login",
                     "/api/posts",
                     "/uploads/**",
+                    "/board",
+                    "/board/**",
                     "/css/**",
-                    "/js/**"
+                    "/js/**",
+                    "/error"
                 ).permitAll()   // 위 페이지들은 인증 없이 접근 허용
                 .requestMatchers("/admin").hasRole("ADMIN") // /admin/** 페이지는 ADMIN 권한 필요
                 .anyRequest().authenticated()   // 미처 적지 못한 다른 페이지들은 인증 필요
             )
 
             .formLogin(form -> form
-                .loginPage("/login")          // 우리가 만든 로그인 페이지(인증이 필요한 페이지에 비로그인 상태로 접근하면 여기로 리다이렉트)
-                .loginProcessingUrl("/login") // 로그인 POST 처리 URL (login.html 폼의 action과 일치해야 함)
+                .loginPage("/users/login")          // 우리가 만든 로그인 페이지(인증이 필요한 페이지에 비로그인 상태로 접근하면 여기로 리다이렉트)
+                .loginProcessingUrl("/users/login") // 로그인 POST 처리 URL (login.html 폼의 action과 일치해야 함)
                 .defaultSuccessUrl("/?login", true)
-                .failureUrl("/login?error=true")
+                .failureUrl("/users/login?error=true")
                 .permitAll()
             )
 
             .sessionManagement(session -> session
             .maximumSessions(1)          // 중복 로그인 방지
-            .expiredUrl("/login")        // 세션 만료 시 이동 페이지
+            .expiredUrl("/users/login")        // 세션 만료 시 이동 페이지
         )
 
 
