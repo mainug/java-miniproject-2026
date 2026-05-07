@@ -211,7 +211,7 @@ function renderProducts() {
               <span class="seller-nickname">${product.nickname || "알 수 없음"}</span>
             </div>
 
-            <p>${product.content || ""}</p>
+            <p class="product-description">${product.content || ""}</p>
 
             <div class="product-meta">
               <strong>${formatPrice(product.price)}</strong>

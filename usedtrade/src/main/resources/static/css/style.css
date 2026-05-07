@@ -229,6 +229,19 @@ textarea {
   line-height: 1.5;
 }
 
+/* 상품 설명 한 줄 초과시 ... 처리 */
+.product-description {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  margin: 0 0 14px;
+}
+
 .product-meta {
   display: flex;
   justify-content: space-between;
@@ -253,6 +266,7 @@ textarea {
   color: #166534;
   font-size: 13px;
   font-weight: 700;
+  margin-bottom: 12px;
 }
 
 .created-at {
@@ -271,17 +285,32 @@ textarea {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-bottom: 10px;
 }
 
+/* 상품명 한 줄 초과시 ... 처리 */
 .product-title-row .product-title {
+  flex: 1;
+  min-width: 0;
+
   margin: 0;
   font-size: 18px;
   font-weight: 700;
   color: #111827;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .seller-nickname {
   flex-shrink: 0;
+
+  max-width: 16ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
   font-size: 13px;
   font-weight: 600;
   color: #6b7280;
@@ -978,9 +1007,9 @@ textarea {
   background: #1d4ed8;
 }
 
-  .post-detail-page {
-    padding: 32px 0;
-  }
+.post-detail-page {
+  padding: 32px 0;
+}
 
 .detail-top {
   margin-bottom: 20px;
