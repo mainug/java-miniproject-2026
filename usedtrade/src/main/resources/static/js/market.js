@@ -232,7 +232,7 @@ function renderProducts() {
               <span>${product.location || ""}</span>
             </div>
 
-            <div class="product-status">
+            <div class="product-status ${getStatusClass(product.status)}">
               ${convertStatus(product.status)}
             </div>
 
@@ -554,6 +554,13 @@ if (productImagesInput) {
 // 상품 등록 폼 제출 이벤트
 if (productWriteForm) {
   productWriteForm.addEventListener("submit", handleProductSubmit);
+}
+
+function getStatusClass(status) {
+  if (status === "SELLING") return "selling";
+  if (status === "RESERVED") return "reserved";
+  if (status === "SOLD") return "sold";
+  return "selling";
 }
 
 // URL 검색 조건을 화면 필터에 반영
