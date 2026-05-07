@@ -39,6 +39,18 @@
               <span>·</span>
               <small>조회 <span th:text="${post.viewCount}"></span></small>
             </div>
+
+            <div class="post-like">
+              <button sec:authorize="isAuthenticated()"
+                      id="likeButton"
+                      class="like-btn"
+                      th:classappend="${isLiked} ? ' liked'">
+                👍 추천 <span id="likeCount" th:text="${likeCount}">0</span>
+              </button>
+              <span sec:authorize="!isAuthenticated()" class="like-display">
+                👍 추천 <span th:text="${likeCount}">0</span>
+              </span>
+            </div>
           </header>
 
           <div th:if="${images != null and !images.isEmpty()}" class="community-images">
