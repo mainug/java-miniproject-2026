@@ -101,7 +101,7 @@ public class PostController {
 
     @PatchMapping("/{postId}/status")
     public ResponseEntity<?> updatePostStatus(
-            @PathVariable Long postId,
+            @PathVariable("postId") Long postId,
             @RequestBody Map<String, String> request,
             Authentication authentication) {
 

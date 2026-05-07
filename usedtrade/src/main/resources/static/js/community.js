@@ -1,12 +1,18 @@
 const communityWriteModal = document.querySelector("#communityWriteModal");
-const openCommunityWriteButton = document.querySelector("#openCommunityWriteButton");
-const closeCommunityWriteButton = document.querySelector("#closeCommunityWriteButton");
+const openCommunityWriteButton = document.querySelector(
+  "#openCommunityWriteButton",
+);
+const closeCommunityWriteButton = document.querySelector(
+  "#closeCommunityWriteButton",
+);
 const communityWriteForm = document.querySelector("#communityWriteForm");
 const communityPostList = document.querySelector("#communityPostList");
 const postCount = document.querySelector("#postCount");
 const categoryFilter = document.querySelector("#categoryFilter");
 const communityImagesInput = document.querySelector("#communityImages");
-const communityImagePreviewList = document.querySelector("#communityImagePreviewList");
+const communityImagePreviewList = document.querySelector(
+  "#communityImagePreviewList",
+);
 
 let posts = [];
 
@@ -25,7 +31,8 @@ async function loadCommunityPosts() {
     const response = await fetch("/api/community/posts");
 
     if (!response.ok) {
-      communityPostList.innerHTML = '<p class="empty">게시글을 불러오지 못했습니다.</p>';
+      communityPostList.innerHTML =
+        '<p class="empty">게시글을 불러오지 못했습니다.</p>';
       return;
     }
 
@@ -33,7 +40,8 @@ async function loadCommunityPosts() {
     renderCommunityPosts();
   } catch (error) {
     console.error(error);
-    communityPostList.innerHTML = '<p class="empty">서버 연결에 실패했습니다.</p>';
+    communityPostList.innerHTML =
+      '<p class="empty">서버 연결에 실패했습니다.</p>';
   }
 }
 
@@ -63,7 +71,10 @@ function renderCommunityPosts() {
       return `
         <article class="product-card" style="cursor:pointer" onclick="location.href='/community/${post.communityPostId}'">
           <div class="product-image">
-            ${imageUrl ? `<img src="${imageUrl}" alt="${post.title}" />` : `
+            ${
+              imageUrl
+                ? `<img src="${imageUrl}" alt="${post.title}" />`
+                : `
             <div class="no-image">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -71,13 +82,16 @@ function renderCommunityPosts() {
                 <polyline points="21 15 16 10 5 21"/>
               </svg>
               <span>이미지 없음</span>
-            </div>`}
+            </div>`
+            }
           </div>
 
           <div class="product-body">
-            <span class="product-status">${convertCategory(post.category)}</span>
-            <h3>${post.title}</h3>
-            <p>${post.content || ""}</p>
+            <div class="product-status">${convertCategory(post.category)}</div>
+            <div class="product-title-row">
+              <h3 class="product-title">${post.title}</h3>
+            </div>
+            <p class="product-description">${post.content || ""}</p>
 
             <div class="product-meta">
               <span>${post.nickname || ""}</span>
@@ -96,7 +110,8 @@ function renderImagePreview() {
   const files = Array.from(communityImagesInput.files);
 
   if (files.length === 0) {
-    communityImagePreviewList.innerHTML = '<p class="image-preview-empty">선택된 이미지가 없습니다.</p>';
+    communityImagePreviewList.innerHTML =
+      '<p class="image-preview-empty">선택된 이미지가 없습니다.</p>';
     return;
   }
 
@@ -123,7 +138,8 @@ function closeCommunityWriteModalFn() {
   communityWriteModal.classList.add("hidden");
   if (communityWriteForm) communityWriteForm.reset();
   if (communityImagePreviewList) {
-    communityImagePreviewList.innerHTML = '<p class="image-preview-empty">선택된 이미지가 없습니다.</p>';
+    communityImagePreviewList.innerHTML =
+      '<p class="image-preview-empty">선택된 이미지가 없습니다.</p>';
   }
 }
 
@@ -174,7 +190,10 @@ if (openCommunityWriteButton) {
 }
 
 if (closeCommunityWriteButton) {
-  closeCommunityWriteButton.addEventListener("click", closeCommunityWriteModalFn);
+  closeCommunityWriteButton.addEventListener(
+    "click",
+    closeCommunityWriteModalFn,
+  );
 }
 
 if (categoryFilter) {
