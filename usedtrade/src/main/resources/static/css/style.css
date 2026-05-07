@@ -295,10 +295,22 @@ textarea {
   color: #b91c1c;
 }
 
-.category-free   { background: #dbeafe; color: #1d4ed8; }
-.category-local  { background: #dcfce7; color: #166534; }
-.category-review { background: #fef3c7; color: #92400e; }
-.category-qna    { background: #f3e8ff; color: #6b21a8; }
+.category-free {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+.category-local {
+  background: #dcfce7;
+  color: #166534;
+}
+.category-review {
+  background: #fef3c7;
+  color: #92400e;
+}
+.category-qna {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
 
 .created-at {
   display: block;
@@ -962,7 +974,6 @@ textarea {
   color: #777;
   font-size: 14px;
 }
-
 
 .post-content {
   line-height: 1.8;

@@ -24,10 +24,25 @@ public class PostController {
         this.fileService = fileService;
     }
 
+    // @GetMapping
+    // public List<PostDTO> findAllPosts() {
+    //     return postService.findAllPosts(); // 전체 데이터 조회
+    // }
+
     @GetMapping
-    public List<PostDTO> findAllPosts() {
-        return postService.findAllPosts();
-    }
+    public ResponseEntity<?> findPosts(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(required = false) String searchKeyword,
+            @RequestParam(required = false) String category,
+            @RequestParam(defaultValue = "latest") String sortCondition) {
+
+        int pageSize = 12;
+        int offset = (page - 1) * pageSize;
+
+        List<PostDTO> postList = postService.findPostsWithPaging(searchKeyword, category, sortCondition, offset, pageSize);
+
+        return ResponseEntity.ok(postList);
+        }
 
     @GetMapping("/{postId}")
     public ResponseEntity<?> findPostDetail(
