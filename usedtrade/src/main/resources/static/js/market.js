@@ -211,16 +211,15 @@ function renderProducts() {
               <span class="seller-nickname">${product.nickname || "알 수 없음"}</span>
             </div>
 
-            <p>${product.content || ""}</p>
+            <p class="product-description">${product.content || ""}</p>
 
             <div class="product-meta">
               <strong>${formatPrice(product.price)}</strong>
               <span>${product.location || ""}</span>
             </div>
-
-            <div class="product-status">
-              ${convertStatus(product.status)}
-            </div>
+<div class="product-status ${getStatusClass(product.status)}">
+  ${convertStatus(product.status)}
+</div>
 
             <small class="created-at">
               등록일: ${createdAt ? createdAt.slice(0, 10) : ""}
@@ -430,6 +429,13 @@ if (productImagesInput) {
 // 상품 등록 폼 제출 이벤트
 if (productWriteForm) {
   productWriteForm.addEventListener("submit", handleProductSubmit);
+}
+
+function getStatusClass(status) {
+  if (status === "SELLING") return "selling";
+  if (status === "RESERVED") return "reserved";
+  if (status === "SOLD") return "sold";
+  return "selling";
 }
 
 // URL 검색 조건을 화면 필터에 반영
