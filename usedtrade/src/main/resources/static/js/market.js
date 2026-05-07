@@ -198,10 +198,11 @@ function renderProducts() {
       return `
         <article class="product-card" onclick="location.href='/posts/${product.postId}'">
           <div class="product-image">
-            ${imageUrl
-          ? `<img src="${imageUrl}" alt="${product.title}" />`
-          : `<span>이미지 없음</span>`
-        }
+            ${
+              imageUrl
+                ? `<img src="${imageUrl}" alt="${product.title}" />`
+                : `<span>이미지 없음</span>`
+            }
           </div>
 
           <div class="product-body">
