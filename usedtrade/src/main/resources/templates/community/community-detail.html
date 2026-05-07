@@ -17,11 +17,12 @@
         <article class="post-detail" th:attr="data-post-id=${post.communityPostId}">
           <header class="post-detail-header">
             <div class="post-detail-title-row">
-              <span class="product-status" th:text="${post.category == 'FREE' ? '자유게시판' :
-                                                      post.category == 'LOCAL' ? '동네정보' :
-                                                      post.category == 'REVIEW' ? '거래후기' :
-                                                      post.category == 'QNA' ? '질문게시판' :
-                                                      post.category}"></span>
+              <span th:class="|product-status category-${#strings.toLowerCase(post.category)}|"
+                    th:text="${post.category == 'FREE' ? '자유게시판' :
+                               post.category == 'LOCAL' ? '동네정보' :
+                               post.category == 'REVIEW' ? '거래후기' :
+                               post.category == 'QNA' ? '질문게시판' :
+                               post.category}"></span>
               <!-- 작성자 본인에게만 수정/삭제 버튼 표시 -->
               <div sec:authorize="isAuthenticated()"
                    th:if="${#authentication.principal.user.userId == post.userId}"
@@ -40,13 +41,18 @@
             </div>
           </header>
 
-          <div class="post-images" th:if="${images != null and !images.isEmpty()}">
-            <img th:each="img : ${images}"
-                 th:src="${img.imageUrl}"
-                 th:alt="${img.originalName}"
-                 class="post-detail-image" />
+          <div th:if="${images != null and !images.isEmpty()}" class="community-images">
+            <div id="communityMainImage" class="detail-main-image">
+              <img th:src="${images[0].imageUrl}" th:alt="${post.title}" />
+            </div>
+            <div class="detail-thumbnail-list" th:if="${images.size() > 1}">
+              <button th:each="img : ${images}" type="button" class="detail-thumbnail"
+                      th:attr="data-src=${img.imageUrl}">
+                <img th:src="${img.imageUrl}" th:alt="${img.originalName}" />
+              </button>
+            </div>
           </div>
-
+          <hr>
           <div class="post-content" th:text="${post.content}"></div>
         </article>
 
@@ -107,6 +113,15 @@
             <textarea id="editContent" th:text="${post.content}"></textarea>
           </label>
 
+          <div class="edit-image-section">
+            <span class="edit-image-label">사진</span>
+            <div id="editImageList" class="edit-image-list"></div>
+            <label class="edit-add-btn">
+              <input type="file" id="editNewImages" accept="image/*" multiple hidden />
+              + 사진 추가
+            </label>
+          </div>
+
           <button type="submit">수정하기</button>
         </form>
       </div>
@@ -114,6 +129,9 @@
   </th:block>
 
   <th:block th:fragment="pageScripts">
+    <script th:inline="javascript">
+      const PAGE_IMAGES = /*[[${images}]]*/ [];
+    </script>
     <script src="/js/community-detail.js"></script>
   </th:block>
 </html>

@@ -5,6 +5,7 @@ import com.pknu26.usedtrade.dto.PostImageDTO;
 import com.pknu26.usedtrade.security.CustomUserDetails;
 import com.pknu26.usedtrade.service.CommunityPostService;
 import com.pknu26.usedtrade.service.FileService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +13,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -53,7 +56,7 @@ public class CommunityPostController {
             @RequestParam("title") String title,
             @RequestParam("content") String content,
             @RequestParam("category") String category,
-            @RequestParam(value = "images", required = false) List<MultipartFile> images) {
+            HttpServletRequest request) {
 
         CommunityPostDTO communityPostDTO = new CommunityPostDTO();
         communityPostDTO.setUserId(userDetails.getUser().getUserId());
@@ -63,6 +66,10 @@ public class CommunityPostController {
 
         Long communityPostId = communityPostService.registerCommunityPost(communityPostDTO);
 
+        List<MultipartFile> images = Collections.emptyList();
+        if (request instanceof MultipartHttpServletRequest multipartRequest) {
+            images = multipartRequest.getFiles("images");
+        }
         fileService.saveCommunityPostImages(communityPostId, images);
 
         return "커뮤니티 게시글 등록 성공";
@@ -75,7 +82,9 @@ public class CommunityPostController {
             @PathVariable("communityPostId") Long communityPostId,
             @RequestParam("title") String title,
             @RequestParam("content") String content,
-            @RequestParam("category") String category) {
+            @RequestParam("category") String category,
+            @RequestParam(value = "keepImageIds", required = false) List<Long> keepImageIds,
+            HttpServletRequest request) {
         CommunityPostDTO communityPostDTO = new CommunityPostDTO();
         communityPostDTO.setCommunityPostId(communityPostId);
         communityPostDTO.setTitle(title);
@@ -83,6 +92,13 @@ public class CommunityPostController {
         communityPostDTO.setCategory(category);
         try {
             communityPostService.updateCommunityPost(communityPostDTO, userDetails.getUser().getUserId());
+
+            List<MultipartFile> newImages = Collections.emptyList();
+            if (request instanceof MultipartHttpServletRequest mr) {
+                newImages = mr.getFiles("newImages");
+            }
+            fileService.replaceCommunityPostImages(communityPostId, keepImageIds, newImages);
+
             return ResponseEntity.ok("커뮤니티 게시글 수정 성공");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
