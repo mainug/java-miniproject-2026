@@ -54,13 +54,32 @@
             p.view_count,
             p.created_at_posts,
             img.image_url AS main_image_url,
-            u.nickname AS nickname
+            u.nickname AS nickname,
+
+            (
+                SELECT COUNT(*)
+                FROM post_favorite pf_count
+                WHERE pf_count.post_id = p.post_id
+            ) AS favorite_count,
+
+            CASE
+                WHEN #{loginUserId, jdbcType=NUMERIC} IS NOT NULL
+                AND EXISTS (
+                    SELECT 1
+                    FROM post_favorite pf
+                    WHERE pf.post_id = p.post_id
+                    AND pf.user_id = #{loginUserId, jdbcType=NUMERIC}
+                )
+                THEN 1
+                ELSE 0
+            END AS favorited
+
         FROM posts p
         LEFT JOIN post_img img
-            ON p.post_id = img.post_id
-        AND img.is_main = 'Y'
+          ON p.post_id = img.post_id
+         AND img.is_main = 'Y'
         LEFT JOIN users u
-            ON p.user_id = u.user_id
+          ON p.user_id = u.user_id
         ORDER BY p.created_at_posts DESC
     </select>
     
@@ -80,7 +99,26 @@
             p.view_count,
             p.created_at_posts,
             img.image_url AS main_image_url,
-            u.nickname AS nickname
+            u.nickname AS nickname,
+
+            (
+                SELECT COUNT(*)
+                FROM post_favorite pf_count
+                WHERE pf_count.post_id = p.post_id
+            ) AS favorite_count,
+
+            CASE
+                WHEN #{loginUserId, jdbcType=NUMERIC} IS NOT NULL
+                 AND EXISTS (
+                    SELECT 1
+                    FROM post_favorite pf
+                    WHERE pf.post_id = p.post_id
+                      AND pf.user_id = #{loginUserId, jdbcType=NUMERIC}
+                )
+                THEN 1
+                ELSE 0
+            END AS favorited
+            
         FROM posts p
         LEFT JOIN post_img img
             ON p.post_id = img.post_id AND img.is_main = 'Y'
@@ -108,7 +146,6 @@
 
     <!-- 게시글 상세 조회 -->
     <select id="findPostById"
-        parameterType="long"
         resultType="com.pknu26.usedtrade.dto.PostDTO">
         SELECT
             p.post_id,
@@ -124,7 +161,26 @@
             p.view_count,
             p.created_at_posts,
             img.image_url AS main_image_url,
-            u.nickname AS nickname
+            u.nickname AS nickname,
+
+            (
+                SELECT COUNT(*)
+                FROM post_favorite pf_count
+                WHERE pf_count.post_id = p.post_id
+            ) AS favorite_count,
+
+            CASE
+                WHEN #{loginUserId, jdbcType=NUMERIC} IS NOT NULL
+                AND EXISTS (
+                    SELECT 1
+                    FROM post_favorite pf
+                    WHERE pf.post_id = p.post_id
+                    AND pf.user_id = #{loginUserId, jdbcType=NUMERIC}
+                )
+                THEN 1
+                ELSE 0
+            END AS favorited
+            
         FROM posts p
         LEFT JOIN post_img img
             ON p.post_id = img.post_id

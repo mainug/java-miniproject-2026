@@ -11,17 +11,17 @@ public interface PostMapper {
 
     int insertPost(PostDTO postDTO);
 
-    List<PostDTO> findAllPosts();
-
     List<PostDTO> findPostsWithPaging(
+        @Param("loginUserId") Long loginUserId,
         @Param("searchKeyword") String searchKeyword,
         @Param("category") String category,
         @Param("sortCondition") String sortCondition,
         @Param("offset") int offset,
         @Param("pageSize") int pageSize
     );
-
-    PostDTO findPostById(@Param("postId") Long postId);
+    
+    PostDTO findPostById(@Param("postId") Long postId, 
+                         @Param("loginUserId") Long loginUserId);
 
     int increaseViewCount(@Param("postId") Long postId);
 

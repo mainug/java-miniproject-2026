@@ -168,6 +168,7 @@ textarea {
 }
 
 .product-card {
+  position: relative;
   overflow: hidden;
   background: white;
   border: 1px solid #e5e7eb;
@@ -180,6 +181,36 @@ textarea {
 .product-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.favorite-button {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 6px 9px;
+  border: none;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  cursor: pointer;
+  z-index: 10;
+}
+
+.favorite-button:hover {
+  transform: scale(1.06);
+}
+
+.favorite-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 .product-image {
