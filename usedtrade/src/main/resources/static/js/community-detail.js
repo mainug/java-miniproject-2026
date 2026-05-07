@@ -1,6 +1,28 @@
 const communityPostId = document.querySelector(".post-detail")?.dataset.postId;
 
 const communityMainImg = document.querySelector("#communityMainImage img");
+
+// ── 라이트박스 ────────────────────────────────────────
+const lightbox = document.createElement("div");
+lightbox.className = "lightbox hidden";
+lightbox.innerHTML = "<img />";
+document.body.appendChild(lightbox);
+
+const lightboxImg = lightbox.querySelector("img");
+
+if (communityMainImg) {
+  communityMainImg.style.cursor = "zoom-in";
+  communityMainImg.addEventListener("click", () => {
+    lightboxImg.src = communityMainImg.src;
+    lightbox.classList.remove("hidden");
+  });
+}
+
+lightbox.addEventListener("click", () => lightbox.classList.add("hidden"));
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") lightbox.classList.add("hidden");
+});
+
 document.querySelectorAll(".detail-thumbnail").forEach((btn) => {
   btn.addEventListener("click", () => {
     if (communityMainImg && btn.dataset.src) {
@@ -14,6 +36,28 @@ const closeEditButton = document.querySelector("#closeEditButton");
 const editModal = document.querySelector("#editModal");
 const editForm = document.querySelector("#editForm");
 const deleteButton = document.querySelector("#deleteButton");
+
+// ── 따봉 ──────────────────────────────────────────────
+
+const likeButton = document.querySelector("#likeButton");
+const likeCountEl = document.querySelector("#likeCount");
+
+if (likeButton) {
+  likeButton.addEventListener("click", async () => {
+    try {
+      const response = await fetch(
+        `/api/community/posts/${communityPostId}/likes`,
+        { method: "POST" }
+      );
+      if (!response.ok) return;
+      const data = await response.json();
+      if (likeCountEl) likeCountEl.textContent = data.likeCount;
+      likeButton.classList.toggle("liked", data.isLiked);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
 
 // ── 수정 모달 이미지 관리 ─────────────────────────────
 

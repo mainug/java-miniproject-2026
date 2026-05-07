@@ -87,7 +87,7 @@ function renderCommunityPosts() {
           </div>
 
           <div class="product-body">
-            <div class="product-status">${convertCategory(post.category)}</div>
+            <div class="product-status category-${post.category.toLowerCase()}">${convertCategory(post.category)}</div>
             <div class="product-title-row">
               <h3 class="product-title">${post.title}</h3>
             </div>
@@ -97,6 +97,7 @@ function renderCommunityPosts() {
               <span>${post.nickname || ""}</span>
               <small>${createdAt ? createdAt.slice(0, 10) : ""}</small>
             </div>
+            <div class="post-like-count">👍 ${post.likeCount || 0}</div>
           </div>
         </article>
       `;

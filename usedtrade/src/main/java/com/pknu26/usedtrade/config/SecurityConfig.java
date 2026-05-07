@@ -25,6 +25,8 @@ public class SecurityConfig {
                                 "/",
                                 "/products",
                                 "/posts/**",
+                                "/community",
+                                "/community/**",
                                 "/users/join",
                                 "/login",
                                 "/uploads/**",
@@ -33,6 +35,7 @@ public class SecurityConfig {
                         .permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/posts", "/api/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/community/posts", "/api/community/posts/**").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/api/posts").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/posts/**").authenticated()

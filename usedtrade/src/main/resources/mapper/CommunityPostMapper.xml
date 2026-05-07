@@ -79,7 +79,9 @@
             cp.created_at,
             cp.updated_at,
             u.nickname,
-            img.image_url AS main_image_url
+            img.image_url AS main_image_url,
+            (SELECT COUNT(*) FROM community_post_likes l
+             WHERE l.community_post_id = cp.community_post_id) AS like_count
         FROM community_posts cp
         JOIN users u ON cp.user_id = u.user_id
         LEFT JOIN post_img img
