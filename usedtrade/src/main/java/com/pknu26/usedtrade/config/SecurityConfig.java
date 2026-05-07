@@ -29,10 +29,12 @@ public class SecurityConfig {
                                 "/login",
                                 "/uploads/**",
                                 "/css/**",
-                                "/js/**")
-                        .permitAll()
+                                "/js/**",
+                                "/images/**"
+                        ).permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/posts", "/api/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/posts/*/favorite").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/api/posts").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/posts/**").authenticated()

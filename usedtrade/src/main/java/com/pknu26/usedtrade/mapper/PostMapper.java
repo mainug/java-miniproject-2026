@@ -11,9 +11,10 @@ public interface PostMapper {
 
     int insertPost(PostDTO postDTO);
 
-    List<PostDTO> findAllPosts();
+    List<PostDTO> findAllPosts(@Param("loginUserId") Long loginUserId);
 
-    PostDTO findPostById(@Param("postId") Long postId);
+    PostDTO findPostById(@Param("postId") Long postId, 
+                         @Param("loginUserId") Long loginUserId);
 
     int increaseViewCount(@Param("postId") Long postId);
 

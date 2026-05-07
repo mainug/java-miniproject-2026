@@ -195,8 +195,14 @@ function renderProducts() {
       const createdAt = product.createdAtPosts || product.createdAt || "";
       const imageUrl = product.mainImageUrl;
 
+      // 현재 로그인 사용자가 찜한 상품이면 채워진 하트 이미지 사용
+      // 찜하지 않은 상품이면 빈 하트 이미지 사용
+      const heartImage = product.favorited
+        ? "/images/heart-fill.png"
+        : "/images/heart.png";
+
       return `
-        <article class="product-card" onclick="location.href='/posts/${product.postId}'">
+        <article class="product-card" data-detail-url="/posts/${product.postId}">
           <div class="product-image">
             ${
               imageUrl
@@ -217,14 +223,29 @@ function renderProducts() {
               <strong>${formatPrice(product.price)}</strong>
               <span>${product.location || ""}</span>
             </div>
-<div class="product-status ${getStatusClass(product.status)}">
-  ${convertStatus(product.status)}
-</div>
+
+            <div class="product-status">
+              ${convertStatus(product.status)}
+            </div>
 
             <small class="created-at">
               등록일: ${createdAt ? createdAt.slice(0, 10) : ""}
             </small>
           </div>
+
+          <button
+            type="button"
+            class="favorite-button"
+            data-post-id="${product.postId}"
+            data-favorited="${product.favorited ? "true" : "false"}"
+            aria-label="찜하기"
+          >
+            <img
+              src="${heartImage}"
+              alt="찜"
+              class="favorite-icon"
+            />
+          </button>
         </article>
       `;
     })
@@ -415,6 +436,102 @@ if (searchForm) {
   });
 }
 
+// ==============================
+// 상품 카드 클릭 이벤트
+// ==============================
+document.addEventListener("click", function (event) {
+  const favoriteButton = event.target.closest(".favorite-button");
+
+  if (favoriteButton) {
+    return;
+  }
+
+  const productCard = event.target.closest(".product-card");
+
+  if (!productCard) {
+    return;
+  }
+
+  const detailUrl = productCard.dataset.detailUrl;
+
+  if (!detailUrl) {
+    return;
+  }
+
+  location.href = detailUrl;
+});
+
+// ==============================
+// 찜 버튼 클릭 이벤트
+// ==============================
+document.addEventListener("click", async function (event) {
+  const favoriteButton = event.target.closest(".favorite-button");
+
+  // 클릭한 요소가 찜 버튼이 아니면 아무 동작 안 함
+  if (!favoriteButton) return;
+
+  // 찜 버튼을 눌렀을 때 상품 상세 페이지로 이동하지 않도록 막음
+  event.preventDefault();
+  event.stopPropagation();
+
+  const postId = favoriteButton.dataset.postId;
+
+  if (!postId) {
+    alert("상품 정보를 찾을 수 없습니다.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/posts/${postId}/favorite`, {
+      method: "POST",
+    });
+
+    // 비로그인 사용자가 찜 버튼을 누른 경우
+    if (response.status === 401) {
+      alert("로그인 후 찜할 수 있습니다.");
+      location.href = "/users/login";
+      return;
+    }
+
+    // 서버 처리 실패
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      alert(errorData?.message || "찜 처리 중 오류가 발생했습니다.");
+      return;
+    }
+
+    const data = await response.json();
+
+    const favoriteIcon = favoriteButton.querySelector(".favorite-icon");
+
+    // 서버에서 받은 찜 상태에 따라 이미지 변경
+    if (data.favorited) {
+      favoriteIcon.src = "/images/heart-fill.png";
+      favoriteButton.dataset.favorited = "true";
+    } else {
+      favoriteIcon.src = "/images/heart.png";
+      favoriteButton.dataset.favorited = "false";
+    }
+
+    // 전역 products 배열도 같이 갱신
+    // 검색이나 정렬 후 다시 renderProducts()가 실행되어도 찜 상태가 유지되도록 하기 위함
+    products = products.map((product) => {
+      if (String(product.postId) !== String(postId)) {
+        return product;
+      }
+
+      return {
+        ...product,
+        favorited: data.favorited,
+        favoriteCount: data.favoriteCount,
+      };
+    });
+  } catch (error) {
+    console.error(error);
+    alert("서버와 통신 중 오류가 발생했습니다.");
+  }
+});
+
 // 카테고리 변경 이벤트는 일부러 등록하지 않음
 // categoryFilter.addEventListener("change", renderProducts); 사용 안 함
 
@@ -429,13 +546,6 @@ if (productImagesInput) {
 // 상품 등록 폼 제출 이벤트
 if (productWriteForm) {
   productWriteForm.addEventListener("submit", handleProductSubmit);
-}
-
-function getStatusClass(status) {
-  if (status === "SELLING") return "selling";
-  if (status === "RESERVED") return "reserved";
-  if (status === "SOLD") return "sold";
-  return "selling";
 }
 
 // URL 검색 조건을 화면 필터에 반영
