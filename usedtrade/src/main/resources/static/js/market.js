@@ -35,6 +35,8 @@ const imagePreviewList = document.querySelector("#imagePreviewList");
 
 // 서버에서 받아온 상품 목록을 저장하는 배열
 let products = [];
+let currentPage = 1; // 추가
+let isFetching = false; // 추가
 
 // ==============================
 // 상태 메시지 표시 함수
@@ -94,28 +96,95 @@ function convertStatus(status) {
 // 서버에서 상품 목록을 불러오는 함수
 // 비회원도 상품 목록을 볼 수 있어야 하므로 로그인 여부와 관계없이 실행됨
 // ==============================
-async function loadProducts() {
-  if (!productList) return;
+async function loadProducts(isInitialLoad = false) {
+  if (!productList || isFetching) return;
+  isFetching = true;
+
+  const keyword = encodeURIComponent(
+    keywordSearch ? keywordSearch.value.trim() : "",
+  );
+  let category = categoryFilter ? categoryFilter.value : "";
+  const sort = sortFilter ? sortFilter.value.toLowerCase() : "latest";
+  if (category === "ALL") category = "";
+
+  const url = `/api/posts?page=${currentPage}&searchKeyword=${keyword}&category=${category}&sortCondition=${sort}`;
 
   try {
-    const response = await fetch("/api/posts");
-
+    const response = await fetch(url);
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(errorText);
       showStatus("상품 목록을 불러오지 못했습니다.");
       return;
     }
 
-    // 서버에서 받은 상품 목록을 전역 배열에 저장
-    products = await response.json();
+    const data = await response.json();
+    const loadMoreBtn = document.getElementById("loadMoreBtn");
 
-    // 처음 페이지에 들어왔을 때 전체 상품 목록 출력
-    renderProducts();
+    // 초기 로딩이면 목록 초기화
+    if (isInitialLoad) productList.innerHTML = "";
+
+    // 더보기 버튼 표시 여부
+    if (loadMoreBtn) {
+      loadMoreBtn.style.display = data.length < 12 ? "none" : "inline-block";
+    }
+
+    // 결과 없음
+    if (data.length === 0 && isInitialLoad) {
+      productList.innerHTML = `<p class="empty" style="text-align:center;">등록된 상품이 없습니다.</p>`;
+      if (productCount) productCount.textContent = "0";
+      return;
+    }
+
+    // 카드 렌더링 — 기존 CSS 클래스(product-card) 사용
+    data.forEach((post) => {
+      const imageHtml = post.mainImageUrl
+        ? `<img src="${post.mainImageUrl}" alt="상품 이미지" loading="lazy">`
+        : `<span>이미지 없음</span>`;
+
+      const createdAt = (post.createdAtPosts || post.createdAt || "").slice(
+        0,
+        10,
+      );
+
+      const cardHTML = `
+        <article class="product-card" onclick="location.href='/posts/${post.postId}'">
+          <div class="product-image">${imageHtml}</div>
+          <div class="product-body">
+            <div class="product-title-row">
+              <h3 class="product-title">${post.title}</h3>
+              <span class="seller-nickname">${post.nickname || "알 수 없음"}</span>
+            </div>
+            <p class="product-description">${post.content || ""}</p>
+            <div class="product-meta">
+              <strong>${formatPrice(post.price)}</strong>
+              <span>${post.location || ""}</span>
+            </div>
+            <div class="product-status ${getStatusClass(post.status)}">
+              ${convertStatus(post.status)}
+            </div>
+            <small class="created-at">등록일: ${createdAt}</small>
+          </div>
+        </article>
+      `;
+      productList.insertAdjacentHTML("beforeend", cardHTML);
+    });
+
+    // 총 게시물 수 업데이트
+    if (productCount) {
+      productCount.textContent =
+        productList.querySelectorAll(".product-card").length;
+    }
   } catch (error) {
     console.error(error);
     showStatus("서버 연결에 실패했습니다.");
+  } finally {
+    isFetching = false;
   }
+}
+
+// 더보기 버튼에서 호출
+function loadMorePosts() {
+  currentPage++;
+  loadProducts(false);
 }
 
 // ==============================
@@ -201,7 +270,15 @@ function renderProducts() {
             ${
               imageUrl
                 ? `<img src="${imageUrl}" alt="${product.title}" />`
-                : `<span>이미지 없음</span>`
+                : `
+            <div class="no-image">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <span>이미지 없음</span>
+            </div>`
             }
           </div>
 
@@ -217,10 +294,9 @@ function renderProducts() {
               <strong>${formatPrice(product.price)}</strong>
               <span>${product.location || ""}</span>
             </div>
-
-            <div class="product-status">
-              ${convertStatus(product.status)}
-            </div>
+<div class="product-status ${getStatusClass(product.status)}">
+  ${convertStatus(product.status)}
+</div>
 
             <small class="created-at">
               등록일: ${createdAt ? createdAt.slice(0, 10) : ""}
@@ -432,8 +508,26 @@ if (productWriteForm) {
   productWriteForm.addEventListener("submit", handleProductSubmit);
 }
 
+function getStatusClass(status) {
+  if (status === "SELLING") return "selling";
+  if (status === "RESERVED") return "reserved";
+  if (status === "SOLD") return "sold";
+  return "selling";
+}
+
 // URL 검색 조건을 화면 필터에 반영
 applySearchParams();
 
 // 로그인 여부와 관계없이 상품 목록 불러오기
-loadProducts();
+// loadProducts();
+
+// 검색 폼: renderProducts 대신 서버 페이징으로 교체
+if (searchForm) {
+  searchForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    currentPage = 1;
+    loadProducts(true);
+  });
+}
+
+loadProducts(true); // 초기 로딩
