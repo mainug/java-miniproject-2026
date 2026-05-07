@@ -31,7 +31,7 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public ResponseEntity<?> findPostDetail(
-            @PathVariable Long postId,
+            @PathVariable("postId") Long postId,
             Authentication authentication) {
 
         Long loginUserId = getLoginUserId(authentication);
@@ -81,7 +81,7 @@ public class PostController {
 
     @PutMapping("/{postId}")
     public ResponseEntity<?> updatePost(
-            @PathVariable Long postId,
+            @PathVariable("postId") Long postId,
             @RequestBody PostDTO updateDTO,
             Authentication authentication) {
 
@@ -123,7 +123,7 @@ public class PostController {
 
     @DeleteMapping("/{postId}")
     public ResponseEntity<?> deletePost(
-            @PathVariable Long postId,
+            @PathVariable("postId") Long postId,
             Authentication authentication) {
 
         Long loginUserId = getLoginUserId(authentication);
