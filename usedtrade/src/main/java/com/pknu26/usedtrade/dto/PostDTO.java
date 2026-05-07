@@ -30,4 +30,9 @@ public class PostDTO {
     private List<PostImageDTO> images;
 
     private boolean owner;
+
+    // 찜 개수
+    private Long favoriteCount;
+    // 현재 로그인 사용자가 찜했는지 여부
+    private boolean favorited;
 }
