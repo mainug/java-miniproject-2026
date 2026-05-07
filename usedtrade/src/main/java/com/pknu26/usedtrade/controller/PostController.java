@@ -31,10 +31,10 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<?> findPosts(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(required = false) String searchKeyword,
-            @RequestParam(required = false) String category,
-            @RequestParam(defaultValue = "latest") String sortCondition) {
+        @RequestParam(value = "page", defaultValue = "1") int page,
+        @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
+        @RequestParam(value = "category", required = false) String category,
+        @RequestParam(value = "sortCondition", defaultValue = "latest") String sortCondition) {
 
         int pageSize = 12;
         int offset = (page - 1) * pageSize;
