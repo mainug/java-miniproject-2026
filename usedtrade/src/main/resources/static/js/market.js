@@ -136,9 +136,18 @@ async function loadProducts(isInitialLoad = false) {
 
     // 카드 렌더링 — 기존 CSS 클래스(product-card) 사용
     data.forEach((post) => {
+      // 1. 이미지 HTML 생성 로직을 community.js와 동일하게 변경
       const imageHtml = post.mainImageUrl
         ? `<img src="${post.mainImageUrl}" alt="상품 이미지" loading="lazy">`
-        : `<span>이미지 없음</span>`;
+        : `
+    <div class="no-image">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21 15 16 10 5 21"/>
+      </svg>
+      <span>이미지 없음</span>
+    </div>`;
 
       const createdAt = (post.createdAtPosts || post.createdAt || "").slice(
         0,
@@ -146,25 +155,25 @@ async function loadProducts(isInitialLoad = false) {
       );
 
       const cardHTML = `
-        <article class="product-card" onclick="location.href='/posts/${post.postId}'">
-          <div class="product-image">${imageHtml}</div>
-          <div class="product-body">
-            <div class="product-title-row">
-              <h3 class="product-title">${post.title}</h3>
-              <span class="seller-nickname">${post.nickname || "알 수 없음"}</span>
-            </div>
-            <p class="product-description">${post.content || ""}</p>
-            <div class="product-meta">
-              <strong>${formatPrice(post.price)}</strong>
-              <span>${post.location || ""}</span>
-            </div>
-            <div class="product-status ${getStatusClass(post.status)}">
-              ${convertStatus(post.status)}
-            </div>
-            <small class="created-at">등록일: ${createdAt}</small>
-          </div>
-        </article>
-      `;
+    <article class="product-card" onclick="location.href='/posts/${post.postId}'">
+      <div class="product-image">${imageHtml}</div> 
+      <div class="product-body">
+        <div class="product-title-row">
+          <h3 class="product-title">${post.title}</h3>
+          <span class="seller-nickname">${post.nickname || "알 수 없음"}</span>
+        </div>
+        <p class="product-description">${post.content || ""}</p>
+        <div class="product-meta">
+          <strong>${formatPrice(post.price)}</strong>
+          <span>${post.location || ""}</span>
+        </div>
+        <div class="product-status ${getStatusClass(post.status)}">
+          ${convertStatus(post.status)}
+        </div>
+        <small class="created-at">등록일: ${createdAt}</small>
+      </div>
+    </article>
+  `;
       productList.insertAdjacentHTML("beforeend", cardHTML);
     });
 
