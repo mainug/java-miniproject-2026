@@ -95,93 +95,65 @@ function convertStatus(status) {
 // ==============================
 // 서버에서 상품 목록을 불러오는 함수
 // 비회원도 상품 목록을 볼 수 있어야 하므로 로그인 여부와 관계없이 실행됨
+// 역할:
+// 1. 현재 페이지 번호, 검색어, 카테고리, 정렬 조건으로 서버에 요청
+// 2. 서버에서 받은 데이터를 products 배열에 저장
+// 3. 실제 화면 출력은 renderProducts()에 맡김
 // ==============================
 async function loadProducts(isInitialLoad = false) {
   if (!productList || isFetching) return;
+
   isFetching = true;
+  hideStatus();
+
+  // 처음 불러오거나 검색 조건이 바뀐 경우 기존 목록 초기화
+  if (isInitialLoad) {
+    currentPage = 1;
+    products = [];
+  }
 
   const keyword = encodeURIComponent(
     keywordSearch ? keywordSearch.value.trim() : "",
   );
+
   let category = categoryFilter ? categoryFilter.value : "";
   const sort = sortFilter ? sortFilter.value.toLowerCase() : "latest";
-  if (category === "ALL") category = "";
+
+  // 서버에는 전체 카테고리 값을 빈 문자열로 보냄
+  if (category === "ALL") {
+    category = "";
+  }
 
   const url = `/api/posts?page=${currentPage}&searchKeyword=${keyword}&category=${category}&sortCondition=${sort}`;
 
   try {
     const response = await fetch(url);
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(errorText);
       showStatus("상품 목록을 불러오지 못했습니다.");
       return;
     }
 
     const data = await response.json();
-    const loadMoreBtn = document.getElementById("loadMoreBtn");
 
-    // 초기 로딩이면 목록 초기화
-    if (isInitialLoad) productList.innerHTML = "";
+    // 첫 페이지면 새로 저장, 더보기면 기존 배열 뒤에 추가
+    if (isInitialLoad) {
+      products = data;
+    } else {
+      products = [...products, ...data];
+    }
 
     // 더보기 버튼 표시 여부
+    const loadMoreBtn = document.getElementById("loadMoreBtn");
+
     if (loadMoreBtn) {
       loadMoreBtn.style.display = data.length < 12 ? "none" : "inline-block";
     }
 
-    // 결과 없음
-    if (data.length === 0 && isInitialLoad) {
-      productList.innerHTML = `<p class="empty" style="text-align:center;">등록된 상품이 없습니다.</p>`;
-      if (productCount) productCount.textContent = "0";
-      return;
-    }
-
-    // 카드 렌더링 — 기존 CSS 클래스(product-card) 사용
-    data.forEach((post) => {
-      // 1. 이미지 HTML 생성 로직을 community.js와 동일하게 변경
-      const imageHtml = post.mainImageUrl
-        ? `<img src="${post.mainImageUrl}" alt="상품 이미지" loading="lazy">`
-        : `
-    <div class="no-image">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <polyline points="21 15 16 10 5 21"/>
-      </svg>
-      <span>이미지 없음</span>
-    </div>`;
-
-      const createdAt = (post.createdAtPosts || post.createdAt || "").slice(
-        0,
-        10,
-      );
-
-      const cardHTML = `
-    <article class="product-card" onclick="location.href='/posts/${post.postId}'">
-      <div class="product-image">${imageHtml}</div> 
-      <div class="product-body">
-        <div class="product-title-row">
-          <h3 class="product-title">${post.title}</h3>
-          <span class="seller-nickname">${post.nickname || "알 수 없음"}</span>
-        </div>
-        <p class="product-description">${post.content || ""}</p>
-        <div class="product-meta">
-          <strong>${formatPrice(post.price)}</strong>
-          <span>${post.location || ""}</span>
-        </div>
-        <div class="product-status ${getStatusClass(post.status)}">
-          ${convertStatus(post.status)}
-        </div>
-        <small class="created-at">등록일: ${createdAt}</small>
-      </div>
-    </article>
-  `;
-      productList.insertAdjacentHTML("beforeend", cardHTML);
-    });
-
-    // 총 게시물 수 업데이트
-    if (productCount) {
-      productCount.textContent =
-        productList.querySelectorAll(".product-card").length;
-    }
+    // 화면 렌더링은 renderProducts()에서만 처리
+    renderProducts();
   } catch (error) {
     console.error(error);
     showStatus("서버 연결에 실패했습니다.");
@@ -206,95 +178,48 @@ function loadMorePosts() {
 function renderProducts() {
   if (!productList || !productCount) return;
 
-  const keyword = keywordSearch ? keywordSearch.value.trim().toLowerCase() : "";
-  const selectedCategory = categoryFilter ? categoryFilter.value : "ALL";
-  const selectedSort = sortFilter ? sortFilter.value : "LATEST";
-
-  // 원본 상품 배열을 직접 수정하지 않기 위해 복사본 생성
-  let filteredProducts = [...products];
-
-  // 검색어가 있으면 상품명, 설명, 거래 지역에서 검색
-  if (keyword) {
-    filteredProducts = filteredProducts.filter((product) => {
-      const title = (product.title || "").toLowerCase();
-      const content = (product.content || "").toLowerCase();
-      const location = (product.location || "").toLowerCase();
-
-      return (
-        title.includes(keyword) ||
-        content.includes(keyword) ||
-        location.includes(keyword)
-      );
-    });
-  }
-
-  // 전체가 아닌 특정 카테고리를 선택한 경우 해당 카테고리만 필터링
-  if (selectedCategory !== "ALL") {
-    filteredProducts = filteredProducts.filter(
-      (product) => product.category === selectedCategory,
-    );
-  }
-
-  // 최신순 정렬
-  if (selectedSort === "LATEST") {
-    filteredProducts.sort(
-      (a, b) =>
-        new Date(b.createdAtPosts || b.createdAt || 0) -
-        new Date(a.createdAtPosts || a.createdAt || 0),
-    );
-  }
-
-  // 가격 낮은순 정렬
-  if (selectedSort === "PRICE_ASC") {
-    filteredProducts.sort(
-      (a, b) => Number(a.price || 0) - Number(b.price || 0),
-    );
-  }
-
-  // 가격 높은순 정렬
-  if (selectedSort === "PRICE_DESC") {
-    filteredProducts.sort(
-      (a, b) => Number(b.price || 0) - Number(a.price || 0),
-    );
-  }
-
   // 상품 개수 표시
-  productCount.textContent = filteredProducts.length;
+  productCount.textContent = products.length;
 
-  // 검색 결과가 없을 때
-  if (filteredProducts.length === 0) {
-    productList.innerHTML = '<p class="empty">검색 결과가 없습니다.</p>';
+  // 상품이 없을 때
+  if (products.length === 0) {
+    productList.innerHTML =
+      '<p class="empty" style="text-align:center;">등록된 상품이 없습니다.</p>';
     return;
   }
 
-  // 상품 카드 HTML 생성
-  productList.innerHTML = filteredProducts
+  productList.innerHTML = products
     .map((product) => {
       const createdAt = product.createdAtPosts || product.createdAt || "";
       const imageUrl = product.mainImageUrl;
 
-      // 현재 로그인 사용자가 찜한 상품이면 채워진 하트 이미지 사용
-      // 찜하지 않은 상품이면 빈 하트 이미지 사용
-      const heartImage = product.favorited
+      const isFavorited =
+        product.favorited === true ||
+        product.favorited === 1 ||
+        product.favorited === "1";
+
+      const heartImage = isFavorited
         ? "/images/heart-fill.png"
         : "/images/heart.png";
+
+      const imageHtml = imageUrl
+        ? `<img src="${imageUrl}" alt="${product.title}" loading="lazy" />`
+        : `
+          <div class="no-image">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span>이미지 없음</span>
+          </div>
+        `;
 
       return `
         <article class="product-card" data-detail-url="/posts/${product.postId}">
           <div class="product-image">
-            ${
-              imageUrl
-                ? `<img src="${imageUrl}" alt="${product.title}" />`
-                : `
-            <div class="no-image">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <circle cx="8.5" cy="8.5" r="1.5"/>
-                <polyline points="21 15 16 10 5 21"/>
-              </svg>
-              <span>이미지 없음</span>
-            </div>`
-            }
+            ${imageHtml}
           </div>
 
           <div class="product-body">
@@ -323,7 +248,7 @@ function renderProducts() {
             type="button"
             class="favorite-button"
             data-post-id="${product.postId}"
-            data-favorited="${product.favorited ? "true" : "false"}"
+            data-favorited="${isFavorited ? "true" : "false"}"
             aria-label="찜하기"
           >
             <img
