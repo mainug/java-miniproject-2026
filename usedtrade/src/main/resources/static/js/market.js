@@ -443,3 +443,97 @@ applySearchParams();
 
 // 로그인 여부와 관계없이 상품 목록 불러오기
 loadProducts();
+
+// ==============================
+// 판매게시판 페이징
+// ==============================
+let currentPage = 1;
+let isFetching = false;
+
+// 1. 처음 화면 로딩 시 1페이지 실행
+document.addEventListener("DOMContentLoaded", () => {
+  fetchPosts(currentPage, true);
+});
+
+// 2. 검색 폼 제출 시 (새로고침 방지 & 1페이지부터 다시 검색)
+document.getElementById("searchForm").addEventListener("submit", function (e) {
+  e.preventDefault(); // 폼 기본 제출(새로고침) 막기
+  currentPage = 1; // 페이지 초기화
+  fetchPosts(currentPage, true); // true = 기존 목록 지우고 새로 그리기
+});
+
+// 3. 더보기 버튼 클릭 시
+function loadMorePosts() {
+  currentPage++;
+  fetchPosts(currentPage, false); // false = 기존 목록 아래에 이어붙이기
+}
+
+// 4. 서버 통신 핵심 함수
+function fetchPosts(page, isInitialLoad = false) {
+  if (isFetching) return;
+  isFetching = true;
+
+  // index.html에 있는 검색 조건들 읽어오기
+  const keyword = document.getElementById("keywordSearch").value || "";
+  const category = document.getElementById("categoryFilter").value || "";
+  // 백엔드 XML의 'price_asc' 등 소문자 조건과 맞추기 위해 소문자로 변환
+  const sort =
+    document.getElementById("sortFilter").value.toLowerCase() || "latest";
+
+  // URL 조립
+  const url = `/api/posts?page=${page}&searchKeyword=${keyword}&category=${category}&sortCondition=${sort}`;
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      const container = document.getElementById("productList");
+      const loadMoreBtn = document.getElementById("loadMoreBtn");
+
+      // 첫 로딩이거나 검색 버튼을 눌렀을 때는 기존 목록 싹 지우기
+      if (isInitialLoad) {
+        container.innerHTML = "";
+      } else {
+        // "상품을 불러오는 중..." 텍스트가 있다면 제거
+        const emptyText = container.querySelector(".empty");
+        if (emptyText) emptyText.remove();
+      }
+
+      // 남은 데이터가 12개 미만(또는 0개)이면 더보기 버튼 숨기기
+      if (data.length < 12) {
+        loadMoreBtn.style.display = "none";
+      } else {
+        loadMoreBtn.style.display = "inline-block";
+      }
+
+      // 카드가 하나도 없을 경우 처리
+      if (data.length === 0 && isInitialLoad) {
+        container.innerHTML = `<p class="empty" style="text-align:center;">등록된 상품이 없습니다.</p>`;
+        return;
+      }
+
+      // 데이터 개수만큼 카드 만들어서 붙이기
+      data.forEach((post) => {
+        const imageUrl = post.mainImageUrl
+          ? post.mainImageUrl
+          : "/images/default.png";
+
+        // 팀에서 사용하는 CSS 클래스명에 맞춰서 카드를 디자인해 줍니다.
+        const cardHTML = `
+                    <div class="product-item" style="border:1px solid #eee; padding:15px; margin-bottom:10px;">
+                        <img src="${imageUrl}" alt="상품" style="width: 100px; height: 100px; object-fit: cover;">
+                        <div class="info">
+                            <h3>${post.title}</h3>
+                            <p style="font-weight: bold;">${post.price.toLocaleString()}원</p>
+                            <p style="color: #888; font-size: 12px;">${post.location} · ${post.nickname}</p>
+                        </div>
+                    </div>
+                `;
+
+        container.insertAdjacentHTML("beforeend", cardHTML);
+      });
+    })
+    .catch((error) => console.error("데이터 불러오기 에러:", error))
+    .finally(() => {
+      isFetching = false;
+    });
+}

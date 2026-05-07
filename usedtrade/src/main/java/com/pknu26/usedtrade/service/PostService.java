@@ -30,6 +30,10 @@ public class PostService {
         return postMapper.findAllPosts();
     }
 
+    public List<PostDTO> findPostsWithPaging(String searchKeyword, String category, String sortCondition, int offset, int pageSize) {
+        return postMapper.findPostsWithPaging(searchKeyword, category, sortCondition, offset, pageSize);
+    }
+
     @Transactional
     public PostDTO findPostDetail(Long postId, Long loginUserId) {
         postMapper.increaseViewCount(postId);
