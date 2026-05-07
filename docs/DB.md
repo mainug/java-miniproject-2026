@@ -145,3 +145,31 @@ ALTER TABLE comments ADD CONSTRAINT fk_comments_community
 
 COMMIT;
 ```
+
+-- 260507 커뮤니티 게시판 추천기능 구현을 위한 스키마 수정
+-- 커뮤니티 추천 테이블
+CREATE TABLE community_post_likes (
+    like_id           NUMBER PRIMARY KEY,
+    community_post_id NUMBER NOT NULL,
+    user_id           NUMBER NOT NULL,
+    created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_like_post FOREIGN KEY (community_post_id)
+        REFERENCES community_posts(community_post_id) ON DELETE CASCADE,
+    CONSTRAINT uq_like UNIQUE (community_post_id, user_id)
+);
+-- 시퀀스
+CREATE SEQUENCE seq_like_id START WITH 1 INCREMENT BY 1;
+
+-- 260507 찜 테이블
+CREATE TABLE post_favorite (
+    favorite_id NUMBER DEFAULT seq_favorite_id.NEXTVAL PRIMARY KEY,
+    post_id NUMBER NOT NULL,
+    user_id NUMBER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_favorite_post FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
+   CONSTRAINT fk_favorite_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  CONSTRAINT uq_favorite_user_post UNIQUE (user_id, post_id)
+);
+
+-- 시퀀스
+CREATE SEQUENCE seq_favorite_id START WITH 1 INCREMENT BY 1 NOCACHE;
