@@ -15,4 +15,13 @@ public interface PostMapper {
     PostDTO findPostById(Long postId);
 
     int increaseViewCount(Long postId);
+
+    int updatePost(PostDTO postDTO);
+
+    int updatePostStatus(PostDTO postDTO);
+
+    int deletePostImages(Long postId);
+
+    int deletePost(Long postId);
+    
 }
