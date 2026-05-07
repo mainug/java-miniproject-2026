@@ -18,6 +18,11 @@ public class CustomUserDetails implements UserDetails{
 
     private final UserDTO user;
 
+    // 추가: 로그인한 사용자의 user_id
+    public Long getUserId() {
+        return user.getUserId();
+    }
+
     // 화면에서 사용할 닉네임
     public String getNickname() {
         return user.getNickname();

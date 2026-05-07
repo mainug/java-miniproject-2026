@@ -11,4 +11,10 @@ public interface PostImageMapper {
     int insertPostImage(PostImageDTO postImageDTO);
 
     List<PostImageDTO> findImagesByPostId(Long postId);
+
+    int insertCommunityPostImage(PostImageDTO postImageDTO);
+
+    List<PostImageDTO> findImagesByCommunityPostId(Long communityPostId);
+
+    void deleteImagesByCommunityPostId(Long communityPostId);
 }

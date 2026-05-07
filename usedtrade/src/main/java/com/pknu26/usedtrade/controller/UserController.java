@@ -21,6 +21,8 @@ public class UserController {
     @GetMapping("/join")
     public String joinForm(Model model) {
         model.addAttribute("userJoinForm", new UserJoinForm());
+        // 회원가입 페이지에서 헤더 오른쪽에 '홈으로' 버튼만 보이게 하기 위한 값_SY
+        model.addAttribute("authPage", true);
         return "/users/join";
     }
 
