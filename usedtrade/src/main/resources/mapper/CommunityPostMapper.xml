@@ -90,4 +90,54 @@
         ORDER BY cp.created_at DESC
     </select>
 
+    <select id="findCommunityPostsPaged" resultType="com.pknu26.usedtrade.dto.CommunityPostDTO">
+        SELECT
+            cp.community_post_id,
+            cp.user_id,
+            cp.title,
+            cp.content,
+            cp.category,
+            cp.view_count,
+            cp.created_at,
+            cp.updated_at,
+            u.nickname,
+            img.image_url AS main_image_url,
+            (SELECT COUNT(*) FROM community_post_likes l
+             WHERE l.community_post_id = cp.community_post_id) AS like_count
+        FROM community_posts cp
+        JOIN users u ON cp.user_id = u.user_id
+        LEFT JOIN post_img img
+            ON cp.community_post_id = img.community_post_id
+           AND img.is_main = 'Y'
+        <where>
+            <if test="category != null and category != 'ALL'">
+                cp.category = #{category}
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="sort == 'LIKES'">
+                (SELECT COUNT(*) FROM community_post_likes l
+                 WHERE l.community_post_id = cp.community_post_id) DESC
+            </when>
+            <when test="sort == 'VIEWS'">
+                cp.view_count DESC
+            </when>
+            <otherwise>
+                cp.created_at DESC
+            </otherwise>
+        </choose>
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </select>
+
+    <select id="countCommunityPosts" resultType="int">
+        SELECT COUNT(*)
+        FROM community_posts cp
+        <where>
+            <if test="category != null and category != 'ALL'">
+                cp.category = #{category}
+            </if>
+        </where>
+    </select>
+
 </mapper>

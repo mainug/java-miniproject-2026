@@ -2,6 +2,19 @@ const communityPostId = document.querySelector(".post-detail")?.dataset.postId;
 
 const communityMainImg = document.querySelector("#communityMainImage img");
 
+// ── 목록으로 뒤로가기 (URL 파라미터 보존) ─────────────
+const backLink = document.querySelector(".back-link");
+if (backLink) {
+  backLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (history.length > 1) {
+      history.back();
+    } else {
+      location.href = "/community";
+    }
+  });
+}
+
 // ── 라이트박스 ────────────────────────────────────────
 const lightbox = document.createElement("div");
 lightbox.className = "lightbox hidden";

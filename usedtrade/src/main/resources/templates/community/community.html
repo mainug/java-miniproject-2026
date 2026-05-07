@@ -25,6 +25,8 @@
 
             <select id="sortFilter" name="sort">
               <option value="LATEST">최신순</option>
+              <option value="LIKES">추천순</option>
+              <option value="VIEWS">조회순</option>
             </select>
           </form>
         </section>
@@ -32,6 +34,10 @@
         <section id="communityPostList" class="product-list">
           <p class="empty">게시글을 불러오는 중...</p>
         </section>
+
+        <div class="load-more-wrap">
+          <button id="loadMoreButton" class="load-more-btn hidden" type="button">더보기</button>
+        </div>
 
         <!-- 로그인한 사용자만 글쓰기 버튼 표시 -->
         <button

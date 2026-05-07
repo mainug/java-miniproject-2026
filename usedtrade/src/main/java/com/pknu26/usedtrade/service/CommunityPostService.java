@@ -30,6 +30,14 @@ public class CommunityPostService {
         return communityPostMapper.findAllCommunityPosts();
     }
 
+    public Map<String, Object> findCommunityPostsPaged(
+            String category, String sort, int offset, int limit) {
+        List<CommunityPostDTO> posts =
+                communityPostMapper.findCommunityPostsPaged(category, sort, offset, limit);
+        int totalCount = communityPostMapper.countCommunityPosts(category);
+        return Map.of("posts", posts, "totalCount", totalCount);
+    }
+
     @Transactional
     public CommunityPostDTO findCommunityPostById(Long communityPostId) {
         communityPostMapper.incrementViewCount(communityPostId);

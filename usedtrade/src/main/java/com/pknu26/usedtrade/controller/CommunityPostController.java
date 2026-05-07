@@ -62,8 +62,14 @@ public class CommunityPostController {
 
     @GetMapping("/api/community/posts")
     @ResponseBody
-    public List<CommunityPostDTO> findAllCommunityPosts() {
-        return communityPostService.findAllCommunityPosts();
+    public ResponseEntity<?> findAllCommunityPosts(
+            @RequestParam(value = "category", defaultValue = "ALL") String category,
+            @RequestParam(value = "sort", defaultValue = "LATEST") String sort,
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "12") int limit) {
+        Map<String, Object> result =
+                communityPostService.findCommunityPostsPaged(category, sort, offset, limit);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/api/community/posts")

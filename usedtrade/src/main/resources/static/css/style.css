@@ -517,10 +517,16 @@ textarea {
   background: #eff6ff;
 }
 
-.post-like-count {
+.post-stats {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.post-like-count,
+.post-view-count {
   font-size: 13px;
   color: #6b7280;
-  margin-top: 4px;
 }
 
 .like-display {
@@ -1420,4 +1426,31 @@ textarea {
 
 #editPostModal .button-group .small-button {
   min-width: 64px;
+}
+
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0 40px;
+}
+
+.load-more-btn {
+  padding: 10px 36px;
+  border: 2px solid #e5e7eb;
+  border-radius: 999px;
+  background: white;
+  font-size: 15px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.load-more-btn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.load-more-btn.hidden {
+  display: none;
 }
