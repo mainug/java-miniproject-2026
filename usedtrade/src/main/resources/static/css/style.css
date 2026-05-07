@@ -521,7 +521,10 @@ textarea {
   font-size: 15px;
   cursor: pointer;
   color: #374151;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background 0.15s;
 }
 
 .like-btn:hover {
@@ -1470,7 +1473,9 @@ textarea {
   font-weight: 500;
   color: #374151;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
 }
 
 .load-more-btn:hover {
