@@ -35,6 +35,8 @@ const imagePreviewList = document.querySelector("#imagePreviewList");
 
 // 서버에서 받아온 상품 목록을 저장하는 배열
 let products = [];
+let currentPage = 1; // 추가
+let isFetching = false; // 추가
 
 // ==============================
 // 상태 메시지 표시 함수
@@ -94,28 +96,95 @@ function convertStatus(status) {
 // 서버에서 상품 목록을 불러오는 함수
 // 비회원도 상품 목록을 볼 수 있어야 하므로 로그인 여부와 관계없이 실행됨
 // ==============================
-async function loadProducts() {
-  if (!productList) return;
+async function loadProducts(isInitialLoad = false) {
+  if (!productList || isFetching) return;
+  isFetching = true;
+
+  const keyword = encodeURIComponent(
+    keywordSearch ? keywordSearch.value.trim() : "",
+  );
+  let category = categoryFilter ? categoryFilter.value : "";
+  const sort = sortFilter ? sortFilter.value.toLowerCase() : "latest";
+  if (category === "ALL") category = "";
+
+  const url = `/api/posts?page=${currentPage}&searchKeyword=${keyword}&category=${category}&sortCondition=${sort}`;
 
   try {
-    const response = await fetch("/api/posts");
-
+    const response = await fetch(url);
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(errorText);
       showStatus("상품 목록을 불러오지 못했습니다.");
       return;
     }
 
-    // 서버에서 받은 상품 목록을 전역 배열에 저장
-    products = await response.json();
+    const data = await response.json();
+    const loadMoreBtn = document.getElementById("loadMoreBtn");
 
-    // 처음 페이지에 들어왔을 때 전체 상품 목록 출력
-    renderProducts();
+    // 초기 로딩이면 목록 초기화
+    if (isInitialLoad) productList.innerHTML = "";
+
+    // 더보기 버튼 표시 여부
+    if (loadMoreBtn) {
+      loadMoreBtn.style.display = data.length < 12 ? "none" : "inline-block";
+    }
+
+    // 결과 없음
+    if (data.length === 0 && isInitialLoad) {
+      productList.innerHTML = `<p class="empty" style="text-align:center;">등록된 상품이 없습니다.</p>`;
+      if (productCount) productCount.textContent = "0";
+      return;
+    }
+
+    // 카드 렌더링 — 기존 CSS 클래스(product-card) 사용
+    data.forEach((post) => {
+      const imageHtml = post.mainImageUrl
+        ? `<img src="${post.mainImageUrl}" alt="상품 이미지" loading="lazy">`
+        : `<span>이미지 없음</span>`;
+
+      const createdAt = (post.createdAtPosts || post.createdAt || "").slice(
+        0,
+        10,
+      );
+
+      const cardHTML = `
+        <article class="product-card" onclick="location.href='/posts/${post.postId}'">
+          <div class="product-image">${imageHtml}</div>
+          <div class="product-body">
+            <div class="product-title-row">
+              <h3 class="product-title">${post.title}</h3>
+              <span class="seller-nickname">${post.nickname || "알 수 없음"}</span>
+            </div>
+            <p class="product-description">${post.content || ""}</p>
+            <div class="product-meta">
+              <strong>${formatPrice(post.price)}</strong>
+              <span>${post.location || ""}</span>
+            </div>
+            <div class="product-status ${getStatusClass(post.status)}">
+              ${convertStatus(post.status)}
+            </div>
+            <small class="created-at">등록일: ${createdAt}</small>
+          </div>
+        </article>
+      `;
+      productList.insertAdjacentHTML("beforeend", cardHTML);
+    });
+
+    // 총 게시물 수 업데이트
+    if (productCount) {
+      productCount.textContent =
+        productList.querySelectorAll(".product-card").length;
+    }
   } catch (error) {
     console.error(error);
     showStatus("서버 연결에 실패했습니다.");
+  } finally {
+    isFetching = false;
   }
+}
+
+// 더보기 버튼에서 호출
+function loadMorePosts() {
+  currentPage++;
+  loadProducts(false);
 }
 
 // ==============================
@@ -442,98 +511,15 @@ function getStatusClass(status) {
 applySearchParams();
 
 // 로그인 여부와 관계없이 상품 목록 불러오기
-loadProducts();
+// loadProducts();
 
-// ==============================
-// 판매게시판 페이징
-// ==============================
-let currentPage = 1;
-let isFetching = false;
-
-// 1. 처음 화면 로딩 시 1페이지 실행
-document.addEventListener("DOMContentLoaded", () => {
-  fetchPosts(currentPage, true);
-});
-
-// 2. 검색 폼 제출 시 (새로고침 방지 & 1페이지부터 다시 검색)
-document.getElementById("searchForm").addEventListener("submit", function (e) {
-  e.preventDefault(); // 폼 기본 제출(새로고침) 막기
-  currentPage = 1; // 페이지 초기화
-  fetchPosts(currentPage, true); // true = 기존 목록 지우고 새로 그리기
-});
-
-// 3. 더보기 버튼 클릭 시
-function loadMorePosts() {
-  currentPage++;
-  fetchPosts(currentPage, false); // false = 기존 목록 아래에 이어붙이기
+// 검색 폼: renderProducts 대신 서버 페이징으로 교체
+if (searchForm) {
+  searchForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    currentPage = 1;
+    loadProducts(true);
+  });
 }
 
-// 4. 서버 통신 핵심 함수
-function fetchPosts(page, isInitialLoad = false) {
-  if (isFetching) return;
-  isFetching = true;
-
-  // index.html에 있는 검색 조건들 읽어오기
-  const keyword = document.getElementById("keywordSearch").value || "";
-  const category = document.getElementById("categoryFilter").value || "";
-  // 백엔드 XML의 'price_asc' 등 소문자 조건과 맞추기 위해 소문자로 변환
-  const sort =
-    document.getElementById("sortFilter").value.toLowerCase() || "latest";
-
-  // URL 조립
-  const url = `/api/posts?page=${page}&searchKeyword=${keyword}&category=${category}&sortCondition=${sort}`;
-
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      const container = document.getElementById("productList");
-      const loadMoreBtn = document.getElementById("loadMoreBtn");
-
-      // 첫 로딩이거나 검색 버튼을 눌렀을 때는 기존 목록 싹 지우기
-      if (isInitialLoad) {
-        container.innerHTML = "";
-      } else {
-        // "상품을 불러오는 중..." 텍스트가 있다면 제거
-        const emptyText = container.querySelector(".empty");
-        if (emptyText) emptyText.remove();
-      }
-
-      // 남은 데이터가 12개 미만(또는 0개)이면 더보기 버튼 숨기기
-      if (data.length < 12) {
-        loadMoreBtn.style.display = "none";
-      } else {
-        loadMoreBtn.style.display = "inline-block";
-      }
-
-      // 카드가 하나도 없을 경우 처리
-      if (data.length === 0 && isInitialLoad) {
-        container.innerHTML = `<p class="empty" style="text-align:center;">등록된 상품이 없습니다.</p>`;
-        return;
-      }
-
-      // 데이터 개수만큼 카드 만들어서 붙이기
-      data.forEach((post) => {
-        const imageUrl = post.mainImageUrl
-          ? post.mainImageUrl
-          : "/images/default.png";
-
-        // 팀에서 사용하는 CSS 클래스명에 맞춰서 카드를 디자인해 줍니다.
-        const cardHTML = `
-                    <div class="product-item" style="border:1px solid #eee; padding:15px; margin-bottom:10px;">
-                        <img src="${imageUrl}" alt="상품" style="width: 100px; height: 100px; object-fit: cover;">
-                        <div class="info">
-                            <h3>${post.title}</h3>
-                            <p style="font-weight: bold;">${post.price.toLocaleString()}원</p>
-                            <p style="color: #888; font-size: 12px;">${post.location} · ${post.nickname}</p>
-                        </div>
-                    </div>
-                `;
-
-        container.insertAdjacentHTML("beforeend", cardHTML);
-      });
-    })
-    .catch((error) => console.error("데이터 불러오기 에러:", error))
-    .finally(() => {
-      isFetching = false;
-    });
-}
+loadProducts(true); // 초기 로딩
