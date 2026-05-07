@@ -2,8 +2,7 @@
 
 ## ERD
 
-<img width="826" height="460" alt="image" src="https://github.com/user-attachments/assets/dc809bf2-c659-481a-8515-605f9bd1643b" />
-
+<img width="770" height="807" alt="image" src="https://github.com/user-attachments/assets/ac29cb9c-6784-409c-b8f1-84faef1af646" />
 
 ## 테이블 생성 쿼리
 
