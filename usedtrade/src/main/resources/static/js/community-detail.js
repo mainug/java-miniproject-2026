@@ -1,16 +1,78 @@
 const communityPostId = document.querySelector(".post-detail")?.dataset.postId;
 
+const communityMainImg = document.querySelector("#communityMainImage img");
+document.querySelectorAll(".detail-thumbnail").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    if (communityMainImg && btn.dataset.src) {
+      communityMainImg.src = btn.dataset.src;
+    }
+  });
+});
+
 const openEditButton = document.querySelector("#openEditButton");
 const closeEditButton = document.querySelector("#closeEditButton");
 const editModal = document.querySelector("#editModal");
 const editForm = document.querySelector("#editForm");
 const deleteButton = document.querySelector("#deleteButton");
 
+// ── 수정 모달 이미지 관리 ─────────────────────────────
+
+let editImages = [];
+
+function renderEditImages() {
+  const list = document.querySelector("#editImageList");
+  if (!list) return;
+  list.innerHTML = "";
+  editImages.forEach((item, i) => {
+    const card = document.createElement("div");
+    card.className = "edit-image-card";
+    card.draggable = true;
+    card.innerHTML = `
+      <img src="${item.type === "existing" ? item.imageUrl : item.previewUrl}" />
+      <button type="button" class="edit-image-delete">🗑</button>
+    `;
+    card.querySelector(".edit-image-delete").addEventListener("click", () => {
+      if (item.type === "new") URL.revokeObjectURL(item.previewUrl);
+      editImages.splice(i, 1);
+      renderEditImages();
+    });
+    card.addEventListener("dragstart", (e) => {
+      e.dataTransfer.setData("text/plain", i);
+      card.classList.add("dragging");
+    });
+    card.addEventListener("dragend", () => card.classList.remove("dragging"));
+    card.addEventListener("dragover", (e) => e.preventDefault());
+    card.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const from = parseInt(e.dataTransfer.getData("text/plain"));
+      if (from === i) return;
+      const [moved] = editImages.splice(from, 1);
+      editImages.splice(i, 0, moved);
+      renderEditImages();
+    });
+    list.appendChild(card);
+  });
+}
+
 if (openEditButton) {
   openEditButton.addEventListener("click", () => {
+    editImages = (PAGE_IMAGES || []).map((img) => ({
+      type: "existing",
+      imageId: img.imageId,
+      imageUrl: img.imageUrl,
+    }));
+    renderEditImages();
     editModal.classList.remove("hidden");
   });
 }
+
+document.querySelector("#editNewImages")?.addEventListener("change", (e) => {
+  for (const file of e.target.files) {
+    editImages.push({ type: "new", file, previewUrl: URL.createObjectURL(file) });
+  }
+  e.target.value = "";
+  renderEditImages();
+});
 
 if (closeEditButton) {
   closeEditButton.addEventListener("click", () => {
@@ -35,6 +97,11 @@ if (editForm) {
     formData.append("title", title);
     formData.append("content", content);
     formData.append("category", category);
+
+    editImages.filter((i) => i.type === "existing")
+      .forEach((i) => formData.append("keepImageIds", i.imageId));
+    editImages.filter((i) => i.type === "new")
+      .forEach((i) => formData.append("newImages", i.file));
 
     try {
       const response = await fetch(`/api/community/posts/${communityPostId}`, {
