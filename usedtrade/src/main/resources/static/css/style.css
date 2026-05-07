@@ -860,9 +860,127 @@ textarea {
   background: #fecaca;
 }
 
-.post-detail-page {
-  padding: 32px 0;
+/* 댓글 섹션 */
+
+.comment-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
 }
+
+.comment-title {
+  font-size: 18px;
+  margin: 0 0 20px;
+}
+
+.comment-item {
+  padding: 16px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.comment-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.comment-nickname {
+  font-weight: 700;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.comment-date {
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.comment-content {
+  color: #374151;
+  line-height: 1.6;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+
+.comment-edit-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 72px;
+}
+
+.comment-edit-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.comment-empty {
+  color: #9ca3af;
+  font-size: 14px;
+  padding: 16px 0;
+}
+
+.comment-login-notice {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 14px;
+  text-align: center;
+}
+
+.comment-login-notice a {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.comment-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.comment-form button[type="submit"] {
+  align-self: flex-end;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.comment-form button[type="submit"]:hover {
+  background: #1d4ed8;
+}
+
+  .post-detail-page {
+    padding: 32px 0;
+  }
 
 .detail-top {
   margin-bottom: 20px;

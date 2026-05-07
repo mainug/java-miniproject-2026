@@ -50,6 +50,28 @@
           <div class="post-content" th:text="${post.content}"></div>
         </article>
 
+        <!-- 댓글 섹션 -->
+        <section class="comment-section">
+          <h3 class="comment-title">댓글 <span id="commentCount">0</span>개</h3>
+
+          <div id="commentList"></div>
+
+          <!-- 로그인된 모든 사용자: 댓글 작성 가능 -->
+          <div sec:authorize="isAuthenticated()"
+               id="commentFormWrapper"
+               th:attr="data-user-id=${#authentication.principal.user.userId}">
+            <form id="commentForm" class="comment-form">
+              <textarea id="commentContent" placeholder="댓글을 입력하세요" rows="3"></textarea>
+              <button type="submit">등록</button>
+            </form>
+          </div>
+
+          <!-- 비로그인: 안내 메시지 -->
+          <div sec:authorize="!isAuthenticated()" class="comment-login-notice">
+            <a th:href="@{/users/login}">로그인</a> 후 댓글을 작성할 수 있습니다.
+          </div>
+        </section>
+
       </div>
     </div>
 

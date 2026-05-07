@@ -28,6 +28,7 @@ public class SecurityConfig {
                                 "/api/posts/**",
                                 "/community/**",
                                 "/api/community/posts",
+                                "/api/community/posts/*/comments",
                                 "/uploads/**",
                                 "/css/**",
                                 "/js/**",
