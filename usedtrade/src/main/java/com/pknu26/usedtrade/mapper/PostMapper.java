@@ -2,6 +2,7 @@ package com.pknu26.usedtrade.mapper;
 
 import com.pknu26.usedtrade.dto.PostDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param; // 추가
 
 import java.util.List;
 
@@ -12,16 +13,24 @@ public interface PostMapper {
 
     List<PostDTO> findAllPosts();
 
-    PostDTO findPostById(Long postId);
+    List<PostDTO> findPostsWithPaging(
+        @Param("searchKeyword") String searchKeyword,
+        @Param("category") String category,
+        @Param("sortCondition") String sortCondition,
+        @Param("offset") int offset,
+        @Param("pageSize") int pageSize
+    );
 
-    int increaseViewCount(Long postId);
+    PostDTO findPostById(@Param("postId") Long postId);
+
+    int increaseViewCount(@Param("postId") Long postId);
 
     int updatePost(PostDTO postDTO);
 
     int updatePostStatus(PostDTO postDTO);
 
-    int deletePostImages(Long postId);
+    int deletePostImages(@Param("postId") Long postId);
 
-    int deletePost(Long postId);
+    int deletePost(@Param("postId") Long postId);
     
 }
