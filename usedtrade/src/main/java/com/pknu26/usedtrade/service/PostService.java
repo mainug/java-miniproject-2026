@@ -31,8 +31,8 @@ public class PostService {
         return postDTO.getPostId();
     }
 
-    public List<PostDTO> findAllPosts(Long loginUserId) {
-        return postMapper.findAllPosts(loginUserId);
+    public List<PostDTO> findPostsWithPaging(Long loginUserId, String searchKeyword, String category, String sortCondition, int offset, int pageSize) {
+        return postMapper.findPostsWithPaging(loginUserId, searchKeyword, category, sortCondition, offset, pageSize);
     }
 
     @Transactional

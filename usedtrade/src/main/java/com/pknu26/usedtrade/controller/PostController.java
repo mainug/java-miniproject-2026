@@ -27,11 +27,22 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostDTO> findAllPosts(Authentication authentication) {
+    public ResponseEntity<?> findAllPosts(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "sortCondition", defaultValue = "latest") String sortCondition,
+            Authentication authentication) {
+
         Long loginUserId = getLoginUserId(authentication);
 
-        return postService.findAllPosts(loginUserId);
-    }
+        int pageSize = 12;
+        int offset = (page - 1) * pageSize;
+
+        List<PostDTO> postList = postService.findPostsWithPaging(loginUserId, searchKeyword, category, sortCondition, offset, pageSize);
+
+        return ResponseEntity.ok(postList);
+        }
 
     // 내가 찜한 상품 목록 조회
     @GetMapping("/favorites")
