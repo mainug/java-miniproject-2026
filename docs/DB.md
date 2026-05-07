@@ -144,7 +144,6 @@ ALTER TABLE comments ADD CONSTRAINT fk_comments_community
     FOREIGN KEY (community_post_id) REFERENCES community_posts(community_post_id) ON DELETE CASCADE;
 
 COMMIT;
-```
 
 -- 260507 커뮤니티 게시판 추천기능 구현을 위한 스키마 수정
 -- 커뮤니티 추천 테이블
@@ -173,3 +172,4 @@ CREATE TABLE post_favorite (
 
 -- 시퀀스
 CREATE SEQUENCE seq_favorite_id START WITH 1 INCREMENT BY 1 NOCACHE;
+```
