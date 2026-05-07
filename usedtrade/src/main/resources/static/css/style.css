@@ -1093,3 +1093,113 @@ textarea {
     height: 320px;
   }
 }
+
+.owner-controls {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid #d1fae5;
+  border-radius: 14px;
+  background: #ecfdf5;
+}
+
+/* 작성자 전용 버튼 한 줄 정렬 */
+
+.owner-action-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.owner-action-row label {
+  font-weight: 700;
+  color: #065f46;
+}
+
+.owner-action-row select {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  background: white;
+}
+
+.owner-action-row .small-button {
+  height: 38px;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
+.owner-action-row .danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.owner-status-box label {
+  font-weight: 700;
+  color: #065f46;
+}
+
+.owner-status-box select {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  background: white;
+}
+
+.small-button.danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.detail-edit-form {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+}
+
+.detail-edit-form h3 {
+  margin-bottom: 16px;
+}
+
+.detail-edit-form textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+/* 게시글 수정 모달 버튼 */
+
+#editPostModal .button-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+#editPostModal .button-group .search-button,
+#editPostModal .button-group .small-button {
+  width: auto;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+#editPostModal .button-group .search-button {
+  min-width: 104px;
+}
+
+#editPostModal .button-group .small-button {
+  min-width: 64px;
+}

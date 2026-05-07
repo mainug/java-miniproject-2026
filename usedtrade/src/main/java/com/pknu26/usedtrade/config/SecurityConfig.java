@@ -2,6 +2,7 @@ package com.pknu26.usedtrade.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,31 +23,31 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
+                                "/products",
                                 "/posts/**",
                                 "/users/join",
-                                "/users/login",
-                                "/api/posts/**",
-                                "/community/**",
-                                "/api/community/posts",
-                                "/api/community/posts/*/comments",
+                                "/login",
                                 "/uploads/**",
                                 "/css/**",
-                                "/js/**",
-                                "/error"
-                        )
+                                "/js/**")
                         .permitAll()
-                        // 위 페이지들은 인증 없이 접근 허용
-                        .requestMatchers("/admin").hasRole("ADMIN") // /admin/** 페이지는 ADMIN 권한 필요
-                        .anyRequest().authenticated() // 미처 적지 못한 다른 페이지들은 인증 필요
-                )
+
+                        .requestMatchers(HttpMethod.GET, "/api/posts", "/api/posts/**").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/posts").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/api/posts/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/posts/**").authenticated()
+
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .anyRequest().authenticated())
 
                 .formLogin(form -> form
-                .loginPage("/users/login")          // 우리가 만든 로그인 페이지(인증이 필요한 페이지에 비로그인 상태로 접근하면 여기로 리다이렉트)
-                .loginProcessingUrl("/users/login") // 로그인 POST 처리 URL (login.html 폼의 action과 일치해야 함)
-                .defaultSuccessUrl("/?login", true)
-                .failureUrl("/users/login?error=true")
-                .permitAll()
-            )
+                        .loginPage("/users/login") // 우리가 만든 로그인 페이지(인증이 필요한 페이지에 비로그인 상태로 접근하면 여기로 리다이렉트)
+                        .loginProcessingUrl("/users/login") // 로그인 POST 처리 URL (login.html 폼의 action과 일치해야 함)
+                        .defaultSuccessUrl("/?login", true)
+                        .failureUrl("/users/login?error=true")
+                        .permitAll())
 
                 .sessionManagement(session -> session
                         .maximumSessions(1) // 중복 로그인 방지

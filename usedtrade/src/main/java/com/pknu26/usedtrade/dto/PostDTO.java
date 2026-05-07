@@ -28,4 +28,6 @@ public class PostDTO {
     
     //상세조회용 이미지 목록
     private List<PostImageDTO> images;
+
+    private boolean owner;
 }

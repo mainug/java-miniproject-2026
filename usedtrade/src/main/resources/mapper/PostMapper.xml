@@ -55,22 +55,19 @@
             p.created_at_posts,
             img.image_url AS main_image_url,
             u.nickname AS nickname
-
         FROM posts p
         LEFT JOIN post_img img
             ON p.post_id = img.post_id
-           AND img.is_main = 'Y'
-           
+        AND img.is_main = 'Y'
         LEFT JOIN users u
             ON p.user_id = u.user_id
-
         ORDER BY p.created_at_posts DESC
     </select>
 
     <!-- 게시글 상세 조회 -->
     <select id="findPostById"
-            parameterType="long"
-            resultType="com.pknu26.usedtrade.dto.PostDTO">
+        parameterType="long"
+        resultType="com.pknu26.usedtrade.dto.PostDTO">
         SELECT
             p.post_id,
             p.user_id,
@@ -84,11 +81,14 @@
             p.status,
             p.view_count,
             p.created_at_posts,
-            img.image_url AS main_image_url
+            img.image_url AS main_image_url,
+            u.nickname AS nickname
         FROM posts p
         LEFT JOIN post_img img
             ON p.post_id = img.post_id
-           AND img.is_main = 'Y'
+        AND img.is_main = 'Y'
+        LEFT JOIN users u
+            ON p.user_id = u.user_id
         WHERE p.post_id = #{postId}
     </select>
 
@@ -98,5 +98,36 @@
         SET view_count = NVL(view_count, 0) + 1
         WHERE post_id = #{postId}
     </update>
+
+    <!-- 게시글 수정 -->
+    <update id="updatePost" parameterType="com.pknu26.usedtrade.dto.PostDTO">
+        UPDATE posts
+        SET
+            title = #{title},
+            content_posts = #{content},
+            price = #{price},
+            category = #{category},
+            location = #{location}
+        WHERE post_id = #{postId}
+    </update>
+
+    <!-- 판매 상태 변경 -->
+    <update id="updatePostStatus" parameterType="com.pknu26.usedtrade.dto.PostDTO">
+        UPDATE posts
+        SET status = #{status}
+        WHERE post_id = #{postId}
+    </update>
+
+    <!-- 게시글 이미지 DB 삭제 -->
+    <delete id="deletePostImages" parameterType="long">
+        DELETE FROM post_img
+        WHERE post_id = #{postId}
+    </delete>
+
+    <!-- 게시글 삭제 -->
+    <delete id="deletePost" parameterType="long">
+        DELETE FROM posts
+        WHERE post_id = #{postId}
+    </delete>
 
 </mapper>
