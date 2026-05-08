@@ -45,15 +45,14 @@
           </button>
         </div>
 
-        <!-- 로그인한 사용자만 글쓰기 버튼 표시 -->
         <button
-          sec:authorize="isAuthenticated()"
           type="button"
           id="openCommunityWriteButton"
           class="upload-fab floating"
           aria-label="글쓰기"
           title="글쓰기"
-        >
+          th:data-authenticated="${#authorization.expression('isAuthenticated()')}"
+          th:data-login-url="@{/users/login}">
           +
         </button>
       </div>

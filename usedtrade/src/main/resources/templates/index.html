@@ -77,6 +77,55 @@
         <p class="empty">상품을 불러오는 중...</p>
       </section>
 
+          <form id="searchForm" class="filter-box">
+            <input
+              type="text"
+              id="keywordSearch"
+              name="keyword"
+              class="search-input"
+              placeholder="상품명, 설명, 지역 검색"
+            />
+
+            <select id="categoryFilter" name="category">
+              <option value="ALL">전체</option>
+              <option value="DIGITAL">디지털기기</option>
+              <option value="FURNITURE">가구</option>
+              <option value="CLOTHES">의류</option>
+              <option value="BOOK">도서</option>
+              <option value="ETC">기타</option>
+            </select>
+
+            <select id="sortFilter" name="sort">
+              <option value="LATEST">최신순</option>
+              <option value="PRICE_ASC">가격 낮은순</option>
+              <option value="PRICE_DESC">가격 높은순</option>
+            </select>
+
+            <button type="submit" class="search-button">검색</button>
+          </form>
+        </section>
+
+        <section id="productList" class="product-list">
+          <p class="empty">상품을 불러오는 중...</p>
+        </section>
+
+        <div class="load-more-wrap">
+          <button type="button" id="loadMoreBtn" class="load-more-btn hidden">
+            더보기
+          </button>
+        </div>
+
+        <!-- 비회원이 상품 등록 버튼 클릭시 로그인페이지로 리다이렉트 -->
+        <button
+          type="button"
+          id="openProductWriteButton"
+          class="upload-fab floating"
+          aria-label="상품 등록"
+          title="상품 등록"
+          th:data-authenticated="${#authorization.expression('isAuthenticated()')}"
+          th:data-login-url="@{/users/login}"
+        >
+          +
       <div style="text-align: center; margin-top: 20px; padding-bottom: 30px">
         <button type="button" id="loadMoreBtn" onclick="loadMorePosts()" style="
               display: none;
