@@ -229,7 +229,18 @@ async function handleCommunitySubmit(event) {
 }
 
 if (openCommunityWriteButton) {
-  openCommunityWriteButton.addEventListener("click", openCommunityWriteModal);
+  openCommunityWriteButton.addEventListener("click", () => {
+    const isAuthenticated =
+      openCommunityWriteButton.dataset.authenticated === "true";
+    const loginUrl = openCommunityWriteButton.dataset.loginUrl;
+
+    if (!isAuthenticated) {
+      location.href = loginUrl;
+      return;
+    }
+
+    openCommunityWriteModal();
+  });
 }
 
 if (closeCommunityWriteButton) {

@@ -17,6 +17,7 @@ const productWriteForm = document.querySelector("#productWriteForm");
 const marketStatus = document.querySelector("#marketStatus");
 const productCount = document.querySelector("#productCount");
 const productList = document.querySelector("#productList");
+const loadMoreBtn = document.getElementById("loadMoreBtn");
 
 // ==============================
 // 검색, 카테고리, 정렬 필터 요소
@@ -35,6 +36,7 @@ const imagePreviewList = document.querySelector("#imagePreviewList");
 
 // 서버에서 받아온 상품 목록을 저장하는 배열
 let products = [];
+let totalProductCount = 0;
 let currentPage = 1; // 추가
 let isFetching = false; // 추가
 
@@ -140,16 +142,19 @@ async function loadProducts(isInitialLoad = false) {
 
     // 첫 페이지면 새로 저장, 더보기면 기존 배열 뒤에 추가
     if (isInitialLoad) {
-      products = data;
+      products = data.posts;
+      totalProductCount = data.totalCount;
     } else {
-      products = [...products, ...data];
+      products = [...products, ...data.posts];
     }
 
     // 더보기 버튼 표시 여부
-    const loadMoreBtn = document.getElementById("loadMoreBtn");
-
     if (loadMoreBtn) {
-      loadMoreBtn.style.display = data.length < 12 ? "none" : "inline-block";
+      if (data.posts.length < 12) {
+        loadMoreBtn.classList.add("hidden");
+      } else {
+        loadMoreBtn.classList.remove("hidden");
+      }
     }
 
     // 화면 렌더링은 renderProducts()에서만 처리
@@ -179,7 +184,7 @@ function renderProducts() {
   if (!productList || !productCount) return;
 
   // 상품 개수 표시
-  productCount.textContent = products.length;
+  productCount.textContent = totalProductCount;
 
   // 상품이 없을 때
   if (products.length === 0) {
@@ -433,6 +438,10 @@ if (openProductWriteButton) {
 // 모달 닫기 버튼 클릭 시 모달 닫기
 if (closeProductWriteButton) {
   closeProductWriteButton.addEventListener("click", closeProductWriteModal);
+}
+
+if (loadMoreBtn) {
+  loadMoreBtn.addEventListener("click", loadMorePosts);
 }
 
 // 검색 버튼 클릭 또는 검색창에서 Enter 입력 시 목록 다시 렌더링

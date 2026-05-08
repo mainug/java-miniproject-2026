@@ -40,8 +40,9 @@ public class PostController {
         int offset = (page - 1) * pageSize;
 
         List<PostDTO> postList = postService.findPostsWithPaging(loginUserId, searchKeyword, category, sortCondition, offset, pageSize);
+        int totalCount = postService.countPostsWithFilter(searchKeyword, category);
 
-        return ResponseEntity.ok(postList);
+        return ResponseEntity.ok(Map.of("posts", postList, "totalCount", totalCount));
         }
 
     // 내가 찜한 상품 목록 조회
