@@ -173,7 +173,7 @@ CREATE TABLE post_favorite (
 CREATE SEQUENCE seq_favorite_id START WITH 1 INCREMENT BY 1 NOCACHE;
 ```
 
-## 최종 테이블
+## 최종 쿼리문
 
 ```sql
 -- 1. 시퀀스 생성
