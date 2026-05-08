@@ -87,6 +87,25 @@ function convertCategory(category) {
 }
 
 // ==============================
+// 상품 판매상태 관련 함수
+// ==============================
+function getStatusClass(status) {
+  if (status === "SELLING") return "selling";
+  if (status === "RESERVED") return "reserved";
+  if (status === "SOLD") return "sold";
+  return "selling";
+}
+
+function updatePostStatusBadge(status) {
+  if (!postStatus) return;
+
+  postStatus.textContent = convertStatus(status);
+
+  postStatus.classList.remove("selling", "reserved", "sold");
+  postStatus.classList.add("product-status", getStatusClass(status));
+}
+
+// ==============================
 // URL에서 게시글 번호 추출
 // 예: /posts/3 -> 3
 // ==============================
@@ -137,7 +156,7 @@ function renderPostDetail(post) {
   postPrice.textContent = formatPrice(post.price);
   postCategory.textContent = convertCategory(post.category);
   postLocation.textContent = post.location || "지역 정보 없음";
-  postStatus.textContent = convertStatus(post.status);
+  updatePostStatusBadge(post.status);
   postContent.textContent = post.content || "";
 
   const createdAt = post.createdAtPosts || "";
@@ -287,7 +306,7 @@ async function handleStatusUpdate() {
     hideDetailStatus();
 
     currentPost.status = status;
-    postStatus.textContent = convertStatus(status);
+    updatePostStatusBadge(post.status);
 
     alert("판매 상태가 변경되었습니다.");
   } catch (error) {
