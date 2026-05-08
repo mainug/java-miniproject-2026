@@ -1458,8 +1458,6 @@ textarea {
   min-width: 64px;
 }
 
-
-
 /* 햄버거 메뉴 전체 박스 */
 
 .user-menu {
@@ -1467,7 +1465,6 @@ textarea {
   display: inline-flex;
   align-items: center;
 }
-
 
 /* 햄버거 버튼 */
 
@@ -1503,7 +1500,6 @@ textarea {
   background: #2563eb;
 }
 
-
 /* 햄버거 드롭다운 메뉴 */
 
 .user-menu-panel {
@@ -1524,7 +1520,6 @@ textarea {
 .user-menu.open .user-menu-panel {
   display: block;
 }
-
 
 /* 메뉴 항목 */
 
@@ -1548,7 +1543,6 @@ textarea {
   background: #eff6ff;
   color: #2563eb;
 }
-
 
 /* 로그아웃 */
 

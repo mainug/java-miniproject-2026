@@ -144,18 +144,6 @@
         OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     </select>
 
-    <select id="countPostsWithFilter" resultType="int">
-        SELECT COUNT(*)
-        FROM posts p
-        WHERE 1=1
-        <if test="searchKeyword != null and searchKeyword != ''">
-            AND p.title LIKE '%' || #{searchKeyword} || '%'
-        </if>
-        <if test="category != null and category != '전체' and category != ''">
-            AND p.category = #{category}
-        </if>
-    </select>
-
     <!-- 게시글 상세 조회 -->
     <select id="findPostById"
         resultType="com.pknu26.usedtrade.dto.PostDTO">

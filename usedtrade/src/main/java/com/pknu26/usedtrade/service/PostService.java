@@ -35,9 +35,9 @@ public class PostService {
         return postMapper.findPostsWithPaging(loginUserId, searchKeyword, category, sortCondition, offset, pageSize);
     }
 
-    public int countPostsWithFilter(String searchKeyword, String category) {
-        return postMapper.countPostsWithFilter(searchKeyword, category);
-    }
+    public List<PostDTO> findPostsByUserId(Long userId) {
+    return postMapper.findPostsByUserId(userId);
+}
 
     @Transactional
     public PostDTO findPostDetail(Long postId, Long loginUserId) {

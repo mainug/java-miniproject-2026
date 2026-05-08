@@ -33,10 +33,6 @@ public interface PostMapper {
 
     int deletePost(@Param("postId") Long postId);
 
-    int countPostsWithFilter(
-        @Param("searchKeyword") String searchKeyword,
-        @Param("category") String category);
-
     List<PostDTO> findPostsByUserId(@Param("userId") Long userId);
     
 }

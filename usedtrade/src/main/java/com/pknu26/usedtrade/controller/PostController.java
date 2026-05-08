@@ -39,10 +39,6 @@ public class PostController {
         int pageSize = 12;
         int offset = (page - 1) * pageSize;
 
-        List<PostDTO> postList = postService.findPostsWithPaging(loginUserId, searchKeyword, category, sortCondition, offset, pageSize);
-        int totalCount = postService.countPostsWithFilter(searchKeyword, category);
-
-        return ResponseEntity.ok(Map.of("posts", postList, "totalCount", totalCount));
         List<PostDTO> postList = postService.findPostsWithPaging(loginUserId, searchKeyword, category, sortCondition,
                 offset, pageSize);
 
