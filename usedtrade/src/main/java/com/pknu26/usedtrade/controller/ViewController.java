@@ -35,10 +35,19 @@ public class ViewController {
     // return "join";
     // }
 
-
-    //게시글 상세화면
+    // 게시글 상세화면
     @GetMapping("/posts/{postId}")
     public String showPostDetailPage() {
         return "post/detail";
+    }
+
+    @GetMapping("/my/posts")
+    public String myPostsPage() {
+        return "index";
+    }
+
+    @GetMapping("/wishlist")
+    public String wishlistPage(){
+        return "index";
     }
 }
