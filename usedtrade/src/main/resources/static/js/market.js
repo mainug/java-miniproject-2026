@@ -65,6 +65,10 @@ function getProductsApiUrl() {
     return "/api/posts/my";
   }
 
+  if (pageType === "WISHLIST") {
+    return "/api/posts/favorites";
+  }
+
   return "/api/posts";
 }
 
@@ -177,7 +181,9 @@ async function loadProducts(isInitialLoad = false) {
 
   let url = "";
 
-  if (getMarketPageType() === "MY_POSTS") {
+  if (getMarketPageType() === "MY_POSTS"||
+      getMarketPageType() === "WISHLIST"
+    ) {
     url = getProductsApiUrl();
   } else {
     url = `${getProductsApiUrl()}?page=${currentPage}&searchKeyword=${keyword}&category=${category}&sortCondition=${sort}`;
