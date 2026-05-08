@@ -306,7 +306,7 @@ async function handleStatusUpdate() {
     hideDetailStatus();
 
     currentPost.status = status;
-    updatePostStatusBadge(post.status);
+    updatePostStatusBadge(currentPost.status);
 
     alert("판매 상태가 변경되었습니다.");
   } catch (error) {

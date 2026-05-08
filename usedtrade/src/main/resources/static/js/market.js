@@ -469,7 +469,7 @@ async function handleProductSubmit(event) {
     closeProductWriteModal();
 
     // 상품 목록 다시 불러오기
-    await loadProducts();
+    window.location.reload();
   } catch (error) {
     console.error(error);
     showStatus("서버 연결에 실패했습니다.");
