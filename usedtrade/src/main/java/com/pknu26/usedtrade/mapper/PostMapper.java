@@ -37,4 +37,6 @@ public interface PostMapper {
         @Param("searchKeyword") String searchKeyword,
         @Param("category") String category);
 
+    List<PostDTO> findPostsByUserId(@Param("userId") Long userId);
+    
 }
