@@ -17,4 +17,5 @@ public class CommunityPostDTO {
 
     private String mainImageUrl;
     private String nickname;
+    private int likeCount;
 }
