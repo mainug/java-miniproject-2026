@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,18 +36,40 @@ public class CommunityPostController {
     @GetMapping("/community/{communityPostId}")
     public String communityDetailPage(
             @PathVariable("communityPostId") Long communityPostId,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             Model model) {
         CommunityPostDTO post = communityPostService.findCommunityPostById(communityPostId);
         List<PostImageDTO> images = communityPostService.findImagesByCommunityPostId(communityPostId);
+        int likeCount = communityPostService.getLikeCount(communityPostId);
+        boolean isLiked = userDetails != null &&
+                communityPostService.isLiked(communityPostId, userDetails.getUser().getUserId());
         model.addAttribute("post", post);
         model.addAttribute("images", images);
+        model.addAttribute("likeCount", likeCount);
+        model.addAttribute("isLiked", isLiked);
         return "community/community-detail";
+    }
+
+    @PostMapping("/api/community/posts/{communityPostId}/likes")
+    @ResponseBody
+    public ResponseEntity<?> toggleLike(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable("communityPostId") Long communityPostId) {
+        Map<String, Object> result = communityPostService.toggleLike(
+                communityPostId, userDetails.getUser().getUserId());
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/api/community/posts")
     @ResponseBody
-    public List<CommunityPostDTO> findAllCommunityPosts() {
-        return communityPostService.findAllCommunityPosts();
+    public ResponseEntity<?> findAllCommunityPosts(
+            @RequestParam(value = "category", defaultValue = "ALL") String category,
+            @RequestParam(value = "sort", defaultValue = "LATEST") String sort,
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "12") int limit) {
+        Map<String, Object> result =
+                communityPostService.findCommunityPostsPaged(category, sort, offset, limit);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/api/community/posts")

@@ -2,6 +2,7 @@ package com.pknu26.usedtrade.service;
 
 import com.pknu26.usedtrade.dto.CommunityPostDTO;
 import com.pknu26.usedtrade.dto.PostImageDTO;
+import com.pknu26.usedtrade.mapper.CommunityPostLikeMapper;
 import com.pknu26.usedtrade.mapper.CommunityPostMapper;
 import com.pknu26.usedtrade.mapper.PostImageMapper;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +18,7 @@ public class CommunityPostService {
 
     private final CommunityPostMapper communityPostMapper;
     private final PostImageMapper postImageMapper;
+    private final CommunityPostLikeMapper likeMapper;
 
     @Transactional
     public Long registerCommunityPost(CommunityPostDTO communityPostDTO) {
@@ -25,6 +28,14 @@ public class CommunityPostService {
 
     public List<CommunityPostDTO> findAllCommunityPosts() {
         return communityPostMapper.findAllCommunityPosts();
+    }
+
+    public Map<String, Object> findCommunityPostsPaged(
+            String category, String sort, int offset, int limit) {
+        List<CommunityPostDTO> posts =
+                communityPostMapper.findCommunityPostsPaged(category, sort, offset, limit);
+        int totalCount = communityPostMapper.countCommunityPosts(category);
+        return Map.of("posts", posts, "totalCount", totalCount);
     }
 
     @Transactional
@@ -45,6 +56,28 @@ public class CommunityPostService {
         }
         postImageMapper.deleteImagesByCommunityPostId(communityPostId);
         communityPostMapper.deleteCommunityPost(communityPostId);
+    }
+
+    @Transactional
+    public Map<String, Object> toggleLike(Long communityPostId, Long userId) {
+        boolean isLiked;
+        if (likeMapper.existsLike(communityPostId, userId) > 0) {
+            likeMapper.deleteLike(communityPostId, userId);
+            isLiked = false;
+        } else {
+            likeMapper.insertLike(communityPostId, userId);
+            isLiked = true;
+        }
+        int likeCount = likeMapper.countLikes(communityPostId);
+        return Map.of("likeCount", likeCount, "isLiked", isLiked);
+    }
+
+    public int getLikeCount(Long communityPostId) {
+        return likeMapper.countLikes(communityPostId);
+    }
+
+    public boolean isLiked(Long communityPostId, Long userId) {
+        return likeMapper.existsLike(communityPostId, userId) > 0;
     }
 
     @Transactional

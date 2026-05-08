@@ -3,11 +3,11 @@
   lang="ko"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-  th:replace="~{layout :: layout(~{::content}, ~{::pageScripts})}">
+  th:replace="~{layout :: layout(~{::content}, ~{::pageScripts})}"
+>
   <th:block th:fragment="content">
     <div class="app">
       <div class="wrap">
-
         <section class="section-header">
           <div>
             <h2>커뮤니티</h2>
@@ -25,6 +25,8 @@
 
             <select id="sortFilter" name="sort">
               <option value="LATEST">최신순</option>
+              <option value="LIKES">추천순</option>
+              <option value="VIEWS">조회순</option>
             </select>
           </form>
         </section>
@@ -33,6 +35,16 @@
           <p class="empty">게시글을 불러오는 중...</p>
         </section>
 
+        <div class="load-more-wrap">
+          <button
+            id="loadMoreButton"
+            class="load-more-btn hidden"
+            type="button"
+          >
+            더보기
+          </button>
+        </div>
+
         <!-- 로그인한 사용자만 글쓰기 버튼 표시 -->
         <button
           sec:authorize="isAuthenticated()"
@@ -40,7 +52,8 @@
           id="openCommunityWriteButton"
           class="upload-fab floating"
           aria-label="글쓰기"
-          title="글쓰기">
+          title="글쓰기"
+        >
           +
         </button>
       </div>
@@ -50,7 +63,8 @@
     <div
       sec:authorize="isAuthenticated()"
       id="communityWriteModal"
-      class="modal hidden">
+      class="modal hidden"
+    >
       <div class="modal-card">
         <div class="modal-header">
           <h2>글쓰기</h2>
@@ -70,18 +84,30 @@
 
           <label class="row">
             <span>제목</span>
-            <input type="text" id="communityTitle" placeholder="제목을 입력하세요" />
+            <input
+              type="text"
+              id="communityTitle"
+              placeholder="제목을 입력하세요"
+            />
           </label>
 
           <label class="row">
             <span>내용</span>
-            <textarea id="communityContent" placeholder="내용을 입력하세요"></textarea>
+            <textarea
+              id="communityContent"
+              placeholder="내용을 입력하세요"
+            ></textarea>
           </label>
 
           <label class="row">
             <span>이미지</span>
             <div class="image-upload-box">
-              <input type="file" id="communityImages" accept="image/*" multiple />
+              <input
+                type="file"
+                id="communityImages"
+                accept="image/*"
+                multiple
+              />
               <div id="communityImagePreviewList" class="image-preview-list">
                 <p class="image-preview-empty">선택된 이미지가 없습니다.</p>
               </div>
