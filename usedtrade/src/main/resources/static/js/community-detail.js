@@ -60,7 +60,7 @@ if (likeButton) {
     try {
       const response = await fetch(
         `/api/community/posts/${communityPostId}/likes`,
-        { method: "POST" }
+        { method: "POST" },
       );
       if (!response.ok) return;
       const data = await response.json();
@@ -125,7 +125,11 @@ if (openEditButton) {
 
 document.querySelector("#editNewImages")?.addEventListener("change", (e) => {
   for (const file of e.target.files) {
-    editImages.push({ type: "new", file, previewUrl: URL.createObjectURL(file) });
+    editImages.push({
+      type: "new",
+      file,
+      previewUrl: URL.createObjectURL(file),
+    });
   }
   e.target.value = "";
   renderEditImages();
@@ -155,9 +159,11 @@ if (editForm) {
     formData.append("content", content);
     formData.append("category", category);
 
-    editImages.filter((i) => i.type === "existing")
+    editImages
+      .filter((i) => i.type === "existing")
       .forEach((i) => formData.append("keepImageIds", i.imageId));
-    editImages.filter((i) => i.type === "new")
+    editImages
+      .filter((i) => i.type === "new")
       .forEach((i) => formData.append("newImages", i.file));
 
     try {
@@ -208,7 +214,9 @@ const commentFormWrapper = document.querySelector("#commentFormWrapper");
 const commentForm = document.querySelector("#commentForm");
 const commentList = document.querySelector("#commentList");
 const commentCount = document.querySelector("#commentCount");
-const loggedInUserId = commentFormWrapper ? Number(commentFormWrapper.dataset.userId) : null;
+const loggedInUserId = commentFormWrapper
+  ? Number(commentFormWrapper.dataset.userId)
+  : null;
 
 function escapeHtml(str) {
   return String(str)
@@ -222,37 +230,48 @@ async function loadComments() {
   if (!commentList) return;
 
   try {
-    const response = await fetch(`/api/community/posts/${communityPostId}/comments`);
+    const response = await fetch(
+      `/api/community/posts/${communityPostId}/comments`,
+    );
     if (!response.ok) return;
 
     const comments = await response.json();
     if (commentCount) commentCount.textContent = comments.length;
 
     if (comments.length === 0) {
-      commentList.innerHTML = '<p class="comment-empty">첫 댓글을 작성해보세요.</p>';
+      commentList.innerHTML =
+        '<p class="comment-empty">첫 댓글을 작성해보세요.</p>';
       return;
     }
 
-    commentList.innerHTML = comments.map((c) => {
-      const isAuthor = loggedInUserId !== null && c.userId === loggedInUserId;
-      const date = c.createdAtComments ? c.createdAtComments.slice(0, 10) : "";
-      return `
+    commentList.innerHTML = comments
+      .map((c) => {
+        const isAuthor = loggedInUserId !== null && c.userId === loggedInUserId;
+        const date = c.createdAtComments
+          ? c.createdAtComments.slice(0, 10)
+          : "";
+        return `
         <div class="comment-item" data-comment-id="${c.commentsId}">
           <div class="comment-meta">
             <div>
               <span class="comment-nickname">${escapeHtml(c.nickname)}</span>
               <small class="comment-date">${date}</small>
             </div>
-            ${isAuthor ? `
+            ${
+              isAuthor
+                ? `
             <div class="comment-actions">
               <button class="btn-secondary" onclick="startEditComment(${c.commentsId})">수정</button>
               <button class="btn-danger" onclick="deleteComment(${c.commentsId})">삭제</button>
-            </div>` : ""}
+            </div>`
+                : ""
+            }
           </div>
           <div class="comment-content">${escapeHtml(c.contentComments)}</div>
         </div>
       `;
-    }).join("");
+      })
+      .join("");
   } catch (error) {
     console.error(error);
   }
@@ -338,10 +357,13 @@ if (commentForm) {
     formData.append("content", content);
 
     try {
-      const response = await fetch(`/api/community/posts/${communityPostId}/comments`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `/api/community/posts/${communityPostId}/comments`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
 
       if (!response.ok) {
         alert("댓글 등록에 실패했습니다.");
