@@ -33,10 +33,61 @@ const sortFilter = document.querySelector("#sortFilter");
 const productImagesInput = document.querySelector("#productImages");
 const imagePreviewList = document.querySelector("#imagePreviewList");
 
+// 장터 이름 선택 변수
+const marketPageTitle = document.querySelector("#marketPageTitle");
+const marketPageSummaryText = document.querySelector("#marketPageSummaryText");
+
+
+
 // 서버에서 받아온 상품 목록을 저장하는 배열
 let products = [];
 let currentPage = 1; // 추가
 let isFetching = false; // 추가
+
+function getMarketPageType() {
+  const path = window.location.pathname;
+
+  if (path === "/my/posts") {
+    return "MY_POSTS";
+  }
+
+  if (path === "/wishlist") {
+    return "WISHLIST";
+  }
+
+  return "ALL_POSTS";
+}
+
+function getProductsApiUrl() {
+  const pageType = getMarketPageType();
+
+  if (pageType === "MY_POSTS") {
+    return "/api/posts/my";
+  }
+
+  return "/api/posts";
+}
+
+function applyMarketPageTitle() {
+  const pageType = getMarketPageType();
+
+  if (!marketPageTitle || !marketPageSummaryText) return;
+
+  if (pageType === "MY_POSTS") {
+    marketPageTitle.textContent = "내 판매글";
+    marketPageSummaryText.textContent = "내가 등록한 판매글";
+    return;
+  }
+
+  if (pageType === "WISHLIST") {
+    marketPageTitle.textContent = "찜 목록";
+    marketPageSummaryText.textContent = "내가 찜한 상품";
+    return;
+  }
+
+  marketPageTitle.textContent = "상품 목록";
+  marketPageSummaryText.textContent = "총";
+}
 
 // ==============================
 // 상태 메시지 표시 함수
@@ -124,7 +175,13 @@ async function loadProducts(isInitialLoad = false) {
     category = "";
   }
 
-  const url = `/api/posts?page=${currentPage}&searchKeyword=${keyword}&category=${category}&sortCondition=${sort}`;
+  let url = "";
+
+  if (getMarketPageType() === "MY_POSTS") {
+    url = getProductsApiUrl();
+  } else {
+    url = `${getProductsApiUrl()}?page=${currentPage}&searchKeyword=${keyword}&category=${category}&sortCondition=${sort}`;
+  }
 
   try {
     const response = await fetch(url);
@@ -435,18 +492,6 @@ if (closeProductWriteButton) {
   closeProductWriteButton.addEventListener("click", closeProductWriteModal);
 }
 
-// 검색 버튼 클릭 또는 검색창에서 Enter 입력 시 목록 다시 렌더링
-//
-// 여기서 renderProducts()가 실행되면서 현재 검색어, 카테고리, 정렬 값을 모두 읽음.
-// 즉 카테고리/정렬 변경 자체는 아무 동작 안 하고,
-// 검색 버튼을 눌렀을 때 한 번에 반영됨.
-if (searchForm) {
-  searchForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    renderProducts();
-  });
-}
-
 // ==============================
 // 상품 카드 클릭 이벤트
 // ==============================
@@ -567,7 +612,6 @@ function getStatusClass(status) {
 }
 
 // URL 검색 조건을 화면 필터에 반영
-applySearchParams();
 
 // 로그인 여부와 관계없이 상품 목록 불러오기
 // loadProducts();
@@ -581,4 +625,6 @@ if (searchForm) {
   });
 }
 
-loadProducts(true); // 초기 로딩
+applyMarketPageTitle();
+applySearchParams();
+loadProducts();

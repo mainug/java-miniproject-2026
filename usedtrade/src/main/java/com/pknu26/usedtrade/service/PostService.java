@@ -35,6 +35,10 @@ public class PostService {
         return postMapper.findPostsWithPaging(loginUserId, searchKeyword, category, sortCondition, offset, pageSize);
     }
 
+    public List<PostDTO> findPostsByUserId(Long userId) {
+    return postMapper.findPostsByUserId(userId);
+}
+
     @Transactional
     public PostDTO findPostDetail(Long postId, Long loginUserId) {
         postMapper.increaseViewCount(postId);

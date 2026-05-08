@@ -39,10 +39,26 @@ public class PostController {
         int pageSize = 12;
         int offset = (page - 1) * pageSize;
 
-        List<PostDTO> postList = postService.findPostsWithPaging(loginUserId, searchKeyword, category, sortCondition, offset, pageSize);
+        List<PostDTO> postList = postService.findPostsWithPaging(loginUserId, searchKeyword, category, sortCondition,
+                offset, pageSize);
 
         return ResponseEntity.ok(postList);
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<?> findMyPosts(Authentication authentication) {
+        Long loginUserId = getLoginUserId(authentication);
+
+        if (loginUserId == null) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "로그인이 필요합니다."));
         }
+
+        List<PostDTO> myPosts = postService.findPostsByUserId(loginUserId);
+
+        return ResponseEntity.ok(myPosts);
+    }
 
     // 내가 찜한 상품 목록 조회
     @GetMapping("/favorites")

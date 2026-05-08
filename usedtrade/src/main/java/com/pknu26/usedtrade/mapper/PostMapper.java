@@ -32,5 +32,7 @@ public interface PostMapper {
     int deletePostImages(@Param("postId") Long postId);
 
     int deletePost(@Param("postId") Long postId);
+
+    List<PostDTO> findPostsByUserId(@Param("userId") Long userId);
     
 }
