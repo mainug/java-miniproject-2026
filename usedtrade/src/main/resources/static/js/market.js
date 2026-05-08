@@ -230,6 +230,17 @@ function loadMorePosts() {
   loadProducts(false);
 }
 
+let searchTimer = null;
+
+function reloadProductsRealtime() {
+  clearTimeout(searchTimer);
+
+  searchTimer = setTimeout(() => {
+    currentPage = 1;
+    loadProducts(true);
+  }, 250);
+}
+
 // ==============================
 // 상품 목록을 화면에 렌더링하는 함수
 //
@@ -593,13 +604,6 @@ document.addEventListener("click", async function (event) {
   }
 });
 
-// 카테고리 변경 이벤트는 일부러 등록하지 않음
-// categoryFilter.addEventListener("change", renderProducts); 사용 안 함
-
-// 정렬 변경 이벤트도 일부러 등록하지 않음
-// sortFilter.addEventListener("change", renderProducts); 사용 안 함
-
-// 이미지 선택 시 미리보기 렌더링
 if (productImagesInput) {
   productImagesInput.addEventListener("change", renderImagePreview);
 }
@@ -621,7 +625,6 @@ function getStatusClass(status) {
 // 로그인 여부와 관계없이 상품 목록 불러오기
 // loadProducts();
 
-// 검색 폼: renderProducts 대신 서버 페이징으로 교체
 if (searchForm) {
   searchForm.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -630,6 +633,23 @@ if (searchForm) {
   });
 }
 
+if (keywordSearch) {
+  keywordSearch.addEventListener("input", reloadProductsRealtime);
+}
+
+if (categoryFilter) {
+  categoryFilter.addEventListener("change", function () {
+    currentPage = 1;
+    loadProducts(true);
+  });
+}
+
+if (sortFilter) {
+  sortFilter.addEventListener("change", function () {
+    currentPage = 1;
+    loadProducts(true);
+  });
+}
 applyMarketPageTitle();
 applySearchParams();
 loadProducts();
